@@ -20,7 +20,7 @@ namespace MonogameCore.Test
         {
             bigFont = AssetManager.GetResource<SpriteFont>("menuFont");
             mainFont = AssetManager.GetResource<SpriteFont>("mainFont");
-            titleText = new Text("Tetris", Vector2.Zero, new Vector2(16, 3));
+            titleText = new Text("Faking game boizz", Vector2.Zero, new Vector2(16, 3));
             titleText.colour = Color.Red;
             scoreText = new Text("Highscore: 0", new Vector2(0, 7), new Vector2(16, 1));
             scoreText.colour = new Color(0, 255, 0);
