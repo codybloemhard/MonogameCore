@@ -5,12 +5,27 @@ using Microsoft.Xna.Framework.Graphics;
 //Simpele GameStateManager, spreekt voorzich.
 namespace Core
 {
-    public interface GameState
+    public abstract class GameState
     {
-        void Load(SpriteBatch batch);
-        void Unload();
-        void Update(float time);
-        void Draw(float time, SpriteBatch batch, GraphicsDevice device);
+        protected GameObjectManager manager;
+
+        public GameState()
+        {
+            manager = new GameObjectManager();
+        }
+
+        public abstract void Load(SpriteBatch batch);
+        public abstract void Unload();
+        public virtual void Update(float time)
+        {
+            manager.Update(time);
+        }
+        public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
+        {
+            batch.Begin();
+            manager.Draw();
+            batch.End();
+        }
     }
     
     public enum CHANGETYPE

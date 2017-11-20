@@ -17,9 +17,6 @@ namespace MonogameCore
         public GameWindow()
         {
             graphics = new GraphicsDeviceManager(this);
-            Grid.Setup(16, 9, 1600, 900);
-            graphics.PreferredBackBufferWidth = (int)Grid.ScreenSize.X;
-            graphics.PreferredBackBufferHeight = (int)Grid.ScreenSize.Y;
             AssetManager.content = Content;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -34,6 +31,7 @@ namespace MonogameCore
         }
         protected override void LoadContent()
         {
+            Camera.SetupResolution(1920, 1080, graphics, GraphicsDevice);
             batch = new SpriteBatch(GraphicsDevice);
             gamestates = new GameStateManager(batch);
             load();

@@ -7,14 +7,14 @@ namespace Core
 {
     public static class Grid
     {
-        private static int _width, _height;
-        private static int _screenW, _screenH;
+        private static uint _width, _height;
+        private static uint _screenW, _screenH;
         private static Vector2 _mul;
         private static Vector2 scrnsz, grdsz;
 
         static Grid() { _mul = default(Vector2); }
 
-        public static void Setup(int width, int height, int screenW, int screenH)
+        public static void Setup(uint width, uint height, uint screenW, uint screenH)
         {
             _width = width;
             _height = height;

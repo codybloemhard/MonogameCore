@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\AssetManager.cs" />
+    <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\CRender.cs" />
     <Compile Include="Core\CRenderSet.cs" />

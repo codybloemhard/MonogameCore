@@ -25,6 +25,7 @@ namespace MonogameCore
             RunGame game = new RunGame();
         }
     }
+
     public class RunGame
     {
         private GameWindow game;
@@ -37,8 +38,8 @@ namespace MonogameCore
         private void Load()
         {
             TestState test = new TestState();
-            game.gamestates.AddState("hello", test);
-            game.gamestates.SetStartingState("hello");
+            game.gamestates.AddState("test", test);
+            game.gamestates.SetStartingState("test");
         }
     }
 }
