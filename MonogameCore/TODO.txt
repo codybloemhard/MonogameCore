@@ -1,0 +1,13 @@
+﻿DONE:
+-Resolution independence, grid system, basic camera;
+-Basic gameobject, components, parent-child, etc;
+-Basic input, window, gamestates, other managment;
+-Basic graphics: sprites, UI, simple particles;
+TODO:
+-More architecture work;
+-Graphics: animation, tiling;
+-Fix input: mouse;
+-Efficient collision detection: AABB, circles, unif.grid or quadtree;
+-Openworld loading: seamless load in chunks, multithread;
+-Raytracing;
+-Produceral graphics;
