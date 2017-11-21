@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-/*Om te voorkomen dat we met pixels werken, nu werken we in game-space
-Zelf aantegeven dimensies, resolutie independend.*/
+
 namespace Core
 {
     public static class Grid
@@ -39,7 +38,7 @@ namespace Core
             return screenP * _mul;
         }
 
-        public static Vector2 Scale(Vector2 pixles)
+        public static Vector2 ScaleSprite(Vector2 pixles)
         {
             Vector2 a = pixles * _mul;
             a.X = 1 / a.X;

@@ -25,7 +25,7 @@ namespace MonogameCore
             RunGame game = new RunGame();
         }
     }
-
+    
     public class RunGame
     {
         private GameWindow game;

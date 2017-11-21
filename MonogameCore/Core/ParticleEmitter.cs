@@ -96,7 +96,7 @@ namespace Core
 
         public void Draw(SpriteBatch batch)
         {
-            Vector2 sizemul = Grid.Scale(new Vector2(texture.Width, texture.Height));
+            Vector2 sizemul = Grid.ScaleSprite(new Vector2(texture.Width, texture.Height));
             for (int i = 0; i < size; i++)
             {
                 if (particles[i].lives <= 0) continue;

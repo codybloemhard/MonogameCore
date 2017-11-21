@@ -21,7 +21,7 @@ namespace Core
             this.colours = colours;
             blocksize = new Vector2(size.X / set.GetLength(0), size.Y / set.GetLength(1));
             this.texture = AssetManager.GetResource<Texture2D>(texture);
-            sizemultiplier = blocksize * Grid.Scale(new Vector2(this.texture.Width, this.texture.Height));
+            sizemultiplier = blocksize * Grid.ScaleSprite(new Vector2(this.texture.Width, this.texture.Height));
             
             this.set = set;
             this.pos = pos;

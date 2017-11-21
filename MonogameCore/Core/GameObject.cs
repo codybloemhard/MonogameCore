@@ -33,7 +33,7 @@ namespace Core
         }
     }
     
-    public partial class GameObject
+    public sealed class GameObject
     {
         private bool dirtybounds = true, dirtyscale = true;
         private Vector2 localpos, pos, localsize, size;
@@ -71,12 +71,12 @@ namespace Core
             comparray = new Component[0];
         }
 
-        public virtual void Init()
+        public void Init()
         {
             for (int i = 0; i < comparray.Length; i++)
                 comparray[i].Init();
         }
-        public virtual void Update(float gameTime)
+        public void Update(float gameTime)
         {
             if (!active) return;
             gtime = gameTime;

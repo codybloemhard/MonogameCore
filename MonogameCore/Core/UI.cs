@@ -38,7 +38,7 @@ namespace Core
         {
             if (dirtysize)
             {
-                sizemul = size * Grid.Scale(physicalsize);
+                sizemul = size * Grid.ScaleSprite(physicalsize);
                 dirtysize = false;
             }
             return sizemul;

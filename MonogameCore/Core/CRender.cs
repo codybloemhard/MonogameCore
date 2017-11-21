@@ -23,8 +23,7 @@ namespace Core
             if (sprite == null) return;
             base.Update(time);
             if (gameObject.DirtySize)
-                sizemul = gameObject.Size * Grid.Scale(new Vector2(sprite.Width, sprite.Height));
-            //scale de sprite zodat alles resolutie independent is.
+                sizemul = gameObject.Size * Grid.ScaleSprite(new Vector2(sprite.Width, sprite.Height));
             batch.Draw(sprite, Grid.ToScreenSpace(gameObject.Pos), null, colour, 0.0f, Vector2.Zero, sizemul, SpriteEffects.None, 0.0f);
         }
     }

@@ -22,7 +22,7 @@ namespace Core
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
             manager.Draw();
             batch.End();
         }
@@ -34,7 +34,7 @@ namespace Core
         SWITCH
     }
 
-    public class GameStateChange
+    public sealed class GameStateChange
     {
         public string newstate;
         public CHANGETYPE type;

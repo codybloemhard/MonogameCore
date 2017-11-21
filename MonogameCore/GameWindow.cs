@@ -7,7 +7,7 @@ using MonogameCore.Test;
 
 namespace MonogameCore
 {
-    public class GameWindow : Game
+    public sealed class GameWindow : Game
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch batch;

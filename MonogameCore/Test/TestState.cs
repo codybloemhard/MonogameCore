@@ -25,8 +25,8 @@ namespace MonogameCore.Test
 
             stone = new GameObject(manager);
             stone.AddComponent("render", new CRender(stone, "block", batch));
-            stone.Pos = new Vector2(1, 8);
-            stone.Size = new Vector2(14, 1);
+            stone.Pos = new Vector2(1, 1);
+            stone.Size = new Vector2(1, 1);
         }
         
         public override void Unload() { }
@@ -34,9 +34,10 @@ namespace MonogameCore.Test
         public override void Update(float time)
         {
             button.Update();
+            Camera.SetCameraTopLeft(new Vector2(0, 0));
             base.Update(time);
         }
-
+        
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);

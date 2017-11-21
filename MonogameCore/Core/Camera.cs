@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace Core
 {
     public struct View
@@ -62,16 +63,14 @@ namespace Core
 
     public static class Camera
     {
-        private static Matrix translation, spriteScale, final;
+        private static Matrix translation;
         private static View view;
-        private static Vector2 scale, size;
-        private static Vector2 screenSize;
+        private static Vector2 screenSize, size;
         private static GraphicsDeviceManager graphics;
 
         static Camera()
         {
             translation = Matrix.CreateTranslation(0, 0, 0);
-            spriteScale = Matrix.CreateScale(1.0f, 1.0f, 1.0f);
             view = new View();
             view.SetSize(screenSize.X, screenSize.Y);
             graphics = null;
@@ -79,12 +78,12 @@ namespace Core
 
         public static void SetupResolution(uint w, uint h, GraphicsDeviceManager g, GraphicsDevice device)
         {
-            Grid.Setup(16, 9, w, h);
             g.PreferredBackBufferWidth = (int)w;
             g.PreferredBackBufferHeight = (int)h;
             g.IsFullScreen = false;
             g.ApplyChanges();
             screenSize = new Vector2(g.PreferredBackBufferWidth, g.PreferredBackBufferHeight);
+            Grid.Setup(16, 9, (uint)screenSize.X, (uint)screenSize.Y);
 
             float targetAspectRatio = (float)w / (float)h;
             int width = (int)screenSize.X;
@@ -96,33 +95,29 @@ namespace Core
             }
 
             Viewport viewport = new Viewport();
-            viewport.X = (int)(screenSize.X / 2) - (width / 2);
-            viewport.Y = (int)(screenSize.Y / 2) - (height / 2);
+            viewport.X = 0;
+            viewport.Y = 0;
             viewport.Width = width;
             viewport.Height = height;
             device.Viewport = viewport;
-
-            scale = new Vector2((float)device.Viewport.Width / screenSize.X,
-                                        (float)device.Viewport.Height / screenSize.Y);
-            spriteScale = Matrix.CreateScale(scale.X, scale.Y, 1);
+            
             view.SetSize(screenSize.X, screenSize.Y);
         }
-
+        
         public static void SetCameraTopLeft(Vector2 pos)
         {
-            view.SetTL(pos.X, pos.Y);
-            pos *= scale;
-            translation = Matrix.CreateTranslation(-pos.X, -pos.Y, 0);
-            final = Matrix.Multiply(spriteScale, translation);
+            Vector2 trans = Grid.ToScreenSpace(pos);
+            view.SetTL(trans.X, trans.Y);
+            translation = Matrix.CreateTranslation(-trans.X, -trans.Y, 0);
         }
 
         public static void SetCameraMiddle(Vector2 pos)
         {
             view.SetMiddle(pos.X, pos.Y);
-            pos *= scale;
-            pos -= new Vector2(screenSize.X, screenSize.Y) * scale / 2.0f;
-            translation = Matrix.CreateTranslation(-pos.X, -pos.Y, 0);
-            final = Matrix.Multiply(spriteScale, translation);
+            Vector2 trans = pos;
+            trans -= new Vector2(16f, 9f) / 2.0f;
+            trans = Grid.ToScreenSpace(pos);
+            translation = Matrix.CreateTranslation(-trans.X, -trans.Y, 0);
         }
 
         public static void FollowPlayer(Vector2 pos)
@@ -143,7 +138,5 @@ namespace Core
         public static Vector2 WorldSize { get { return size; } }
         public static Vector2 ScreenSize { get { return screenSize; } }
         public static Matrix TranslationMatrix { get { return translation; } }
-        public static Matrix ScaleMatrix { get { return spriteScale; } }
-        public static Matrix FinalMatrix { get { return final; } }
     }
 }
