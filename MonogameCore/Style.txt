@@ -1,0 +1,66 @@
+﻿//PascalCase voor: Functions, Methods, Classes, Namespaces
+namespace Foo{}
+class Bar{}
+void Exec(){}
+
+//camelCase voor: variables
+int thisIsAnInt = 0;
+
+//Gerbuik een punt voor doubles en floats en een f voor floats
+double x = 0.0;
+float y = 1.0f;
+
+//haakjes
+void Foo(){
+	Bar();
+	Bar();
+}
+
+//Nooit haakjes voor oneliners voor if, for, while, etc
+for(;;)
+	Console.Writeline("oops");
+while(ok)
+	Foo();
+if(Foo())
+	Bar();
+
+//Geen static members in front-end code (alleen 1 in de singleton)
+//FOUT:
+class Observer{
+	public static Vector2 playerPos, endBossPos;
+}
+//GOED: Singleton
+class Observer{
+	public static Observer instance;
+	public Observer(){
+		if(instance == null)
+			instance = this
+		return;
+	}
+}
+
+//Gebruik haakjes in switch
+switch(dingetje){
+	case 0: {break;}
+	case 1: 
+	case 2: {break;}
+	default: {break;}
+}
+
+//Access modifier verplicht op alles!!! waar kan dan.
+//NEEEEEE:
+int dir = 0;
+//JAAAAA:
+private int zero = 0;
+protected float health = 0.666f;
+public class Foobar{}
+internal void Help(){}
+
+//Geen foreach over een list
+//FOUT:
+foreach(Item i in list){ i = 0; }
+//GOED:
+for(uint i = 0; i < list.Count; i++){list[i] = 0; }
+
+//Probeer unsigned versies van de types te gebruiken waar handig, bv iteraties.
+uint naturalsU0;
