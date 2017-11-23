@@ -22,6 +22,7 @@ namespace Core
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
+            //clear screen when ui manager is done
             batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
             manager.Draw();
             batch.End();
@@ -32,17 +33,6 @@ namespace Core
     {
         LOAD,
         SWITCH
-    }
-
-    public sealed class GameStateChange
-    {
-        public string newstate;
-        public CHANGETYPE type;
-        public GameStateChange(string s, CHANGETYPE t)
-        {
-            newstate = s;
-            type = t;
-        }
     }
 
     public class GameStateManager
@@ -67,12 +57,11 @@ namespace Core
                 currentstate = states[name];
         }
 
-        public static void RequestChange(GameStateChange change)
+        public static void RequestChange(string state, CHANGETYPE type)
         {
-            if (change == null) return;
-            if (change.type == CHANGETYPE.LOAD) instance.currentstate.Unload();
-            instance.SetState(change.newstate);
-            if (change.type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
+            if (type == CHANGETYPE.LOAD) instance.currentstate.Unload();
+            instance.SetState(state);
+            if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
         }
 
         public void Update(float time)

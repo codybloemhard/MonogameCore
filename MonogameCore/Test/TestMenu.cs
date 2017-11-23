@@ -5,28 +5,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonogameCore.Test
 {
-    public class TestState : GameState
+    public class TestMenu : GameState
     {
         private SpriteFont font;
         private Text text;
         private Button button;
-        private GameObject stone;
-
-        public TestState() : base() { }
+        
+        public TestMenu() : base() { }
 
         public override void Load(SpriteBatch batch)
         {
             font = AssetManager.GetResource<SpriteFont>("mainFont");
-            text = new Text("text", new Vector2(0, 0), new Vector2(1, 0.5f));
+            text = new Text("Gekste game!", new Vector2(0f, 2f), new Vector2(16f, 1f));
             text.colour = new Color(0, 255, 0);
-            button = new Button("press me", "block", () => GameStateManager.RequestChange(new GameStateChange("game", CHANGETYPE.LOAD)),
-                new Vector2(14, 0), new Vector2(2, 1));
+            button = new Button("Play here!", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
+                new Vector2(6, 4), new Vector2(4, 3));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
-
-            stone = new GameObject(manager);
-            stone.AddComponent("render", new CRender(stone, "block", batch));
-            stone.Pos = new Vector2(1, 1);
-            stone.Size = new Vector2(1, 1);
+            Camera.SetCameraTopLeft(new Vector2(0, 0));
         }
         
         public override void Unload() { }
@@ -34,7 +29,6 @@ namespace MonogameCore.Test
         public override void Update(float time)
         {
             button.Update();
-            Camera.SetCameraTopLeft(new Vector2(0, 0));
             base.Update(time);
         }
         

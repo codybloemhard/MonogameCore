@@ -9,17 +9,19 @@ namespace MonogameCore
 {
     public sealed class GameWindow : Game
     {
+        private uint screenWidth;
         private GraphicsDeviceManager graphics;
         private SpriteBatch batch;
         private Action load;
-        public GameStateManager gamestates;
+        public GameStateManager states;
 
-        public GameWindow()
+        public GameWindow(uint width)
         {
             graphics = new GraphicsDeviceManager(this);
             AssetManager.content = Content;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            screenWidth = width;
         }
         public void SetLoad(Action a)
         {
@@ -31,9 +33,10 @@ namespace MonogameCore
         }
         protected override void LoadContent()
         {
-            Camera.SetupResolution(1920, 1080, graphics, GraphicsDevice);
+            uint screenHeight = screenWidth / 16 * 9;
+            Camera.SetupResolution(screenWidth, screenHeight, graphics, GraphicsDevice);
             batch = new SpriteBatch(GraphicsDevice);
-            gamestates = new GameStateManager(batch);
+            states = new GameStateManager(batch);
             load();
         }
         protected override void UnloadContent()
@@ -41,13 +44,13 @@ namespace MonogameCore
         }
         protected override void Update(GameTime gameTime)
         {
-            gamestates.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            states.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            gamestates.Draw((float)gameTime.ElapsedGameTime.TotalSeconds, batch, GraphicsDevice);
+            states.Draw((float)gameTime.ElapsedGameTime.TotalSeconds, batch, GraphicsDevice);
             base.Draw(gameTime);
         }
     }

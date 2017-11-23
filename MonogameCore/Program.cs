@@ -31,15 +31,17 @@ namespace MonogameCore
         private GameWindow game;
         public RunGame()
         {
-            game = new GameWindow();
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             game.Run();
         }
         private void Load()
         {
-            TestState test = new TestState();
-            game.gamestates.AddState("test", test);
-            game.gamestates.SetStartingState("test");
+            TestMenu testMenu = new TestMenu();
+            TestGame testGame = new TestGame();
+            game.states.AddState("menu", testMenu);
+            game.states.AddState("game", testGame);
+            game.states.SetStartingState("menu");
         }
     }
 }
