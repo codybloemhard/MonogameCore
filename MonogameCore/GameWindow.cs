@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Core;
 using MonogameCore.Test;
+using System.Runtime.InteropServices;
 
-namespace MonogameCore
+namespace Core
 {
     public sealed class GameWindow : Game
     {
@@ -15,6 +16,11 @@ namespace MonogameCore
         private Action load;
         public GameStateManager states;
 
+        //source: https://stackoverflow.com/questions/4362111/how-do-i-show-a-console-output-window-in-a-forms-application
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         public GameWindow(uint width)
         {
             graphics = new GraphicsDeviceManager(this);
@@ -22,6 +28,11 @@ namespace MonogameCore
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             screenWidth = width;
+
+            AllocConsole();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("MonogameCore made by Cody Bloemhard.");
+            Console.WriteLine("Close this console to close the game!");
         }
         public void SetLoad(Action a)
         {

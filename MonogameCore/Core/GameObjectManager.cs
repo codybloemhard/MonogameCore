@@ -8,7 +8,7 @@ namespace Core
     public class GameObjectManager
     {
         private List<GameObject> objects;
-        private List<GameObject> objs;
+        private List<GameObject> objs;//For finding multiple objs.
 
         public GameObjectManager()
         {
@@ -38,7 +38,7 @@ namespace Core
         {
             objects.Add(o);
         }
-
+        
         public void Destroy(GameObject o)
         {
             objects.Remove(o);

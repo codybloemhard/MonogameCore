@@ -8,10 +8,12 @@ namespace Core
     public abstract class GameState
     {
         protected GameObjectManager manager;
+        protected UIObjectManager ui;
 
         public GameState()
         {
             manager = new GameObjectManager();
+            ui = new UIObjectManager();
         }
 
         public abstract void Load(SpriteBatch batch);
@@ -19,12 +21,16 @@ namespace Core
         public virtual void Update(float time)
         {
             manager.Update(time);
+            ui.Update();
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
-            //clear screen when ui manager is done
+            device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
             manager.Draw();
+            batch.End();
+            batch.Begin();
+            ui.Draw(batch);
             batch.End();
         }
     }

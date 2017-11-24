@@ -13,7 +13,7 @@ namespace Core
         }
     }
 
-    public class UIElement
+    public abstract class UIElement
     {
         protected Vector2 position;
         private Vector2 size, sizemul;
@@ -49,6 +49,8 @@ namespace Core
             get { return size; }
             set { size = value; dirtysize = true; }
         }
+
+        public abstract void Draw(SpriteBatch batch);
     }
 
     public class UITextureElement : UIElement
@@ -61,7 +63,7 @@ namespace Core
             this.texture = AssetManager.GetResource<Texture2D>(texture);
         }
 
-        public void Draw(SpriteBatch batch)
+        public override void Draw(SpriteBatch batch)
         {
             Vector2 drawsize = DrawSize(new Vector2(texture.Width, texture.Height));
             batch.Draw(texture, Grid.ToScreenSpace(position), null, 
@@ -73,14 +75,16 @@ namespace Core
     public class Text : UIElement
     {
         public string text;
+        protected SpriteFont font;
 
-        public Text(string text, Vector2 position, Vector2 size) 
+        public Text(string text, Vector2 position, Vector2 size, SpriteFont font) 
             : base(position, size)
         {
             this.text = text;
+            this.font = font;
         }
 
-        public void Draw(SpriteBatch batch, SpriteFont font)
+        public override void Draw(SpriteBatch batch)
         {
             UI.TextInCenter(text, Grid.ToScreenSpace(position), Grid.ToScreenSpace(Size), batch, font, colour);
         }
@@ -92,8 +96,9 @@ namespace Core
         protected string text;
         protected Bounds bounds;
         protected Action pressAction;
+        protected SpriteFont font;
 
-        public Button(string text, string texture, Action a,Vector2 position, Vector2 size) 
+        public Button(string text, string texture, Action a, SpriteFont font, Vector2 position, Vector2 size) 
             : base(texture, position, size)
         {
             colour = Color.White;
@@ -105,6 +110,7 @@ namespace Core
             this.texture = AssetManager.GetResource<Texture2D>(texture);
             bounds = new Bounds(position.X, position.Y, size.X, size.Y);
             pressAction = a;
+            this.font = font;
         }
 
         public void SetupColours(Color baseColour, Color highlightColour, Color downColour, Color textColour)
@@ -128,7 +134,7 @@ namespace Core
             else colour = baseColour;
         }
 
-        public void Draw(SpriteBatch batch, SpriteFont font)
+        public override void Draw(SpriteBatch batch)
         {
             base.Draw(batch);
             UI.TextInCenter(text, Grid.ToScreenSpace(position), Grid.ToScreenSpace(Size), batch, font, textColour);
