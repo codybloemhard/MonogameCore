@@ -7,7 +7,7 @@ namespace Core
 {
     public class GameObjectManager
     {
-        private List<GameObject> objects;
+        internal List<GameObject> objects;
         private TagEngine tags;
 
         internal GameObjectManager()

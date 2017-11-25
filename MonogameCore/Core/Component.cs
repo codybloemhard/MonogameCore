@@ -13,22 +13,14 @@ namespace Core
         {
             active = true;
         }
-
-        public virtual void Init()
-        {
-
-        }
-
+        public virtual void Init() { }
         public virtual void Update(float time)
         {
             if (!active)
                 return;
         }
-
-        public virtual void GOReferenceFunction(GameObject g)
-        {
-        }
-
+        public virtual void GOReferenceFunction(GameObject g) { }
+        public virtual void OnCollision(GameObject other) { }
         public GameObject GameObject { get { return gameObject; } }
     }
 }

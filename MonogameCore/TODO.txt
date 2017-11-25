@@ -6,7 +6,7 @@
 -More architecture work;
 -UI manager;
 TODO:
--Efficient collision detection: AABB, circles, unif.grid or quadtree;
+-Efficient collision detection: AABB, circles, unif.grid or quadtree, layers;
 -FSM;
 -Timers;
 -Graphics: animation, tiling, layers;

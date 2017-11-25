@@ -95,7 +95,7 @@ namespace Core
     {
         public Color baseColour, highlightColour, downColour, textColour;
         protected string text;
-        protected Bounds bounds;
+        protected AABB bounds;
         protected Action pressAction;
         protected SpriteFont font;
 
@@ -109,7 +109,7 @@ namespace Core
             baseColour = Color.White;
             this.text = text;
             this.texture = AssetManager.GetResource<Texture2D>(texture);
-            bounds = new Bounds(position.X, position.Y, size.X, size.Y);
+            bounds = new AABB(position.X, position.Y, size.X, size.Y);
             pressAction = a;
             this.font = font;
         }

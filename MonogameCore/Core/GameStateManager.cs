@@ -9,18 +9,21 @@ namespace Core
     {
         public GameObjectManager objects;
         public UIObjectManager ui;
+        internal Collision collision;
 
         public GameState()
         {
             objects = new GameObjectManager();
             ui = new UIObjectManager();
+            collision = new Collision();
         }
-
+        
         public abstract void Load(SpriteBatch batch);
         public abstract void Unload();
         public virtual void Update(float time)
         {
             objects.Update(time);
+            collision.Check();
             ui.Update();
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
@@ -70,6 +73,7 @@ namespace Core
                 instance.currentstate.Unload();
                 instance.currentstate.ui.Clear();
                 instance.currentstate.objects.Clear();
+                instance.currentstate.collision.Clear();
             }
             instance.SetState(state);
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);

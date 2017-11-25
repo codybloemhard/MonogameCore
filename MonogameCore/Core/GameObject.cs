@@ -5,34 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Core
 {
-    public class Bounds
-    {
-        public float x, y, w, h;
-
-        public Bounds(float x, float y, float w, float h)
-        {
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-        }
-
-        public bool Intersects(Bounds b)
-        {
-            if (x < b.x + b.w && x + w > b.x &&
-                y < b.y + b.h && y + h > b.y)
-                return true;
-            return false;
-        }
-
-        public bool Inside(Vector2 p)
-        {
-            if (p.X > x && p.X < x + w && p.Y > y && p.Y < y + h)
-                return true;
-            return false;
-        }
-    }
-    
     public sealed class GameObject : _tagged
     {
         private bool dirtybounds = true, dirtyscale = true;
@@ -42,45 +14,37 @@ namespace Core
         private Component[] comparray;//for fast iteration
         private CRender renderer;
         private float gtime;
-        protected GameObject parent;
-        protected GameObjectManager manager;
-        protected Bounds bounds;
+        private GameObject parent;
+        private GameObjectManager manager;
+        private AABB bounds;
+        private List<GameObject> done;
+        private _collider collider;
         public bool active = true;
 
         public GameObject(GameState context)
         {
             this.manager = context.objects;
             manager.Add(this);
+            context.collision.Add(this);
             construct();
         }
         public GameObject(string tag, GameState context)
         {
             this.manager = context.objects;
             manager.Add(this);
-            construct();
-            this.tag = tag;
-        }
-        public GameObject(GameObjectManager manager)
-        {
-            this.manager = manager;
-            manager.Add(this);
-            construct();
-        }
-        public GameObject(string tag, GameObjectManager manager)
-        {
-            this.manager = manager;
-            manager.Add(this);
+            context.collision.Add(this);
             construct();
             this.tag = tag;
         }
         private void construct()
         {
-            bounds = new Bounds(0, 0, 0, 0);
+            bounds = new AABB(0, 0, 0, 0);
             dirtybounds = true;
             dirtyscale = true;
             childs = new List<GameObject>();
             components = new Dictionary<string, Component>();
             comparray = new Component[0];
+            done = new List<GameObject>();
         }
 
         public void Init()
@@ -92,6 +56,9 @@ namespace Core
         {
             if (!active) return;
             gtime = gameTime;
+            Component col = (collider as Component);
+            if (col != null)
+                col.Update(gameTime);
             for (int i = 0; i < comparray.Length; i++)
                 comparray[i].Update(gameTime);
             if (parent != null)
@@ -105,15 +72,24 @@ namespace Core
             if (!active) return;
             if (renderer != null)
                 renderer.Update(gtime);
-            dirtybounds = false;
             dirtyscale = false;
+            done.Clear();
+        }
+        //This will get called when it collides with something
+        public void OnCollision(GameObject other)
+        {
+            if (!active) return;
+            if (done.Contains(other)) return;
+            done.Add(other);
+            for (int i = 0; i < comparray.Length; i++)
+                comparray[i].OnCollision(other);
         }
         public bool DirtyBounds { get { return dirtybounds; } }
         public bool DirtySize { get { return dirtyscale; } }
         //GetBounds creates a rectangle that matches the dimensions of the drawn sprite
         /*System with a diryflag ensures we do not have to calculate new bounds
         Everytime we either check for collision or updadate our position.*/
-        public Bounds GetBounds()
+        public AABB GetAABB()
         {
             if (!dirtybounds) return bounds;
             bounds.x = pos.X;
@@ -146,7 +122,7 @@ namespace Core
         //this method uses the rectangle created in GetBounds to check if two sprites collide
         public bool Collides(GameObject e)
         {
-            if (GetBounds().Intersects(e.GetBounds())) return true;
+            if (GetAABB().Intersects(e.GetAABB())) return true;
             return false;
         }
         //methods om components te beheren
@@ -174,12 +150,15 @@ namespace Core
             com.gameObject = this;
             if (com is CRender)
                 renderer = com as CRender;
+            else if (com is _collider)
+                collider = com as _collider;
             else
             {
                 components.Add(name, com);
                 comparray = new Component[components.Count];
                 components.Values.CopyTo(comparray, 0);
-            }    
+            }
+            com.Init();
         }
         public int ComponentCount { get { return components.Count; }  }
         //methods om parent-childs relaties te beheren
@@ -256,5 +235,6 @@ namespace Core
 
         public GameObjectManager Manager { get { return manager; } }
         public CRender Renderer { get { return renderer;  } }
+        public _collider Collider { get { return collider; } }
     }
 }
