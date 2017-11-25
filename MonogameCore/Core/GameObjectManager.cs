@@ -10,25 +10,25 @@ namespace Core
         private List<GameObject> objects;
         private TagEngine tags;
 
-        public GameObjectManager()
+        internal GameObjectManager()
         {
             objects = new List<GameObject>();
             tags = new TagEngine();
         }
 
-        public void Init()
+        internal void Init()
         {
             for (int i = 0; i < Size; i++)
                 objects[i].Init();
         }
 
-        public void Update(float time)
+        internal void Update(float time)
         {
             for (int i = 0; i < Size; i++)
                 objects[i].Update(time);
         }
 
-        public void Draw()
+        internal void Draw()
         {
             for (int i = 0; i < Size; i++)
                 objects[i].FinishFrame();
@@ -49,7 +49,7 @@ namespace Core
             objects.Remove(o);
         }
 
-        public void Clear()
+        internal void Clear()
         {
             objects.Clear();
         }

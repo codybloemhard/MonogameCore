@@ -7,12 +7,12 @@ namespace Core
 {
     public abstract class GameState
     {
-        internal GameObjectManager manager;
+        public GameObjectManager objects;
         public UIObjectManager ui;
 
         public GameState()
         {
-            manager = new GameObjectManager();
+            objects = new GameObjectManager();
             ui = new UIObjectManager();
         }
 
@@ -20,14 +20,14 @@ namespace Core
         public abstract void Unload();
         public virtual void Update(float time)
         {
-            manager.Update(time);
+            objects.Update(time);
             ui.Update();
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
-            manager.Draw();
+            objects.Draw();
             batch.End();
             batch.Begin();
             ui.Draw(batch);
@@ -65,7 +65,12 @@ namespace Core
 
         public static void RequestChange(string state, CHANGETYPE type)
         {
-            if (type == CHANGETYPE.LOAD) instance.currentstate.Unload();
+            if (type == CHANGETYPE.LOAD && instance.currentstate != null)
+            {
+                instance.currentstate.Unload();
+                instance.currentstate.ui.Clear();
+                instance.currentstate.objects.Clear();
+            }
             instance.SetState(state);
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
         }
@@ -88,7 +93,6 @@ namespace Core
             if (state == null) return;
             if (states.ContainsKey(name)) return;
             states.Add(name, state);
-            states[name].Load(instance.batch);
         }
 
         public void RemoveState(string name)
@@ -101,6 +105,7 @@ namespace Core
         {
             if (currentstate != null) return;
             SetState(name);
+            currentstate.Load(batch);
         }
     }
 }

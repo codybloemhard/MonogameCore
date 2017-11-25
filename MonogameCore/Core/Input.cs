@@ -40,7 +40,7 @@ namespace Core
             kCurrent = Keyboard.GetState().GetPressedKeys();
         }
 
-        public static void Update()
+        internal static void Update()
         {
             mprevState = mcurrentState;
             mcurrentState = Mouse.GetState();

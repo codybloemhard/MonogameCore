@@ -49,13 +49,13 @@ namespace Core
 
         public GameObject(GameState context)
         {
-            this.manager = context.manager;
+            this.manager = context.objects;
             manager.Add(this);
             construct();
         }
         public GameObject(string tag, GameState context)
         {
-            this.manager = context.manager;
+            this.manager = context.objects;
             manager.Add(this);
             construct();
             this.tag = tag;

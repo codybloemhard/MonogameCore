@@ -10,7 +10,7 @@ namespace Core
         private List<UIElement> elements;
         private TagEngine tags;
 
-        public UIObjectManager()
+        internal UIObjectManager()
         {
             elements = new List<UIElement>();
             tags = new TagEngine();

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Core;
-using MonogameCore.Test;
 using System.Runtime.InteropServices;
 
 namespace Core

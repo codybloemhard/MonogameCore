@@ -9,7 +9,7 @@ TODO:
 -Efficient collision detection: AABB, circles, unif.grid or quadtree;
 -FSM;
 -Timers;
--Graphics: animation, tiling;
+-Graphics: animation, tiling, layers;
 -Openworld loading: seamless load in chunks, multithread;
 -Produceral graphics;
 -Raytracing???;
