@@ -6,12 +6,11 @@ namespace Core
 {
     public class Component
     {
-        protected GameObject gameObject;
+        internal GameObject gameObject;
         public bool active;
 
-        public Component(GameObject parent)
+        public Component()
         {
-            this.gameObject = parent;
             active = true;
         }
 

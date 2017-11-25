@@ -8,12 +8,12 @@ namespace Core
     public class GameObjectManager
     {
         private List<GameObject> objects;
-        private List<GameObject> objs;//For finding multiple objs.
+        private TagEngine tags;
 
         public GameObjectManager()
         {
             objects = new List<GameObject>();
-            objs = new List<GameObject>();
+            tags = new TagEngine();
         }
 
         public void Init()
@@ -53,48 +53,20 @@ namespace Core
         {
             objects.Clear();
         }
-        /*Achterlichende functies for FindWithTag etc.
-        Zie GameObject waarom.*/
+
         public GameObject FindWithTag(string tag)
         {
-            for (int i = 0; i < Size; i++)
-            {
-                if (objects[i].tag == tag)
-                    return objects[i];
-            }
-            return null;
+            return tags.FindWithTag(tag, objects);
         }
 
         public GameObject[] FindAllWithTag(string tag)
         {
-            for (int i = 0; i < Size; i++)
-            {
-                if (objects[i].tag == tag)
-                    objs.Add(objects[i]);
-            }
-            if (objs.Count == 0) return null;
-            GameObject[] arr = objs.ToArray();
-            objs.Clear();
-            return arr;
+            return tags.FindAllWithTag(tag, objects);
         }
 
         public GameObject[] FindAllWithTags(string[] tags)
         {
-            for (int i = 0; i < Size; i++)
-            {
-                for (int j = 0; j < tags.Length; j++)
-                {
-                    if (objects[i].tag == tags[j])
-                    {
-                        objs.Add(objects[i]);
-                        break;
-                    }
-                }
-            }
-            if (objs.Count == 0) return null;
-            GameObject[] arr = objs.ToArray();
-            objs.Clear();
-            return arr;
+            return this.tags.FindAllWithTags(tags, objects);
         }
 
         public int Size { get { return objects.Count; } }

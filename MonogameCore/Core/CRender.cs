@@ -11,7 +11,7 @@ namespace Core
         protected Texture2D sprite;
         public Color colour;
 
-        public CRender(GameObject parent, string sprite, SpriteBatch batch) : base(parent)
+        public CRender(string sprite, SpriteBatch batch) : base()
         {
             this.batch = batch;
             this.sprite = AssetManager.GetResource<Texture2D>(sprite);

@@ -4,9 +4,11 @@
 -Basic input, window, gamestates, other managment;
 -Basic graphics: sprites, UI, simple particles;
 -More architecture work;
-TODO:
 -UI manager;
+TODO:
 -Efficient collision detection: AABB, circles, unif.grid or quadtree;
+-FSM;
+-Timers;
 -Graphics: animation, tiling;
 -Openworld loading: seamless load in chunks, multithread;
 -Produceral graphics;

@@ -53,6 +53,7 @@
     <Compile Include="Core\Input.cs" />
     <Compile Include="Core\Math.cs" />
     <Compile Include="Core\ParticleEmitter.cs" />
+    <Compile Include="Core\TagEngine.cs" />
     <Compile Include="Core\UI.cs" />
     <Compile Include="Core\UIObjectManager.cs" />
     <Compile Include="GameWindow.cs" />

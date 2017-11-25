@@ -13,8 +13,8 @@ namespace MonogameCore.Test
 
         public override void Load(SpriteBatch batch)
         {
-            stone = new GameObject(manager);
-            stone.AddComponent("render", new CRender(stone, "block", batch));
+            stone = new GameObject(this);
+            stone.AddComponent("render", new CRender("block", batch));
             stone.Pos = new Vector2(0, 8);
             stone.Size = new Vector2(4, 1);
         }
@@ -32,7 +32,6 @@ namespace MonogameCore.Test
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
-            device.Clear(Color.Black);
             base.Draw(time, batch, device);
         }
     }

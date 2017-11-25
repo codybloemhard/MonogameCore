@@ -7,8 +7,8 @@ namespace Core
 {
     public abstract class GameState
     {
-        protected GameObjectManager manager;
-        protected UIObjectManager ui;
+        internal GameObjectManager manager;
+        public UIObjectManager ui;
 
         public GameState()
         {

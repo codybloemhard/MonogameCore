@@ -13,18 +13,19 @@ namespace Core
         }
     }
 
-    public abstract class UIElement
+    public abstract class UIElement : _tagged
     {
         protected Vector2 position;
         private Vector2 size, sizemul;
         private bool dirtysize = true;
         public Color colour;
 
-        public UIElement(Vector2 position, Vector2 size)
+        public UIElement(GameState context, Vector2 position, Vector2 size)
         {
             this.position = position;
             this.size = size;
             colour = Color.White;
+            context.ui.Add(this);
         }
 
         public UIElement(Vector2 position, Vector2 size, Color colour)
@@ -57,8 +58,8 @@ namespace Core
     {
         protected Texture2D texture;
 
-        public UITextureElement(string texture, Vector2 position, Vector2 size)
-            : base(position, size)
+        public UITextureElement(GameState context, string texture, Vector2 position, Vector2 size)
+            : base(context, position, size)
         {
             this.texture = AssetManager.GetResource<Texture2D>(texture);
         }
@@ -77,8 +78,8 @@ namespace Core
         public string text;
         protected SpriteFont font;
 
-        public Text(string text, Vector2 position, Vector2 size, SpriteFont font) 
-            : base(position, size)
+        public Text(GameState context, string text, Vector2 position, Vector2 size, SpriteFont font) 
+            : base(context, position, size)
         {
             this.text = text;
             this.font = font;
@@ -98,8 +99,8 @@ namespace Core
         protected Action pressAction;
         protected SpriteFont font;
 
-        public Button(string text, string texture, Action a, SpriteFont font, Vector2 position, Vector2 size) 
-            : base(texture, position, size)
+        public Button(GameState context, string text, string texture, Action a, SpriteFont font, Vector2 position, Vector2 size) 
+            : base(context, texture, position, size)
         {
             colour = Color.White;
             highlightColour = Color.White;

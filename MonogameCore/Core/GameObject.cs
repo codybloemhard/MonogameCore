@@ -33,7 +33,7 @@ namespace Core
         }
     }
     
-    public sealed class GameObject
+    public sealed class GameObject : _tagged
     {
         private bool dirtybounds = true, dirtyscale = true;
         private Vector2 localpos, pos, localsize, size;
@@ -41,13 +41,25 @@ namespace Core
         private Dictionary<string, Component> components;
         private Component[] comparray;//for fast iteration
         private CRender renderer;
+        private float gtime;
         protected GameObject parent;
         protected GameObjectManager manager;
         protected Bounds bounds;
-        public string tag = "";
-        private float gtime;
         public bool active = true;
 
+        public GameObject(GameState context)
+        {
+            this.manager = context.manager;
+            manager.Add(this);
+            construct();
+        }
+        public GameObject(string tag, GameState context)
+        {
+            this.manager = context.manager;
+            manager.Add(this);
+            construct();
+            this.tag = tag;
+        }
         public GameObject(GameObjectManager manager)
         {
             this.manager = manager;
@@ -159,7 +171,8 @@ namespace Core
         }
         public void AddComponent(string name, Component com)
         {
-            if(com is CRender)
+            com.gameObject = this;
+            if (com is CRender)
                 renderer = com as CRender;
             else
             {
