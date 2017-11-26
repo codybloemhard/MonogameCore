@@ -25,7 +25,7 @@ namespace MonogameCore.Test
                 font, new Vector2(6, 4), new Vector2(4, 3));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             //others
-            Timers.Add("timer", 30, changeTextColour);
+            Timers.Add("timer", 10, changeTextColour);
             Camera.SetCameraTopLeft(new Vector2(0, 0));
         }
 

@@ -11,6 +11,7 @@ namespace Core
         public UIObjectManager ui;
         internal Collision collision;
         internal LayeredRenderer renderer;
+        internal bool loaded = false;
 
         public GameState()
         {
@@ -40,6 +41,7 @@ namespace Core
             ui.Draw(batch);
             batch.End();
         }
+        public bool Loaded { get { return loaded; } }
     }
     
     public enum CHANGETYPE
@@ -78,8 +80,11 @@ namespace Core
                 instance.currentstate.ui.Clear();
                 instance.currentstate.objects.Clear();
                 instance.currentstate.collision.Clear();
+                instance.currentstate.loaded = false;
+                Time.timeScale = 1.0f;
             }
             instance.SetState(state);
+            instance.currentstate.loaded = true;
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
         }
 
@@ -114,6 +119,9 @@ namespace Core
             if (currentstate != null) return;
             SetState(name);
             currentstate.Load(batch);
+            currentstate.loaded = true;
         }
+
+        public static GameState CurrentState { get { return instance.currentstate; } }
     }
 }

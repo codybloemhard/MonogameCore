@@ -54,7 +54,7 @@ namespace Core
         }
         protected override void Update(GameTime gameTime)
         {
-            states.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            states.Update((float)gameTime.ElapsedGameTime.TotalSeconds * Time.timeScale);
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
