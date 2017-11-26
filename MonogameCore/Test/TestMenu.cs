@@ -7,7 +7,7 @@ namespace MonogameCore.Test
 {
     public class TestMenu : GameState
     {
-        private Text text;
+        private Text text, testTimer;
         private Button button;
 
         public TestMenu() : base() { }
@@ -18,16 +18,31 @@ namespace MonogameCore.Test
             text = new Text(this, "Gekste game!", new Vector2(0f, 2f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "exampleTag";
+            testTimer = new Text(this, "time: ", new Vector2(0, 8), new Vector2(16f, 1f), font);
+            testTimer.colour = new Color(0, 255, 0);
+            testTimer.tag = "timerText";
             button = new Button(this, "Play here!", "block", () => GameStateManager.RequestChange("game", CHANGETYPE.LOAD),
                 font, new Vector2(6, 4), new Vector2(4, 3));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
+            //others
+            Timers.Add("timer", 30, changeTextColour);
             Camera.SetCameraTopLeft(new Vector2(0, 0));
         }
 
-        public override void Unload() { }
+        private void changeTextColour()
+        {
+            ui.FindWithTag("timerText").colour = new Color(255, 0, 0);
+        }
+
+        public override void Unload()
+        {
+            Timers.FindWithTag("timer").Reset();
+        }
 
         public override void Update(float time)
         {
+            string msg = "Time: " + MathH.Float(Timers.FindWithTag("timer").TimeLeft, 2);
+            (ui.FindWithTag("timerText") as Text).text = msg;
             base.Update(time);
         }
 

@@ -19,20 +19,24 @@ namespace Core
         private AABB bounds;
         private List<GameObject> done;
         private _collider collider;
+        private bool isStatic;
         public bool active = true;
+        public uint layer = 0;
 
-        public GameObject(GameState context)
+        public GameObject(GameState context, bool isStatic = false)
         {
+            this.isStatic = isStatic;
             this.manager = context.objects;
-            manager.Add(this);
-            context.collision.Add(this);
+            manager.Add(this, isStatic);
+            context.collision.Add(this, isStatic);
             construct();
         }
-        public GameObject(string tag, GameState context)
+        public GameObject(string tag, GameState context, bool isStatic = false)
         {
+            this.isStatic = isStatic;
             this.manager = context.objects;
-            manager.Add(this);
-            context.collision.Add(this);
+            manager.Add(this, isStatic);
+            context.collision.Add(this, isStatic);
             construct();
             this.tag = tag;
         }
@@ -61,6 +65,7 @@ namespace Core
                 col.Update(gameTime);
             for (int i = 0; i < comparray.Length; i++)
                 comparray[i].Update(gameTime);
+            if (isStatic) return;
             if (parent != null)
             {
                 Pos = parent.Pos + localpos;
@@ -193,7 +198,7 @@ namespace Core
             for (int i = 0; i < childs.Count; i++)
                 childs[i].Destroy();
             childs.Clear();
-            manager.Destroy(this);
+            manager.Destroy(this, isStatic);
         }
         //locale en wereld coordinaten
         public Vector2 Pos
@@ -236,5 +241,6 @@ namespace Core
         public GameObjectManager Manager { get { return manager; } }
         public CRender Renderer { get { return renderer;  } }
         public _collider Collider { get { return collider; } }
+        public bool IsStatic { get { return isStatic; } }
     }
 }

@@ -46,6 +46,7 @@
     <Compile Include="Core\CRender.cs" />
     <Compile Include="Core\CRenderSet.cs" />
     <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\FSM.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\GameObjectManager.cs" />
     <Compile Include="Core\GameStateManager.cs" />
@@ -53,9 +54,11 @@
     <Compile Include="Core\GridSpace.cs" />
     <Compile Include="Core\Highscores.cs" />
     <Compile Include="Core\Input.cs" />
+    <Compile Include="Core\LayeredRenderer.cs" />
     <Compile Include="Core\Math.cs" />
     <Compile Include="Core\ParticleEmitter.cs" />
     <Compile Include="Core\TagEngine.cs" />
+    <Compile Include="Core\Timers.cs" />
     <Compile Include="Core\UI.cs" />
     <Compile Include="Core\UIObjectManager.cs" />
     <Compile Include="GameWindow.cs" />

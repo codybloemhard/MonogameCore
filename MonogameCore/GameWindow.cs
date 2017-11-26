@@ -14,7 +14,7 @@ namespace Core
         private SpriteBatch batch;
         private Action load;
         public GameStateManager states;
-
+        
         //source: https://stackoverflow.com/questions/4362111/how-do-i-show-a-console-output-window-in-a-forms-application
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

@@ -5,13 +5,18 @@
 -Basic graphics: sprites, UI, simple particles;
 -More architecture work;
 -UI manager;
+-Collision detection architecture;
+-Timers;
+-FSM;
+-Static GameObjects;
+-Graphics: layers;
 TODO:
 -Efficient collision detection: AABB, circles, unif.grid or quadtree, layers;
--FSM;
--Timers;
--Graphics: animation, tiling, layers;
+-Graphics: animation, tiling;
+-Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
 -Produceral graphics;
 -Raytracing???;
 -Text font scaling;
 -Resolution bigger than screen bugs(mouse);
+-Better error handling;

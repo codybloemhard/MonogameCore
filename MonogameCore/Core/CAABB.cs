@@ -61,7 +61,7 @@ namespace Core
             base.Update(time);
             if (sync) aabb = gameObject.GetAABB();
         }
-
+        
         public bool Intersects(_collider o)
         {
             if (o is CAABB)

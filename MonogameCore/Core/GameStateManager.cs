@@ -10,18 +10,21 @@ namespace Core
         public GameObjectManager objects;
         public UIObjectManager ui;
         internal Collision collision;
+        internal LayeredRenderer renderer;
 
         public GameState()
         {
             objects = new GameObjectManager();
             ui = new UIObjectManager();
             collision = new Collision();
+            renderer = new LayeredRenderer();
         }
         
         public abstract void Load(SpriteBatch batch);
         public abstract void Unload();
         public virtual void Update(float time)
         {
+            Timers.Update(time);
             objects.Update(time);
             collision.Check();
             ui.Update();
@@ -30,7 +33,8 @@ namespace Core
         {
             device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
-            objects.Draw();
+            objects.SendToDraw(renderer);
+            renderer.Render();
             batch.End();
             batch.Begin();
             ui.Draw(batch);
@@ -51,7 +55,7 @@ namespace Core
         private static GameStateManager instance;
         private SpriteBatch batch;
 
-        public GameStateManager(SpriteBatch batch)
+        internal GameStateManager(SpriteBatch batch)
         {
             if (instance != null) return;
             states = new Dictionary<string, GameState>();
@@ -79,14 +83,14 @@ namespace Core
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
         }
 
-        public void Update(float time)
+        internal void Update(float time)
         {
             Input.Update();
             if (currentstate == null) return;
             currentstate.Update(time);
         }
 
-        public void Draw(float time, SpriteBatch batch, GraphicsDevice device)
+        internal void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             if (currentstate == null) return;
             currentstate.Draw(time, batch, device);
