@@ -34,14 +34,6 @@ namespace Core
                 objects[i].Update(time);
         }
 
-        internal void SendToDraw(LayeredRenderer renderer)
-        {
-            for (int i = 0; i < StaticSize; i++)
-                renderer.Add(staticObjects[i]);
-            for (int i = 0; i < Size; i++)
-                renderer.Add(objects[i]);
-        }
-
         public void Add(GameObject o, bool isStatic = false)
         {
             if (isStatic) staticObjects.Add(o);

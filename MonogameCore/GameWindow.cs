@@ -33,14 +33,17 @@ namespace Core
             Console.WriteLine("MonogameCore made by Cody Bloemhard.");
             Console.WriteLine("Close this console to close the game!");
         }
+
         public void SetLoad(Action a)
         {
             load = a;
         }
+
         protected override void Initialize()
         {
             base.Initialize();
         }
+
         protected override void LoadContent()
         {
             uint screenHeight = screenWidth / 16 * 9;
@@ -49,14 +52,17 @@ namespace Core
             states = new GameStateManager(batch);
             load();
         }
+
         protected override void UnloadContent()
         {
         }
+
         protected override void Update(GameTime gameTime)
         {
             states.Update((float)gameTime.ElapsedGameTime.TotalSeconds * Time.timeScale);
             base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);

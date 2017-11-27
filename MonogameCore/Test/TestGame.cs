@@ -20,24 +20,22 @@ namespace MonogameCore.Test
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             //Objects
-            GameObject stone = new GameObject("stone", this, true);
+            GameObject stone = new GameObject("stone", this, 1, true);
             stone.AddComponent("render", new CRender("block", batch));
             stone.AddComponent("collider", new CAABB());
             stone.Pos = new Vector2(0, 8);
             stone.Size = new Vector2(4, 1);
-            stone.layer = 1;
-            GameObject player = new GameObject("player", this);
+            GameObject player = new GameObject("player", this, 0);
             player.AddComponent("render", new CRender("block", batch));
             player.AddComponent("move", new CPlayerMovement(3.0f));
             player.AddComponent("collider", new CAABB());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
-            player.layer = 0;
         }
 
         public override void Unload()
         {
-
+            
         }
 
         public override void Update(float time)

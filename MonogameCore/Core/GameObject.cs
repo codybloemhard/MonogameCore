@@ -7,6 +7,7 @@ namespace Core
 {
     public sealed class GameObject : _tagged
     {
+        private GameState context;
         private bool dirtybounds = true, dirtyscale = true;
         private Vector2 localpos, pos, localsize, size;
         private List<GameObject> childs;
@@ -15,31 +16,36 @@ namespace Core
         private CRender renderer;
         private float gtime;
         private GameObject parent;
-        private GameObjectManager manager;
         private AABB bounds;
         private List<GameObject> done;
         private _collider collider;
         private bool isStatic;
+        private uint layer = 0;
         public bool active = true;
-        public uint layer = 0;
 
-        public GameObject(GameState context, bool isStatic = false)
+        public GameObject(GameState context, uint layer = 0, bool isStatic = false)
         {
             this.isStatic = isStatic;
-            this.manager = context.objects;
-            manager.Add(this, isStatic);
+            this.context = context;
+            this.layer = layer;
+            context.objects.Add(this, isStatic);
             context.collision.Add(this, isStatic);
+            context.renderer.Add(this);
             construct();
         }
-        public GameObject(string tag, GameState context, bool isStatic = false)
+
+        public GameObject(string tag, GameState context, uint layer = 0, bool isStatic = false)
         {
             this.isStatic = isStatic;
-            this.manager = context.objects;
-            manager.Add(this, isStatic);
+            this.context = context;
+            this.layer = layer;
+            context.objects.Add(this, isStatic);
             context.collision.Add(this, isStatic);
+            context.renderer.Add(this);
             construct();
             this.tag = tag;
         }
+
         private void construct()
         {
             bounds = new AABB(0, 0, 0, 0);
@@ -111,17 +117,17 @@ namespace Core
         */
         public GameObject FindWithTag(string tag)
         {
-            return manager.FindWithTag(tag);
+            return context.objects.FindWithTag(tag);
         }
 
         public GameObject[] FindAllWithTag(string tag)
         {
-            return manager.FindAllWithTag(tag);
+            return context.objects.FindAllWithTag(tag);
         }
 
         public GameObject[] FindAllWithTags(string[] tags)
         {
-            return manager.FindAllWithTags(tags);
+            return context.objects.FindAllWithTags(tags);
         }
 
         //this method uses the rectangle created in GetBounds to check if two sprites collide
@@ -198,7 +204,9 @@ namespace Core
             for (int i = 0; i < childs.Count; i++)
                 childs[i].Destroy();
             childs.Clear();
-            manager.Destroy(this, isStatic);
+            context.objects.Destroy(this, isStatic);
+            context.collision.Remove(this, isStatic);
+            context.renderer.Remove(this);
         }
         //locale en wereld coordinaten
         public Vector2 Pos
@@ -238,9 +246,10 @@ namespace Core
             }
         }
 
-        public GameObjectManager Manager { get { return manager; } }
+        public GameObjectManager Manager { get { return context.objects; } }
         public CRender Renderer { get { return renderer;  } }
         public _collider Collider { get { return collider; } }
         public bool IsStatic { get { return isStatic; } }
+        public uint Layer { get { return layer; } }
     }
 }

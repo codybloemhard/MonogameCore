@@ -34,7 +34,6 @@ namespace Core
         {
             device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
-            objects.SendToDraw(renderer);
             renderer.Render();
             batch.End();
             batch.Begin();
