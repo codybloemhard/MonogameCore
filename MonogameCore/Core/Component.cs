@@ -21,6 +21,6 @@ namespace Core
         }
         public virtual void GOReferenceFunction(GameObject g) { }
         public virtual void OnCollision(GameObject other) { }
-        public GameObject GameObject { get { return gameObject; } }
+        public GameObject GO { get { return gameObject; } }
     }
 }

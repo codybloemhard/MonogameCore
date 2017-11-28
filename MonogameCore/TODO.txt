@@ -20,3 +20,4 @@ TODO:
 -Text font scaling;
 -Resolution bigger than screen bugs(mouse);
 -Better error handling;
+-Better sound;

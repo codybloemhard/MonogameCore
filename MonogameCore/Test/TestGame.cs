@@ -20,15 +20,31 @@ namespace MonogameCore.Test
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
             //Objects
-            GameObject stone = new GameObject("stone", this, 1, true);
-            stone.AddComponent("render", new CRender("block", batch));
-            stone.AddComponent("collider", new CAABB());
-            stone.Pos = new Vector2(0, 8);
-            stone.Size = new Vector2(4, 1);
-            GameObject player = new GameObject("player", this, 0, true);
-            player.AddComponent("render", new CRender("block", batch));
+            GameObject stone0 = new GameObject("stone", this, 2, true);
+            stone0.AddComponent("render", new CRender("block"));
+            stone0.AddComponent("collider", new CAABB());
+            stone0.Pos = new Vector2(0, 8);
+            stone0.Size = new Vector2(8, 1);
+            GameObject stone1 = new GameObject("stone", this, 2, true);
+            stone1.AddComponent("render", new CRender("block"));
+            stone1.AddComponent("collider", new CAABB());
+            stone1.Pos = new Vector2(9, 7);
+            stone1.Size = new Vector2(2, 2);
+            GameObject stone2 = new GameObject("stone", this, 2, true);
+            stone2.AddComponent("render", new CRender("block"));
+            stone2.AddComponent("collider", new CAABB());
+            stone2.Pos = new Vector2(12, 5);
+            stone2.Size = new Vector2(3, 0.2f);
+            GameObject stone3 = new GameObject("stone", this, 2, true);
+            stone3.AddComponent("render", new CRender("block"));
+            stone3.AddComponent("collider", new CAABB());
+            stone3.Pos = new Vector2(8, 3);
+            stone3.Size = new Vector2(3, 0.2f);
+            GameObject player = new GameObject("player", this, 1);
+            player.AddComponent("render", new CRender("block"));
             player.AddComponent("move", new CPlayerMovement(3.0f));
             player.AddComponent("collider", new CAABB());
+            player.AddComponent("shoot", new CShoot());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
         }
@@ -43,7 +59,7 @@ namespace MonogameCore.Test
             Camera.SetCameraTopLeft(new Vector2(0, 0));
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
-            text.text = "Position: " + player.Pos.X + " , " + player.Pos.Y;
+            text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
             base.Update(time);
         }
 

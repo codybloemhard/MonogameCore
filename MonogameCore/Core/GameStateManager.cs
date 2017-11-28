@@ -26,8 +26,8 @@ namespace Core
         public virtual void Update(float time)
         {
             Timers.Update(time);
-            objects.Update(time);
             collision.Check();
+            objects.Update(time);
             ui.Update();
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)

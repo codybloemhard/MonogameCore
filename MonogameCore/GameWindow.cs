@@ -49,6 +49,7 @@ namespace Core
             uint screenHeight = screenWidth / 16 * 9;
             Camera.SetupResolution(screenWidth, screenHeight, graphics, GraphicsDevice);
             batch = new SpriteBatch(GraphicsDevice);
+            AssetManager.batch = batch;
             states = new GameStateManager(batch);
             load();
         }

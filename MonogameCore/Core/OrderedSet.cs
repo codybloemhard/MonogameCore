@@ -19,6 +19,8 @@ namespace Core
             int index = orderedSet.BinarySearch(obj, comparer);
             if (index < 0)
                 orderedSet.Insert(~index, obj);
+            else
+                orderedSet.Insert(index, obj);
         }
 
         public List<T> Set { get { return orderedSet; } }

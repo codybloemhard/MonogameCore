@@ -11,9 +11,10 @@ namespace Core
         protected Texture2D sprite;
         public Color colour;
 
-        public CRender(string sprite, SpriteBatch batch) : base()
+        public CRender(string sprite) : base()
         {
-            this.batch = batch;
+            this.batch = AssetManager.batch;
+            if(batch == null) { /*error*/ }
             this.sprite = AssetManager.GetResource<Texture2D>(sprite);
             colour = Color.White;
         }

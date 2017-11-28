@@ -13,8 +13,8 @@ namespace Core
         private Vector2 blocksize, sizemultiplier;
         private Texture2D texture;
 
-        public CRenderSet(string sprite, SpriteBatch batch)
-            : base(sprite, batch) { }
+        public CRenderSet(string sprite)
+            : base(sprite) { }
 
         public void InitSet(int[,] set, string texture, Color[] colours, Vector2 pos, Vector2 size)
         {

@@ -35,7 +35,7 @@ namespace Core
 
     public class CAABB : Component, _collider
     {
-        private AABB aabb;
+        internal AABB aabb;
         private bool sync = false;
 
         public CAABB(float x, float y, float w, float h) : base()

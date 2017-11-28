@@ -246,10 +246,16 @@ namespace Core
             }
         }
 
+        public RaycastResult Raycast(Vector2 origin, Vector2 direction, RAYCASTTYPE type)
+        {
+            return context.collision.Raycast(origin, direction, type);
+        }
+
         public GameObjectManager Manager { get { return context.objects; } }
         public CRender Renderer { get { return renderer;  } }
         public _collider Collider { get { return collider; } }
         public bool IsStatic { get { return isStatic; } }
         public uint Layer { get { return layer; } }
+        public GameState Context { get { return context; } }
     }
 }
