@@ -23,6 +23,16 @@ namespace Core
             return vec;
         }
 
+        public static Vector2 RandomUnitAngle()
+        {
+            Vector2 vec = new Vector2();
+            double r = random.NextDouble();
+            vec.X = (float)Math.Sin(r);
+            vec.Y = (float)Math.Cos(r);
+            vec.Normalize();
+            return vec;
+        }
+
         public static string Float(float x, int p)
         {
             string res = "" + Math.Round(x, p);

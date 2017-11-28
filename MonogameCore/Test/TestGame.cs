@@ -25,7 +25,7 @@ namespace MonogameCore.Test
             stone.AddComponent("collider", new CAABB());
             stone.Pos = new Vector2(0, 8);
             stone.Size = new Vector2(4, 1);
-            GameObject player = new GameObject("player", this, 0);
+            GameObject player = new GameObject("player", this, 0, true);
             player.AddComponent("render", new CRender("block", batch));
             player.AddComponent("move", new CPlayerMovement(3.0f));
             player.AddComponent("collider", new CAABB());

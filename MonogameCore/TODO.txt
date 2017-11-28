@@ -15,7 +15,7 @@ TODO:
 -Graphics: animation, tiling;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
--Produceral graphics;
+-Procedural graphics;
 -Raytracing???;
 -Text font scaling;
 -Resolution bigger than screen bugs(mouse);

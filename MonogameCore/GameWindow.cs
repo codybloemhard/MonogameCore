@@ -27,7 +27,7 @@ namespace Core
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             screenWidth = width;
-
+            
             AllocConsole();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("MonogameCore made by Cody Bloemhard.");
