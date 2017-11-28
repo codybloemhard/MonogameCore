@@ -30,7 +30,7 @@ namespace Core
             for(int i = 0; i < res.Length; i++)
             {
                 if (c != -1) c++;//masterrace
-                if (res[i] == '.') c = 0;
+                if (res[i] == '.' || res[i] == ',') c = 0;
             }
             if(c == -1)
             {
