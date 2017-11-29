@@ -12,7 +12,7 @@ namespace Core
 {
     public static class AssetManager
     {
-        public static SpriteBatch batch;
+        internal static SpriteBatch batch;
         private static GenericDatabase database;
         public static ContentManager content;
 
