@@ -19,6 +19,7 @@ namespace Core
         private Vector2 size, sizemul;
         private bool dirtysize = true;
         public Color colour;
+        public GameObject GO;
 
         public UIElement(GameState context, Vector2 position, Vector2 size)
         {
@@ -33,6 +34,11 @@ namespace Core
             this.position = position;
             this.size = size;
             this.colour = colour;
+        }
+
+        public void AddGameObject(GameObject GO)
+        {
+            this.GO = GO;
         }
 
         protected Vector2 DrawSize(Vector2 physicalsize)
@@ -52,6 +58,14 @@ namespace Core
         }
 
         public abstract void Draw(SpriteBatch batch);
+
+        public virtual void Update()
+        {
+            if (GO != null)
+            {
+                position = GO.Pos;
+            }
+        }
     }
 
     public class UITextureElement : UIElement
@@ -123,7 +137,7 @@ namespace Core
             colour = baseColour;
         }
 
-        public void Update()
+        public override void Update()
         {
             Vector2 mpos = Input.GetMousePosition();
             bool down = Input.GetMouseButton(PressAction.DOWN, MouseButton.LEFT);
