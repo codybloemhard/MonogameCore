@@ -51,9 +51,13 @@ namespace MonogameCore.Test
             player.AddComponent("move", new CPlayerMovement(3.0f));
             player.AddComponent("collider", new CAABB());
             player.AddComponent("shoot", new CShoot());
+            player.AddComponent("healthbar", new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
-            uint max = 1000;
+            //UI testing
+            Text UITest = new Text(this, "Random UI", new Vector2(0, 0), new Vector2(5, 1), font);
+            UITest.AddGameObject(player);
+            uint max = 1000; 
             for (int i = 0; i < max; i++)
             {
                 float t = (float)i / (float)max * 2 * MathH.PI;

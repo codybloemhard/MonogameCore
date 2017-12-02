@@ -71,6 +71,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\CBulletMovement.cs" />
+    <Compile Include="Test\CHealthBar.cs" />
     <Compile Include="Test\CPlayerMovement.cs" />
     <Compile Include="Test\CShoot.cs" />
     <Compile Include="Test\TestGame.cs" />
