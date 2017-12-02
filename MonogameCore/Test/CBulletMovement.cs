@@ -15,7 +15,7 @@ namespace MonogameCore.Test
             this.speed = speed;
             this.dir = dir;
         }
-        
+
         public override void Init()
         {
             CRender render = GO.Renderer;

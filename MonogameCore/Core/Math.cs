@@ -12,6 +12,7 @@ namespace Core
             random = new Random();
         }
 
+        public static float PI = 3.14159265359f;
         public static float RAD_TO_DEG = 57.2957795f;
         public static float DEG_TO_RAD = 0.01745329f;
 

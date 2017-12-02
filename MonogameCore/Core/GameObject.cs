@@ -29,7 +29,6 @@ namespace Core
             this.context = context;
             this.layer = layer;
             context.objects.Add(this, isStatic);
-            context.collision.Add(this, isStatic);
             context.renderer.Add(this);
             construct();
         }
@@ -40,7 +39,6 @@ namespace Core
             this.context = context;
             this.layer = layer;
             context.objects.Add(this, isStatic);
-            context.collision.Add(this, isStatic);
             context.renderer.Add(this);
             construct();
             this.tag = tag;
@@ -57,11 +55,6 @@ namespace Core
             done = new List<GameObject>();
         }
 
-        public void Init()
-        {
-            for (int i = 0; i < comparray.Length; i++)
-                comparray[i].Init();
-        }
         public void Update(float gameTime)
         {
             if (!active) return;
@@ -78,6 +71,7 @@ namespace Core
                 Size = parent.Size * localsize;
             }
         }
+
         public void FinishFrame()
         {
             if (!active) return;
@@ -159,17 +153,20 @@ namespace Core
         public void AddComponent(string name, Component com)
         {
             com.gameObject = this;
+            com.Init();
             if (com is CRender)
                 renderer = com as CRender;
             else if (com is _collider)
+            {
                 collider = com as _collider;
+                context.collision.Add(collider, isStatic);
+            }
             else
             {
                 components.Add(name, com);
                 comparray = new Component[components.Count];
                 components.Values.CopyTo(comparray, 0);
             }
-            com.Init();
         }
         public int ComponentCount { get { return components.Count; }  }
         //methods om parent-childs relaties te beheren
