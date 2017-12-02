@@ -37,6 +37,7 @@ namespace MonogameCore.Test
                 dir = velocity;
                 dir.Normalize();
             }
+
             //gravity and jump
             Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
             Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);

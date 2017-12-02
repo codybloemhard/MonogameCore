@@ -45,12 +45,13 @@ namespace MonogameCore.Test
             player.AddComponent("move", new CPlayerMovement(3.0f));
             player.AddComponent("collider", new CAABB());
             player.AddComponent("shoot", new CShoot());
+            player.AddComponent("healthbar", new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
 
             //UI testing
-            Text UITest = new Text(this, "Random UI", new Vector2(0, 0), new Vector2(5, 1), font);
-            UITest.AddGameObject(player);
+            //Text UITest = new Text(this, "Random UI", new Vector2(0, 0), new Vector2(5, 1), font);
+            //UITest.AddGameObject(player);
         }
 
         public override void Unload()
