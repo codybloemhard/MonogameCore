@@ -62,9 +62,7 @@ namespace Core
         public virtual void Update()
         {
             if (GO != null)
-            {
                 position = GO.Pos;
-            }
         }
     }
 

@@ -30,8 +30,9 @@ namespace Core
             
             AllocConsole();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("MonogameCore made by Cody Bloemhard.");
+            Console.WriteLine("MonogameCore running!");
             Console.WriteLine("Close this console to close the game!");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void SetLoad(Action a)
@@ -49,7 +50,7 @@ namespace Core
             uint screenHeight = screenWidth / 16 * 9;
             Camera.SetupResolution(screenWidth, screenHeight, graphics, GraphicsDevice);
             batch = new SpriteBatch(GraphicsDevice);
-            AssetManager.batch = batch;
+            AssetManager.Batch = batch;
             AssetManager.device = GraphicsDevice;
             AssetManager.LoadPlaceholder();
             states = new GameStateManager(batch);
@@ -62,7 +63,9 @@ namespace Core
 
         protected override void Update(GameTime gameTime)
         {
-            states.Update((float)gameTime.ElapsedGameTime.TotalSeconds * Time.timeScale);
+            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Debug.Update(time);
+            states.Update(time * Time.timeScale);
             base.Update(gameTime);
         }
 

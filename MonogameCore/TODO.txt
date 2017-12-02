@@ -13,14 +13,17 @@
 -Raytracing;
 -Efficient collision detection: quadtree;
 TODO:
--Graphics: animation, tiling;
--Collision: layer;
+-Debuger
+-Better error handling;
+-Graphics: animation, tiling, atlas;
+-Collision: layer, raytracing using quadtree;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
 -Procedural graphics;
 -Text font scaling;
 -Resolution bigger than screen bugs(mouse);
--Better error handling;
 -Better sound;
 -level editor
 -bones animation
+-Tagengine using binary search
+-get renderer and collider from GetComponent<T>

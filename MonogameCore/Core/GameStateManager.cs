@@ -31,6 +31,8 @@ namespace Core
             collision.Check();
             objects.Update(time);
             ui.Update();
+            Debug.dynamicObjects = objects.objects.Count;
+            Debug.staticObjects = objects.staticObjects.Count;
         }
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
@@ -39,7 +41,7 @@ namespace Core
             renderer.Render();
             batch.End();
             batch.Begin();
-            lines.Render(batch);
+            if(Debug.drawLines) lines.Render(batch);
             ui.Draw(batch);
             batch.End();
         }
@@ -71,7 +73,11 @@ namespace Core
         private void SetState(string name)
         {
             if (states.ContainsKey(name))
+            {
                 currentstate = states[name];
+                Debug.PrintNotification("GameState loaded: ", "\"" + name + "\"");
+            }
+            else Debug.PrintError("Could not find GameState " + name + "!");
         }
 
         public static void RequestChange(string state, CHANGETYPE type)
@@ -109,6 +115,7 @@ namespace Core
             if (state == null) return;
             if (states.ContainsKey(name)) return;
             states.Add(name, state);
+            Debug.PrintNotification("GameState added: ", "\"" + name + "\"");
         }
 
         public void RemoveState(string name)

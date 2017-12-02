@@ -12,7 +12,7 @@ namespace Core
 {
     public static class AssetManager
     {
-        internal static SpriteBatch batch;
+        private static SpriteBatch batch;
         private static GenericDatabase database;
         public static ContentManager content;
         internal static Texture2D placeholder;
@@ -37,12 +37,25 @@ namespace Core
                 return res;
             try { res = content.Load<T>(name); } 
             catch(Exception){
+                Debug.PrintError("Asset \"" + name + "\" is not found!");
                 return default(T);
             }
             database.SetData<T>(name, res);
+            Debug.PrintNotification("Asset loaded: ", "\"" + name + "\"");
             return res;
         }
 
-
+        internal static SpriteBatch Batch
+        {
+            get
+            {
+                if (batch == null) Debug.PrintError("Batch is null!");
+                return batch;
+            }
+            set
+            {
+                batch = value;
+            }
+        }
     }
 }

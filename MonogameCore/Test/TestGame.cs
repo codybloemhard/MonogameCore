@@ -11,6 +11,7 @@ namespace MonogameCore.Test
 
         public override void Load(SpriteBatch batch)
         {
+            Debug.FullDebugMode();
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
@@ -23,41 +24,38 @@ namespace MonogameCore.Test
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0, 8);
             stone0.Size = new Vector2(8, 1);
-            stone0.AddComponent("render", new CRender("block"));
-            stone0.AddComponent("collider", new CAABB());
+            stone0.AddComponent(new CRender("block"));
+            stone0.AddComponent(new CAABB());
             GameObject stone1 = new GameObject("stone", this, 2, true);
             stone1.Pos = new Vector2(9, 7);
             stone1.Size = new Vector2(2, 2);
-            stone1.AddComponent("render", new CRender("block"));
-            stone1.AddComponent("collider", new CAABB());
+            stone1.AddComponent(new CRender("block"));
+            stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(12, 5);
             stone2.Size = new Vector2(3, 0.2f);
-            stone2.AddComponent("render", new CRender("block"));
-            stone2.AddComponent("collider", new CAABB());
+            stone2.AddComponent(new CRender("block"));
+            stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
             stone3.Pos = new Vector2(8, 3);
             stone3.Size = new Vector2(3, 0.2f);
-            stone3.AddComponent("render", new CRender("block"));
-            stone3.AddComponent("collider", new CAABB());
+            stone3.AddComponent(new CRender("block"));
+            stone3.AddComponent(new CAABB());
             GameObject killer = new GameObject("killer", this, 2);
-            killer.AddComponent("render", new CRender("block"));
-            killer.AddComponent("collider", new CAABB());
+            killer.AddComponent(new CRender("block"));
+            killer.AddComponent(new CAABB());
             killer.Pos = new Vector2(3, 5);
             killer.Size = new Vector2(1, 1);
             killer.Renderer.colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            player.AddComponent("render", new CRender("block"));
-            player.AddComponent("move", new CPlayerMovement(3.0f));
-            player.AddComponent("collider", new CAABB());
-            player.AddComponent("shoot", new CShoot());
-            player.AddComponent("healthbar", new CHealthBar(5, player));
+            player.AddComponent(new CRender("block"));
+            player.AddComponent(new CPlayerMovement(3.0f));
+            player.AddComponent(new CAABB());
+            player.AddComponent(new CShoot());
+            player.AddComponent(new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 0.5f);
-            //UI testing
-            Text UITest = new Text(this, "Random UI", new Vector2(0, 0), new Vector2(5, 1), font);
-            UITest.AddGameObject(player);
-            uint max = 1000; 
+            uint max = 1000;
             for (int i = 0; i < max; i++)
             {
                 float t = (float)i / (float)max * 2 * MathH.PI;
@@ -65,8 +63,8 @@ namespace MonogameCore.Test
                 GameObject stone = new GameObject("stone", this, 2, true);
                 stone.Pos = new Vector2(5, 3) + new Vector2((float)Math.Sin(t) * rad, (float)Math.Cos(t) * rad);
                 stone.Size = new Vector2(0.1f, 0.1f);
-                stone.AddComponent("render", new CRender("block"));
-                stone.AddComponent("collider", new CAABB());
+                stone.AddComponent(new CRender("block"));
+                stone.AddComponent(new CAABB());
             }
         }
         
