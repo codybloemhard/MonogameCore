@@ -79,6 +79,16 @@ namespace Core
             return aabb;
         }
 
+        public bool IsActive()
+        {
+            return GO.active;
+        }
+
+        public GameObject Parent()
+        {
+            return GO;
+        }
+
         public bool Inside(Vector2 p)
         {
             return aabb.Inside(p);

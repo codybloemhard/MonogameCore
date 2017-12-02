@@ -11,8 +11,9 @@ namespace Core
         private Vector2 diff;
         private float angle;
         private Rectangle r;
+        private Color colour;
 
-        public Line(Vector2 p, Vector2 q)
+        public Line(Vector2 p, Vector2 q, Color colour = default(Color))
         {
             this.p = p;
             this.q = q;
@@ -21,9 +22,11 @@ namespace Core
             r = new Rectangle((int)Grid.ToScreenSpace(p).X,
                             (int)Grid.ToScreenSpace(p).Y,
                             (int)Grid.ToScreenSpace(new Vector2(diff.Length(), 1)).X, 1);
+            if (colour == default(Color)) colour = Color.White;
+            this.colour = colour;
         }
 
-        public Line(float px, float py, float qx, float qy)
+        public Line(float px, float py, float qx, float qy, Color colour = default(Color))
         {
             p = new Vector2(px, py);
             q = new Vector2(qx, qy);
@@ -32,11 +35,13 @@ namespace Core
             r = new Rectangle((int)Grid.ToScreenSpace(p).X,
                             (int)Grid.ToScreenSpace(p).Y,
                             (int)Grid.ToScreenSpace(new Vector2(diff.Length(), 1)).X, 1);
+            if (colour == default(Color)) colour = Color.White;
+            this.colour = colour;
         }
 
         public void Render(SpriteBatch batch)
         {
-            batch.Draw(AssetManager.placeholder, r, null, Color.White, angle, Vector2.Zero, SpriteEffects.None, 0);
+            batch.Draw(AssetManager.placeholder, r, null, colour, angle, Vector2.Zero, SpriteEffects.None, 0);
         }
     }
 

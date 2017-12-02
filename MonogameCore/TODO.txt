@@ -11,9 +11,10 @@
 -Static GameObjects;
 -Graphics: layers;
 -Raytracing;
+-Efficient collision detection: quadtree;
 TODO:
--Efficient collision detection: AABB, circles, unif.grid or quadtree, layers;
 -Graphics: animation, tiling;
+-Collision: layer;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
 -Procedural graphics;
