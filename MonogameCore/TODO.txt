@@ -10,14 +10,16 @@
 -FSM;
 -Static GameObjects;
 -Graphics: layers;
+-Raytracing;
 TODO:
 -Efficient collision detection: AABB, circles, unif.grid or quadtree, layers;
 -Graphics: animation, tiling;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
 -Procedural graphics;
--Raytracing???;
 -Text font scaling;
 -Resolution bigger than screen bugs(mouse);
 -Better error handling;
 -Better sound;
+-level editor
+-bones animation

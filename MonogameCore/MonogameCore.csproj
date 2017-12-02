@@ -55,6 +55,7 @@
     <Compile Include="Core\Highscores.cs" />
     <Compile Include="Core\Input.cs" />
     <Compile Include="Core\LayeredRenderer.cs" />
+    <Compile Include="Core\LineRenderer.cs" />
     <Compile Include="Core\Math.cs" />
     <Compile Include="Core\OrderedSet.cs" />
     <Compile Include="Core\ParticleEmitter.cs" />

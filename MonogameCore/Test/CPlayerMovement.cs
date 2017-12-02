@@ -16,6 +16,7 @@ namespace MonogameCore.Test
         public CPlayerMovement(float speed) : base()
         {
             this.speed = speed;
+            dir = new Vector2(1, 0);
         }
 
         public override void Init()
@@ -61,6 +62,12 @@ namespace MonogameCore.Test
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f));
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            if (other.tag == "killer")
+                GO.Pos = new Vector2(1, 1);
         }
     }
 }

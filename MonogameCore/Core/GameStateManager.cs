@@ -11,14 +11,16 @@ namespace Core
         public UIObjectManager ui;
         internal Collision collision;
         internal LayeredRenderer renderer;
+        internal LineRenderer lines;
         internal bool loaded = false;
 
         public GameState()
         {
             objects = new GameObjectManager();
             ui = new UIObjectManager();
-            collision = new Collision();
             renderer = new LayeredRenderer();
+            lines = new LineRenderer();
+            collision = new Collision(lines);
         }
         
         public abstract void Load(SpriteBatch batch);
@@ -37,6 +39,7 @@ namespace Core
             renderer.Render();
             batch.End();
             batch.Begin();
+            lines.Render(batch);
             ui.Draw(batch);
             batch.End();
         }
@@ -79,6 +82,7 @@ namespace Core
                 instance.currentstate.ui.Clear();
                 instance.currentstate.objects.Clear();
                 instance.currentstate.collision.Clear();
+                instance.currentstate.renderer.Clear();
                 instance.currentstate.loaded = false;
                 Time.timeScale = 1.0f;
             }

@@ -50,6 +50,8 @@ namespace Core
             Camera.SetupResolution(screenWidth, screenHeight, graphics, GraphicsDevice);
             batch = new SpriteBatch(GraphicsDevice);
             AssetManager.batch = batch;
+            AssetManager.device = GraphicsDevice;
+            AssetManager.LoadPlaceholder();
             states = new GameStateManager(batch);
             load();
         }

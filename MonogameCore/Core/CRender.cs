@@ -14,8 +14,9 @@ namespace Core
         public CRender(string sprite) : base()
         {
             this.batch = AssetManager.batch;
-            if(batch == null) { /*error*/ }
+            if(batch == null) { Console.WriteLine("Could not fin SpriteBatch!"); }
             this.sprite = AssetManager.GetResource<Texture2D>(sprite);
+            if (this.sprite == null) Console.WriteLine("Could not find Sprite");
             colour = Color.White;
         }
 

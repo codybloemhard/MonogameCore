@@ -15,10 +15,18 @@ namespace Core
         internal static SpriteBatch batch;
         private static GenericDatabase database;
         public static ContentManager content;
+        internal static Texture2D placeholder;
+        internal static GraphicsDevice device;
 
         static AssetManager()
         {
             database = new GenericDatabase();
+        }
+
+        internal static void LoadPlaceholder()
+        {
+            placeholder = new Texture2D(device, 1, 1);
+            placeholder.SetData<Color>(new Color[] { Color.White });
         }
 
         public static T GetResource<T>(string name)
@@ -34,5 +42,7 @@ namespace Core
             database.SetData<T>(name, res);
             return res;
         }
+
+
     }
 }

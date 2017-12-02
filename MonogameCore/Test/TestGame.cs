@@ -40,6 +40,12 @@ namespace MonogameCore.Test
             stone3.AddComponent("collider", new CAABB());
             stone3.Pos = new Vector2(8, 3);
             stone3.Size = new Vector2(3, 0.2f);
+            GameObject killer = new GameObject("killer", this, 2);
+            killer.AddComponent("render", new CRender("block"));
+            killer.AddComponent("collider", new CAABB());
+            killer.Pos = new Vector2(3, 5);
+            killer.Size = new Vector2(1, 1);
+            killer.Renderer.colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
             player.AddComponent("render", new CRender("block"));
             player.AddComponent("move", new CPlayerMovement(3.0f));

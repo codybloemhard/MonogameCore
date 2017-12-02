@@ -31,6 +31,11 @@ namespace Core
                 return true;
             return false;
         }
+
+        public string String()
+        {
+            return x + " , " + y + " , " + w + " , " + h;
+        }
     }
 
     public class CAABB : Component, _collider
@@ -67,6 +72,11 @@ namespace Core
             if (o is CAABB)
                 return aabb.Intersects((o as CAABB).aabb);
             return false;
+        }
+
+        public AABB Minmax()
+        {
+            return aabb;
         }
 
         public bool Inside(Vector2 p)

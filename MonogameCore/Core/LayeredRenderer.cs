@@ -23,6 +23,12 @@ namespace Core
         {
             set.Remove(go);
         }
+        
+        internal void Clear()
+        {
+            set.Clear();
+        }
+
         internal void Render()
         {
             for (int i = set.Set.Count - 1; i >= 0; i--)
