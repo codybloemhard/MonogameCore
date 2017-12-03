@@ -37,7 +37,7 @@ namespace Core
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
+            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.TranslationMatrix);
             renderer.Render();
             batch.End();
             batch.Begin();

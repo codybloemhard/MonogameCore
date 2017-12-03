@@ -10,7 +10,7 @@ namespace Core
         internal static int dynamicObjects;
         internal static int staticObjects;
 
-        public static float printInterval = 5.0f;
+        public static float printInterval = 1.0f;
         public static bool printErrors = false;
         public static bool drawLines = false;
         public static bool printData = false;
@@ -86,6 +86,7 @@ namespace Core
             else return;
             if (printData)
             {
+                PrintDebug("FPS: ", Time.Fps);
                 PrintDebug("Dynamics: ", dynamicObjects);
                 PrintDebug("Statics: ", staticObjects);
             }

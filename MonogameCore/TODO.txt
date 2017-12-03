@@ -12,9 +12,9 @@
 -Graphics: layers;
 -Raytracing;
 -Efficient collision detection: quadtree;
-TODO:
 -Debuger
 -Better error handling;
+TODO:
 -Graphics: animation, tiling, atlas;
 -Collision: layer, raytracing using quadtree;
 -Mulithreaded task system;

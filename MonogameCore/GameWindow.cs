@@ -56,7 +56,7 @@ namespace Core
             states = new GameStateManager(batch);
             load();
         }
-
+        
         protected override void UnloadContent()
         {
         }
@@ -71,6 +71,7 @@ namespace Core
 
         protected override void Draw(GameTime gameTime)
         {
+            Time.Update();
             GraphicsDevice.Clear(Color.Black);
             states.Draw((float)gameTime.ElapsedGameTime.TotalSeconds, batch, GraphicsDevice);
             base.Draw(gameTime);
