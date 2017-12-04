@@ -11,6 +11,7 @@
 -Static GameObjects;
 -Graphics: layers;
 -Raytracing;
+
 TODO:
 -Efficient collision detection: AABB, circles, unif.grid or quadtree, layers;
 -Graphics: animation, tiling;
