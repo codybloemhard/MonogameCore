@@ -28,7 +28,7 @@ namespace MonogameCore.Test
             Timers.Add("timer", 10, changeTextColour);
             Camera.SetCameraTopLeft(new Vector2(0, 0));
         }
-
+        
         private void changeTextColour()
         {
             ui.FindWithTag("timerText").colour = new Color(255, 0, 0);

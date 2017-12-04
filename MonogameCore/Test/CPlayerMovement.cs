@@ -22,7 +22,7 @@ namespace MonogameCore.Test
         public override void Init()
         {
             CRender render = GO.Renderer;
-            if (render != null) render.colour = Color.Blue;
+            if (render != null) render.colour = Color.White;
         }
 
         public override void Update(float time)

@@ -25,6 +25,7 @@ namespace Core
         
         public abstract void Load(SpriteBatch batch);
         public abstract void Unload();
+
         public virtual void Update(float time)
         {
             Timers.Update(time);
@@ -34,6 +35,7 @@ namespace Core
             Debug.dynamicObjects = objects.objects.Count;
             Debug.staticObjects = objects.staticObjects.Count;
         }
+
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
@@ -42,9 +44,11 @@ namespace Core
             batch.End();
             batch.Begin();
             if(Debug.drawLines) lines.Render(batch);
+            //batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
             ui.Draw(batch);
             batch.End();
         }
+
         public bool Loaded { get { return loaded; } }
     }
     
@@ -128,8 +132,12 @@ namespace Core
         {
             if (currentstate != null) return;
             SetState(name);
-            currentstate.Load(batch);
-            currentstate.loaded = true;
+        }
+
+        internal static void LoadStartingState()
+        {
+            instance.currentstate.Load(instance.batch);
+            instance.currentstate.loaded = true;
         }
 
         public static GameState CurrentState { get { return instance.currentstate; } }

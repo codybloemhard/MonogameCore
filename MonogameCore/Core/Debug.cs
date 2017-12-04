@@ -6,18 +6,20 @@ namespace Core
     public static class Debug
     {
         private static float timer;
+        private static bool inDebug = false;
 
         internal static int dynamicObjects;
         internal static int staticObjects;
-
+        
         public static float printInterval = 1.0f;
-        public static bool printErrors = false;
+        public static bool printErrors = true;
         public static bool drawLines = false;
         public static bool printData = false;
         public static bool printNotifications = false;
         
         public static void ReleaseMode()
         {
+            inDebug = false;
             printErrors = false;
             drawLines = false;
             printData = false;
@@ -29,6 +31,7 @@ namespace Core
 
         public static void FullDebugMode()
         {
+            inDebug = true;
             printErrors = true;
             drawLines = true;
             printData = true;
@@ -36,6 +39,12 @@ namespace Core
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[Engine] :: Debug Mode activated!");
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public static void SwitchMode()
+        {
+            if (inDebug) ReleaseMode();
+            else FullDebugMode();
         }
 
         internal static void PrintError(string error)

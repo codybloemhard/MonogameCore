@@ -55,6 +55,9 @@ namespace Core
             AssetManager.LoadPlaceholder();
             states = new GameStateManager(batch);
             load();
+            TextureManager.CalculateTree();
+            TextureManager.Bake();
+            GameStateManager.LoadStartingState();
         }
         
         protected override void UnloadContent()

@@ -62,6 +62,7 @@
     <Compile Include="Core\ParticleEmitter.cs" />
     <Compile Include="Core\TagEngine.cs" />
     <Compile Include="Core\TaskEngine.cs" />
+    <Compile Include="Core\TextureManager.cs" />
     <Compile Include="Core\Timers.cs" />
     <Compile Include="Core\UI.cs" />
     <Compile Include="Core\UIObjectManager.cs" />

@@ -5,9 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-/*Deze deelt pointers uit en laad pas als de asset nooit eerder
-is opgevraagd.
-*/
+
 namespace Core
 {
     public static class AssetManager
@@ -27,6 +25,11 @@ namespace Core
         {
             placeholder = new Texture2D(device, 1, 1);
             placeholder.SetData<Color>(new Color[] { Color.White });
+        }
+
+        internal static Texture2D GetNewTexture(uint w, uint h)
+        {
+            return new Texture2D(device, (int)w, (int)h);
         }
 
         public static T GetResource<T>(string name)

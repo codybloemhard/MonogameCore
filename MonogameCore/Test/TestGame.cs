@@ -2,6 +2,7 @@
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonogameCore.Test
 {
@@ -11,7 +12,6 @@ namespace MonogameCore.Test
 
         public override void Load(SpriteBatch batch)
         {
-            Debug.FullDebugMode();
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
@@ -42,19 +42,19 @@ namespace MonogameCore.Test
             stone3.AddComponent(new CRender("block"));
             stone3.AddComponent(new CAABB());
             GameObject killer = new GameObject("killer", this, 2);
-            killer.AddComponent(new CRender("block"));
+            killer.AddComponent(new CRender("suprise"));
             killer.AddComponent(new CAABB());
             killer.Pos = new Vector2(3, 5);
             killer.Size = new Vector2(1, 1);
             killer.Renderer.colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            player.AddComponent(new CRender("block"));
+            player.AddComponent(new CRender("dude"));
             player.AddComponent(new CPlayerMovement(3.0f));
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
-            player.Size = new Vector2(0.5f, 0.5f);
+            player.Size = new Vector2(0.5f, 1.0f);
             uint max = 1000;
             for (int i = 0; i < max; i++)
             {
@@ -79,6 +79,8 @@ namespace MonogameCore.Test
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            if (Input.GetKey(PressAction.PRESSED, Keys.P))
+                Debug.SwitchMode();
             base.Update(time);
         }
 
