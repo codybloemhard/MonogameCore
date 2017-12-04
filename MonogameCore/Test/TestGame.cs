@@ -55,7 +55,8 @@ namespace MonogameCore.Test
             player.AddComponent(new CHealthBar(5, player));
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            uint max = 1000;
+            //tree testing
+            uint max = 1000; 
             for (int i = 0; i < max; i++)
             {
                 float t = (float)i / (float)max * 2 * MathH.PI;
