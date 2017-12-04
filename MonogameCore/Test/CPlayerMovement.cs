@@ -67,10 +67,7 @@ namespace MonogameCore.Test
         public override void OnCollision(GameObject other)
         {
             if (other.tag == "killer")
-            {
                 GO.Pos = new Vector2(1, 1);
-                GO.GetComponent<CHealthBar>().TakeDamage();
-            }
         }
     }
 }

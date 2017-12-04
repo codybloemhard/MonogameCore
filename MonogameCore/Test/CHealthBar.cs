@@ -17,10 +17,10 @@ namespace MonogameCore.Test
             healthBar.AddGameObject(GO);
         }
 
-        public void TakeDamage()
+        public override void OnCollision(GameObject other)
         {
+            base.OnCollision(other);
             HP -= 1;
-            healthBar.text = "Health: " + HP;
         }
     }
 }
