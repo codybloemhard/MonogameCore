@@ -25,24 +25,30 @@ namespace Core
         
         public abstract void Load(SpriteBatch batch);
         public abstract void Unload();
+
         public virtual void Update(float time)
         {
             Timers.Update(time);
             collision.Check();
             objects.Update(time);
             ui.Update();
+            Debug.dynamicObjects = objects.objects.Count;
+            Debug.staticObjects = objects.staticObjects.Count;
         }
+
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            batch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.TranslationMatrix);
+            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.TranslationMatrix);
             renderer.Render();
             batch.End();
             batch.Begin();
-            lines.Render(batch);
+            if(Debug.drawLines) lines.Render(batch);
+            //batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
             ui.Draw(batch);
             batch.End();
         }
+
         public bool Loaded { get { return loaded; } }
     }
     
@@ -71,7 +77,11 @@ namespace Core
         private void SetState(string name)
         {
             if (states.ContainsKey(name))
+            {
                 currentstate = states[name];
+                Debug.PrintNotification("GameState loaded: ", "\"" + name + "\"");
+            }
+            else Debug.PrintError("Could not find GameState " + name + "!");
         }
 
         public static void RequestChange(string state, CHANGETYPE type)
@@ -109,6 +119,7 @@ namespace Core
             if (state == null) return;
             if (states.ContainsKey(name)) return;
             states.Add(name, state);
+            Debug.PrintNotification("GameState added: ", "\"" + name + "\"");
         }
 
         public void RemoveState(string name)
@@ -121,8 +132,12 @@ namespace Core
         {
             if (currentstate != null) return;
             SetState(name);
-            currentstate.Load(batch);
-            currentstate.loaded = true;
+        }
+
+        internal static void LoadStartingState()
+        {
+            instance.currentstate.Load(instance.batch);
+            instance.currentstate.loaded = true;
         }
 
         public static GameState CurrentState { get { return instance.currentstate; } }

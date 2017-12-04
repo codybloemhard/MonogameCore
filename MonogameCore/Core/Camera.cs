@@ -93,7 +93,7 @@ namespace Core
                 height = (int)screenSize.Y;
                 width = (int)(height * targetAspectRatio);
             }
-
+            
             Viewport viewport = new Viewport();
             viewport.X = 0;
             viewport.Y = 0;

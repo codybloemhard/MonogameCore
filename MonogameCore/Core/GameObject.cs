@@ -150,7 +150,7 @@ namespace Core
                 return components[name] as T;
             return default(T);
         }
-        public void AddComponent(string name, Component com)
+        public void AddComponent(Component com, string name = "")
         {
             com.gameObject = this;
             com.Init();
@@ -163,6 +163,8 @@ namespace Core
             }
             else
             {
+                if (name == "")
+                    name = MathH.random.NextDouble().ToString();
                 components.Add(name, com);
                 comparray = new Component[components.Count];
                 components.Values.CopyTo(comparray, 0);

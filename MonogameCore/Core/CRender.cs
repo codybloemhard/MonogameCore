@@ -6,27 +6,34 @@ namespace Core
 {
     public class CRender : Component
     {
-        protected Vector2 sizemul;
         protected SpriteBatch batch;
-        protected Texture2D sprite;
+        protected Texture texture;
         public Color colour;
+        private Vector2 temp;
+        private Rectangle dest;
 
-        public CRender(string sprite) : base()
+        public CRender(string name) : base()
         {
-            this.batch = AssetManager.batch;
-            if(batch == null) { Console.WriteLine("Could not fin SpriteBatch!"); }
-            this.sprite = AssetManager.GetResource<Texture2D>(sprite);
-            if (this.sprite == null) Console.WriteLine("Could not find Sprite");
+            this.batch = AssetManager.Batch;
+            texture = TextureManager.GetTexture(name);
             colour = Color.White;
+            dest = new Rectangle();
         }
 
         public override void Update(float time)
         {
-            if (sprite == null) return;
+            if (texture == null) return;
             base.Update(time);
             if (gameObject.DirtySize)
-                sizemul = gameObject.Size * Grid.ScaleSprite(new Vector2(sprite.Width, sprite.Height));
-            batch.Draw(sprite, Grid.ToScreenSpace(gameObject.Pos), null, colour, 0.0f, Vector2.Zero, sizemul, SpriteEffects.None, 0.0f);
+            {
+                temp = Grid.ToScreenSpace(GO.Size);
+                dest.Width = (int)temp.X;
+                dest.Height = (int)temp.Y;
+            }
+            temp = Grid.ToScreenSpace(GO.Pos);
+            dest.X = (int)temp.X;
+            dest.Y = (int)temp.Y;
+            batch.Draw(texture.texture, dest, texture.Final, colour);
         }
     }
 }
