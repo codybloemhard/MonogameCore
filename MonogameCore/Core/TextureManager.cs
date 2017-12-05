@@ -50,7 +50,7 @@ namespace Core
 
     public class AnimatedTexture : Texture
     {
-        private uint framesX, framesY;
+        internal uint framesX, framesY;
 
         public AnimatedTexture(Texture2D texture, uint framesX, uint framesY
             ,Rectangle bound) : base(texture, bound)
@@ -63,23 +63,24 @@ namespace Core
         {
             float w = 1.0f / framesX;
             float h = 1.0f / framesY;
-            float x = (float)frame % framesX;
-            float y = (float)frame / framesY;
-            MakeCut(x, y, w, h);
+            float y = (int)((float)frame / (float)framesX) * h;
+            float x = ((float)frame / (float)framesX) % 1.0f;
+            MakeCut(x, y, x + w, y + h);
         }
     }
 
     public class RawTexture
     {
-        public Texture2D texture;
-        public bool sheet;
+        public Texture2D texture;   
         public string name;
+        public uint c, r;
         
-        public RawTexture(Texture2D texture, bool sheet, string name)
+        public RawTexture(Texture2D texture, string name, uint c, uint r)
         {
             this.texture = texture;
-            this.sheet = sheet;
             this.name = name;
+            this.c = c;
+            this.r = r;
         }
     }
 
@@ -157,16 +158,18 @@ namespace Core
     public static class TextureManager
     {
         private static Dictionary<string, Texture> textures;
+        private static Dictionary<string, AnimatedTexture> animations;
         private static OrderedSet<RawTexture> rawTexs;
         internal static Texture2D atlas;
 
         static TextureManager()
         {
             textures = new Dictionary<string, Texture>();
+            animations = new Dictionary<string, AnimatedTexture>();
             rawTexs = new OrderedSet<RawTexture>(new RawTexComparer());
         }
 
-        public static bool LoadTexture(string name, string file, bool animationsheet)
+        public static bool LoadTexture(string name, string file, uint col = 1, uint row = 1)
         {
             if (textures.ContainsKey(name))
             {
@@ -175,7 +178,7 @@ namespace Core
             }
             Texture2D tex2d = AssetManager.GetResource<Texture2D>(file);
             if (tex2d == null) return false;
-            rawTexs.Add(new RawTexture(tex2d, animationsheet, name));
+            rawTexs.Add(new RawTexture(tex2d, name, col, row));
             return true;
         }
 
@@ -188,7 +191,13 @@ namespace Core
                 Rectangle r = new Rectangle(0, 0, raw.texture.Width, raw.texture.Height);
                 PackingNode res = root.Fill(r);
                 if (res == null) Debug.PrintError("Texture could not be packed: " + raw.name);
-                else textures.Add(raw.name, new Texture(raw.texture, res.bound));
+                else
+                {
+                    if (raw.c == 1 && raw.r == 1)
+                        textures.Add(raw.name, new Texture(raw.texture, res.bound));
+                    else
+                        animations.Add(raw.name, new AnimatedTexture(raw.texture, raw.c, raw.r, res.bound));
+                }
             }
         }
 
@@ -196,22 +205,31 @@ namespace Core
         {
             Color[] data = new Color[2048 * 2048];
             List<Texture> texs = textures.Values.ToList();
+            List<AnimatedTexture> anims = animations.Values.ToList();
             for (int i = 0; i < texs.Count; i++)
-            {
-                Texture t = texs[i];
-                Rectangle r = new Rectangle(0, 0, t.texture.Width, t.texture.Height);
-                Color[] local = new Color[r.Width * r.Height];
-                t.texture.GetData<Color>(0, r, local, 0, r.Width * r.Height);
-                for (int y = 0; y < r.Height; y++)
-                    for (int x = 0; x < r.Width; x++)
-                        data[To1D(t.Final.X + x, t.Final.Y + y, 2048)] = local[To1D(x, y, r.Width)];
-            }
+                WriteToIMG(texs[i], data);
+            for (int i = 0; i < anims.Count; i++)
+                WriteToIMG(anims[i], data);
             atlas = AssetManager.GetNewTexture(2048, 2048);
             atlas.SetData<Color>(data);
             for (int i = 0; i < texs.Count; i++)
                 texs[i].texture = atlas;
+            for (int i = 0; i < anims.Count; i++)
+                anims[i].texture = atlas;
+            rawTexs.Clear();
+            GC.Collect();
         }
         
+        internal static void WriteToIMG(Texture t, Color[] data)
+        {
+            Rectangle r = new Rectangle(0, 0, t.texture.Width, t.texture.Height);
+            Color[] local = new Color[r.Width * r.Height];
+            t.texture.GetData<Color>(0, r, local, 0, r.Width * r.Height);
+            for (int y = 0; y < r.Height; y++)
+                for (int x = 0; x < r.Width; x++)
+                    data[To1D(t.Final.X + x, t.Final.Y + y, 2048)] = local[To1D(x, y, r.Width)];
+        }
+
         internal static int To1D(int x, int y, int h)
         {
             return y * h + x;
@@ -221,7 +239,15 @@ namespace Core
         {
             if (textures.ContainsKey(name))
                 return textures[name];
-            Debug.PrintError("Texture not found: " + name);
+            Debug.PrintError("Texture not found: ", name);
+            return null;
+        }
+
+        public static AnimatedTexture GetAnimation(string name)
+        {
+            if (animations.ContainsKey(name)) 
+                return animations[name] as AnimatedTexture;
+            Debug.PrintError("Animation not found: ", name);
             return null;
         }
     }

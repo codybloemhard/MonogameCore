@@ -21,14 +21,17 @@ namespace MonogameCore
         {
             game = new GameWindow(1920);
             game.SetLoad(Load);
+            Debug.ProfilingMode();
             game.Run();
         }
 
         private void Load()
         {
-            TextureManager.LoadTexture("block", "block", false);
-            TextureManager.LoadTexture("suprise", "suprise", false);
-            TextureManager.LoadTexture("dude", "player", false);
+            TextureManager.LoadTexture("block", "block");
+            TextureManager.LoadTexture("suprise", "suprise");
+            TextureManager.LoadTexture("dude", "player");
+            TextureManager.LoadTexture("animNumbers", "animatie0", 4, 2);
+            TextureManager.LoadTexture("animLetters", "animatie1", 5, 2);
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             game.states.AddState("menu", testMenu);

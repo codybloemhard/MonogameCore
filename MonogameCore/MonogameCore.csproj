@@ -41,6 +41,7 @@
     <Compile Include="Core\AssetManager.cs" />
     <Compile Include="Core\CAABB.cs" />
     <Compile Include="Core\Camera.cs" />
+    <Compile Include="Core\CAnimatedSprite.cs" />
     <Compile Include="Core\Collision.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\CRender.cs" />

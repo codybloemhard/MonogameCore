@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-//Simpele GameStateManager, spreekt voorzich.
+
 namespace Core
 {
     public abstract class GameState
@@ -44,7 +44,7 @@ namespace Core
             batch.End();
             batch.Begin();
             if(Debug.drawLines) lines.Render(batch);
-            //batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
+            batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
             ui.Draw(batch);
             batch.End();
         }
@@ -99,6 +99,7 @@ namespace Core
             instance.SetState(state);
             instance.currentstate.loaded = true;
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
+            GC.Collect();
         }
 
         internal void Update(float time)

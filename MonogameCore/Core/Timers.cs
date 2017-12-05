@@ -9,18 +9,28 @@ namespace Core
     {
         public static float timeScale = 1.0f;
         private static FPS fps;
+        private static PTimer timer;
+        private static float elapsed;
 
         static Time()
         {
             fps = new FPS();
+            timer = new PTimer();
+            
+        }
+
+        public static void UpdateFps()
+        {
+            fps.Update();
         }
 
         public static void Update()
         {
-            fps.Update();
+            elapsed = (float)timer.GetElapsedTime();
         }
         
         public static double Fps { get { return fps.fps; } }
+        public static float Elapsed { get { return elapsed; } }
     }
 
     public class PTimer

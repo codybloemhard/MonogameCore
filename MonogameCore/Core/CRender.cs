@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Core
 {
-    public class CRender : Component
+    public interface _renderer { void Update(float time); }
+
+    public class CRender : Component, _renderer
     {
         protected SpriteBatch batch;
         protected Texture texture;
@@ -22,8 +24,8 @@ namespace Core
 
         public override void Update(float time)
         {
-            if (texture == null) return;
             base.Update(time);
+            if (texture == null) return;
             if (gameObject.DirtySize)
             {
                 temp = Grid.ToScreenSpace(GO.Size);
