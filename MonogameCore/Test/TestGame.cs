@@ -63,7 +63,8 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(3, 3);
-            uint max = 1000;
+            //tree testing
+            uint max = 1000; 
             for (int i = 0; i < max; i++)
             {
                 float t = (float)i / (float)max * 2 * MathH.PI;
