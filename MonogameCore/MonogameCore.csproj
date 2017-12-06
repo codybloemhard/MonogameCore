@@ -46,6 +46,7 @@
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\CRender.cs" />
     <Compile Include="Core\CRenderSet.cs" />
+    <Compile Include="Core\CTileableSprite.cs" />
     <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\Debug.cs" />
     <Compile Include="Core\FSM.cs" />

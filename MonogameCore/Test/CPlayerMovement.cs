@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace MonogameCore.Test
@@ -68,6 +69,25 @@ namespace MonogameCore.Test
         {
             if (other.tag == "killer")
                 GO.Pos = new Vector2(1, 1);
+        }
+    }
+
+    public class Example : Component
+    {
+        public Example() : base() { }
+
+        public override void Init()
+        {
+        }
+
+        public override void Update(float time)
+        {
+            base.Update(time);
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            base.OnCollision(other);
         }
     }
 }

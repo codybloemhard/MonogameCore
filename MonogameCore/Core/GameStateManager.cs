@@ -39,12 +39,12 @@ namespace Core
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.TranslationMatrix);
+            batch.Begin(SpriteSortMode.Texture, null, SamplerState.PointWrap, null, null, null, Camera.TranslationMatrix);
             renderer.Render();
             batch.End();
             batch.Begin();
             if(Debug.drawLines) lines.Render(batch);
-            batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
+            //batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
             ui.Draw(batch);
             batch.End();
         }

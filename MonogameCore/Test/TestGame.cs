@@ -29,7 +29,7 @@ namespace MonogameCore.Test
             GameObject stone1 = new GameObject("stone", this, 2, true);
             stone1.Pos = new Vector2(9, 7);
             stone1.Size = new Vector2(2, 2);
-            stone1.AddComponent(new CRender("block"));
+            stone1.AddComponent(new CTileableSprite("tiletest", 2, 2));
             stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(12, 5);
@@ -62,7 +62,7 @@ namespace MonogameCore.Test
             animatie.PlayAnimation("letters", 4);
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
-            anim.Size = new Vector2(3, 3);
+            anim.Size = new Vector2(1, 1);
             //tree testing
             uint max = 1000; 
             for (int i = 0; i < max; i++)

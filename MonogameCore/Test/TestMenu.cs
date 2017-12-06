@@ -9,7 +9,7 @@ namespace MonogameCore.Test
     {
         private Text text, testTimer;
         private Button button;
-
+        
         public TestMenu() : base() { }
         
         public override void Load(SpriteBatch batch)

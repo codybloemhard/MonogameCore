@@ -69,6 +69,19 @@ namespace Core
         }
     }
 
+    public class TileableTexture : Texture
+    {
+        public TileableTexture(Texture2D texture) 
+            : base(texture, new Rectangle(0,0,texture.Width,texture.Height))
+        {
+        }
+
+        public void Tile(float tilesx, float tilesy)
+        {
+            MakeCut(0, 0, tilesx, tilesy);
+        }
+    }
+
     public class RawTexture
     {
         public Texture2D texture;   
@@ -159,6 +172,7 @@ namespace Core
     {
         private static Dictionary<string, Texture> textures;
         private static Dictionary<string, AnimatedTexture> animations;
+        private static Dictionary<string, TileableTexture> tiles;
         private static OrderedSet<RawTexture> rawTexs;
         internal static Texture2D atlas;
 
@@ -166,6 +180,7 @@ namespace Core
         {
             textures = new Dictionary<string, Texture>();
             animations = new Dictionary<string, AnimatedTexture>();
+            tiles = new Dictionary<string, TileableTexture>();
             rawTexs = new OrderedSet<RawTexture>(new RawTexComparer());
         }
 
@@ -195,6 +210,8 @@ namespace Core
                 {
                     if (raw.c == 1 && raw.r == 1)
                         textures.Add(raw.name, new Texture(raw.texture, res.bound));
+                    else if (raw.c == 0 && raw.r == 0)
+                        tiles.Add(raw.name, new TileableTexture(raw.texture));
                     else
                         animations.Add(raw.name, new AnimatedTexture(raw.texture, raw.c, raw.r, res.bound));
                 }
@@ -248,6 +265,15 @@ namespace Core
             if (animations.ContainsKey(name)) 
                 return animations[name] as AnimatedTexture;
             Debug.PrintError("Animation not found: ", name);
+            return null;
+        }
+
+        public static TileableTexture GetTileable(string name)
+        {
+            if (tiles.ContainsKey(name))
+                return tiles[name] as TileableTexture;
+            Debug.PrintError("Tileable sprite not found: ", name);
+            
             return null;
         }
     }
