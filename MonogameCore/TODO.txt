@@ -14,9 +14,8 @@
 -Efficient collision detection: quadtree;
 -Debuger
 -Better error handling;
--Graphics: atlas  texture, animation;
+-Graphics: atlas  texture, animation, tiling;
 TODO:
--Graphics: tiling;
 -Collision: layer, raytracing using quadtree;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;

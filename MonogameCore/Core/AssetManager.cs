@@ -27,7 +27,7 @@ namespace Core
             placeholder.SetData<Color>(new Color[] { Color.White });
         }
 
-        internal static Texture2D GetNewTexture(uint w, uint h)
+        public static Texture2D GetNewTexture(uint w, uint h)
         {
             return new Texture2D(device, (int)w, (int)h);
         }

@@ -6,7 +6,7 @@ namespace Core
     public class FSM
     {
         private Dictionary<string, Action> states;
-        private string current;
+        private string current = "";
 
         public FSM()
         {

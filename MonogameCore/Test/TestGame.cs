@@ -53,6 +53,7 @@ namespace MonogameCore.Test
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CHealthBar(5, player));
+            player.AddComponent(new CFsm());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject anim = new GameObject("anim", this, 5);

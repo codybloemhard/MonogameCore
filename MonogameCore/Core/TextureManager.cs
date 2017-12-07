@@ -197,6 +197,19 @@ namespace Core
             return true;
         }
 
+        public static bool LoadTexture(string name, Texture2D file, uint col = 1, uint row = 1)
+        {
+            if (textures.ContainsKey(name))
+            {
+                Debug.PrintNotification("Texture name already used: ", name);
+                return false;
+            }
+            if (file == null) return false;
+            Texture2D tex2d = file;
+            rawTexs.Add(new RawTexture(tex2d, name, col, row));
+            return true;
+        }
+
         internal static void CalculateTree()
         {
             PackingNode root = new PackingNode(new Rectangle(0, 0, 2048, 2048));
