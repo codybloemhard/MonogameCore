@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -89,10 +90,17 @@ namespace Core
 
     public class Text : UIElement
     {
-        public string text;
+        public List<string> text = new List<string>();
         protected SpriteFont font;
 
         public Text(GameState context, string text, Vector2 position, Vector2 size, SpriteFont font) 
+            : base(context, position, size)
+        {
+            this.text.Add(text);
+            this.font = font;
+        }
+
+        public Text(GameState context, List<string> text, Vector2 position, Vector2 size, SpriteFont font)
             : base(context, position, size)
         {
             this.text = text;
@@ -101,7 +109,10 @@ namespace Core
 
         public override void Draw(SpriteBatch batch)
         {
-            UI.TextInCenter(text, Grid.ToScreenSpace(position), Grid.ToScreenSpace(Size), batch, font, colour);
+            for (int i = 0; i < text.Count; i++)
+            {
+                UI.TextInCenter(text[i], Grid.ToScreenSpace(position) + new Vector2(0, font.MeasureString(text[i]).Y) * i, Grid.ToScreenSpace(Size), batch, font, colour);
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,11 @@ namespace MonogameCore.Test
         public CHealthBar(int HP, GameObject GO)
         {
             this.HP = HP;
-            healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
+            List<string> text = new List<string>();
+            text.Add("a");
+            text.Add("b");
+            text.Add("adfsadfadsfdsf");
+            healthBar = new Text(GO.Context, text, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
             healthBar.AddGameObject(GO);
         }
 

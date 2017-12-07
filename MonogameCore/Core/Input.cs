@@ -46,6 +46,12 @@ namespace Core
             mcurrentState = Mouse.GetState();
             kPrev = kCurrent;
             kCurrent = Keyboard.GetState().GetPressedKeys();
+            if (kCurrent != kPrev)
+            {
+                Keys[] k = kCurrent;
+                foreach (Keys key in k) { }
+                    //Console.WriteLine(key.ToString());
+            }
         }
 
         private static bool GetButton(Mstate state, MouseButton button)

@@ -70,7 +70,7 @@ namespace MonogameCore.Test
             Camera.SetCameraTopLeft(new Vector2(0, 0));
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
-            text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            text.text[0] = ("Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2));
             base.Update(time);
         }
 
