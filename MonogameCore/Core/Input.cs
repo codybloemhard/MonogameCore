@@ -48,6 +48,31 @@ namespace Core
             kCurrent = Keyboard.GetState().GetPressedKeys();
         }
 
+        public static string Type(string s)
+        {
+            string toAdd = "";
+            foreach (Keys k in kCurrent)
+            {
+                if (!Array.Exists<Keys>(kPrev, element => element == k))
+                {
+                    if (k.ToString().Length == 1)
+                        toAdd = k.ToString();
+                    else if (k == Keys.Space)
+                        toAdd = " ";
+                    else if (k == Keys.Back && s.Length >= 1)
+                        s = s.Substring(0, s.Length - 1);
+
+                }
+            }
+
+            if (!Array.Exists<Keys>(kCurrent, element => element == Keys.LeftShift || element == Keys.RightShift))
+            {
+                toAdd = toAdd.ToLower();
+            }
+
+            return s + toAdd;
+        }
+
         private static bool GetButton(Mstate state, MouseButton button)
         {
             MouseState s;

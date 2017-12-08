@@ -16,6 +16,10 @@ namespace MonogameCore.Test
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "positionText";
+
+            Text type = new Text(this, "", new Vector2(8, 8), new Vector2(5, 1), font);
+            type.tag = "typeDisplay";
+
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
@@ -73,10 +77,15 @@ namespace MonogameCore.Test
 
         public override void Update(float time)
         {
+            Console.WriteLine(Input.Type(""));
             Camera.SetCameraTopLeft(new Vector2(0, 0));
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+
+            Text type = ui.FindWithTag("typeDisplay") as Text;
+            type.text = Input.Type(type.text);
+
             base.Update(time);
         }
 
