@@ -25,6 +25,7 @@ namespace Core
         public static bool printData = false;
         public static bool printNotifications = false;
         public static bool printPerformance = false;
+        public static bool showAtlas = false;
         
         public static void ReleaseMode()
         {

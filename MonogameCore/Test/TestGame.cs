@@ -64,18 +64,17 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(1, 1);
-            //tree testing
-            uint max = 1000; 
-            for (int i = 0; i < max; i++)
-            {
-                float t = (float)i / (float)max * 2 * MathH.PI;
-                float rad = 2;
-                GameObject stone = new GameObject("stone", this, 2, true);
-                stone.Pos = new Vector2(5, 3) + new Vector2((float)Math.Sin(t) * rad, (float)Math.Cos(t) * rad);
-                stone.Size = new Vector2(0.1f, 0.1f);
-                stone.AddComponent(new CRender("block"));
-                stone.AddComponent(new CAABB());
-            }
+            //testing
+            GameObject parent = new GameObject("parent", this, 1);
+            parent.AddComponent(new CRender("block"));
+            parent.Pos = new Vector2(1, 1);
+            parent.Size = new Vector2(4, 4);
+            GameObject child = new GameObject("child", this, 0);
+            child.SetParent(parent);
+            child.LocalPos = new Vector2(0.5f, 0.5f);
+            child.LocalSize = new Vector2(0.5f, 0.5f);
+            child.AddComponent(new CRender("block"));
+            (child.Renderer as CRender).colour = Color.Red;
         }
         
         public override void Unload()
@@ -95,6 +94,8 @@ namespace MonogameCore.Test
                     Debug.FullDebugMode();
                 else Debug.ProfilingMode();
             }
+            if (Input.GetKey(PressAction.DOWN, Keys.O)) Debug.showAtlas = true;
+            else Debug.showAtlas = false;
             base.Update(time);
         }
 

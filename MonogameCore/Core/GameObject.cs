@@ -180,11 +180,11 @@ namespace Core
                 return null;
             return childs[i];
         }
-        public void AddChild(GameObject obj)
+        internal void AddChild(GameObject obj)
         {
             childs.Add(obj);
         }
-        public void RemoveChild(GameObject obj)
+        internal void RemoveChild(GameObject obj)
         {
             childs.Remove(obj);
         }
@@ -219,9 +219,14 @@ namespace Core
         }
         public Vector2 LocalPos
         {
-            get { return localpos; }
+            get
+            {
+                if (parent == null) return Vector2.Zero;
+                return localpos;
+            }
             set
             {
+                if (parent == null) return;
                 localpos = value;
                 Pos = parent.pos + localpos;
                 dirtybounds = true;
