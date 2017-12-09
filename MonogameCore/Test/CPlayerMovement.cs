@@ -1,6 +1,7 @@
 ﻿using System;
 using Core;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace MonogameCore.Test
@@ -9,8 +10,8 @@ namespace MonogameCore.Test
     {
         private float speed;
         private Vector2 dir;
-        private float jumpPower = 15f;
-        private float acceleration = 0.8f, vertVelo = 0f;
+        private float jumpPower = 20f;
+        private float acceleration = 80f, vertVelo = 0f;
         private bool grounded = false;
 
         public CPlayerMovement(float speed) : base()
@@ -21,7 +22,7 @@ namespace MonogameCore.Test
 
         public override void Init()
         {
-            CRender render = GO.Renderer;
+            CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.White;
         }
 
@@ -55,7 +56,7 @@ namespace MonogameCore.Test
             else grounded = false;
             if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W))
                 vertVelo = -jumpPower;
-            if (!grounded) vertVelo += acceleration;
+            if (!grounded) vertVelo += acceleration * time;
             //speed is in Units/Second
             GO.Pos += velocity * speed * time;
             GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
@@ -68,6 +69,25 @@ namespace MonogameCore.Test
         {
             if (other.tag == "killer")
                 GO.Pos = new Vector2(1, 1);
+        }
+    }
+
+    public class Example : Component
+    {
+        public Example() : base() { }
+
+        public override void Init()
+        {
+        }
+
+        public override void Update(float time)
+        {
+            base.Update(time);
+        }
+
+        public override void OnCollision(GameObject other)
+        {
+            base.OnCollision(other);
         }
     }
 }

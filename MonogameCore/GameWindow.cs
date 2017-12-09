@@ -58,6 +58,7 @@ namespace Core
             TextureManager.CalculateTree();
             TextureManager.Bake();
             GameStateManager.LoadStartingState();
+            this.IsFixedTimeStep = false;
         }
         
         protected override void UnloadContent()
@@ -66,17 +67,18 @@ namespace Core
 
         protected override void Update(GameTime gameTime)
         {
-            float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Debug.Update(time);
+            Time.Update();
+            float time = Time.Elapsed;
+            Debug.Update(Time.Elapsed);
             states.Update(time * Time.timeScale);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            Time.Update();
+            Time.UpdateFps();
             GraphicsDevice.Clear(Color.Black);
-            states.Draw((float)gameTime.ElapsedGameTime.TotalSeconds, batch, GraphicsDevice);
+            states.Draw(Time.Elapsed, batch, GraphicsDevice);
             base.Draw(gameTime);
         }
     }

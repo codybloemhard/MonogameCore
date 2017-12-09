@@ -14,9 +14,8 @@
 -Efficient collision detection: quadtree;
 -Debuger
 -Better error handling;
--Graphics: atlas  texture;
+-Graphics: atlas  texture, animation, tiling;
 TODO:
--Graphics: animation, tiling;
 -Collision: layer, raytracing using quadtree;
 -Mulithreaded task system;
 -Openworld loading: seamless load in chunks, multithread;
@@ -28,3 +27,4 @@ TODO:
 -bones animation
 -Tagengine using binary search
 -get renderer and collider from GetComponent<T>
+-quadtree one obj bug fix

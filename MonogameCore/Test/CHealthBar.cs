@@ -14,7 +14,7 @@ namespace MonogameCore.Test
         {
             this.HP = HP;
             healthBar = new Text(GO.Context, "Health: " + HP, new Vector2(0, 0), new Vector2(3, 1), AssetManager.GetResource<SpriteFont>("mainFont"));
-            healthBar.AddGameObject(GO);
+            healthBar.AddGameObject(GO, new Vector2(-1, -2));
         }
 
         public override void OnCollision(GameObject other)

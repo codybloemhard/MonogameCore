@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-//Simpele GameStateManager, spreekt voorzich.
+
 namespace Core
 {
     public abstract class GameState
@@ -39,12 +39,12 @@ namespace Core
         public virtual void Draw(float time, SpriteBatch batch, GraphicsDevice device)
         {
             device.Clear(Color.Black);
-            batch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, Camera.TranslationMatrix);
+            batch.Begin(SpriteSortMode.Deferred, GameStateManager.blendstate, GameStateManager.samplerstate, null, null, null, Camera.TranslationMatrix);
             renderer.Render();
             batch.End();
             batch.Begin();
             if(Debug.drawLines) lines.Render(batch);
-            //batch.Draw(TextureManager.atlas, new Rectangle(0, 0, 2048, 2048), Color.White);
+            if(Debug.showAtlas) batch.Draw(TextureManager.atlas, new Rectangle(0, 0, (int)Camera.ScreenSize.Y, (int)Camera.ScreenSize.Y), Color.White);
             ui.Draw(batch);
             batch.End();
         }
@@ -64,6 +64,8 @@ namespace Core
         private GameState currentstate;
         private static GameStateManager instance;
         private SpriteBatch batch;
+        internal static BlendState blendstate = BlendState.NonPremultiplied;
+        internal static SamplerState samplerstate = SamplerState.PointWrap;
 
         internal GameStateManager(SpriteBatch batch)
         {
@@ -99,6 +101,7 @@ namespace Core
             instance.SetState(state);
             instance.currentstate.loaded = true;
             if (type == CHANGETYPE.LOAD) instance.currentstate.Load(instance.batch);
+            GC.Collect();
         }
 
         internal void Update(float time)
@@ -138,6 +141,12 @@ namespace Core
         {
             instance.currentstate.Load(instance.batch);
             instance.currentstate.loaded = true;
+        }
+
+        public static void SetRenderingMode(BlendState bs, SamplerState ss)
+        {
+            blendstate = bs;
+            samplerstate = ss;
         }
 
         public static GameState CurrentState { get { return instance.currentstate; } }
