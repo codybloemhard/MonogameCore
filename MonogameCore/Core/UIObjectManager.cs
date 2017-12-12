@@ -18,10 +18,6 @@ namespace Core
 
         internal void Update()
         {
-            /*for (int i = 0; i < elements.Count; i++) {
-                if (elements[i] is Button)
-                    (elements[i] as Button).Update();
-            }*/
             for (int i = 0; i < elements.Count; i++)
             {
                 elements[i].Update();
