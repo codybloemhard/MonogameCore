@@ -18,7 +18,7 @@ namespace MonogameCore.Test
 
         public override void Init()
         {
-            CRender render = GO.Renderer;
+            CRender render = GO.Renderer as CRender;
             if (render != null) render.colour = Color.Red;
         }
 

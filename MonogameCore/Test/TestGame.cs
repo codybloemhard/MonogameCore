@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonogameCore.Test
 {
@@ -39,47 +40,57 @@ namespace MonogameCore.Test
             GameObject stone0 = new GameObject("stone", this, 2, true);
             stone0.Pos = new Vector2(0, 8);
             stone0.Size = new Vector2(8, 1);
-            stone0.AddComponent("render", new CRender("block"));
-            stone0.AddComponent("collider", new CAABB());
+            stone0.AddComponent(new CRender("block"));
+            stone0.AddComponent(new CAABB());
             GameObject stone1 = new GameObject("stone", this, 2, true);
             stone1.Pos = new Vector2(9, 7);
             stone1.Size = new Vector2(2, 2);
-            stone1.AddComponent("render", new CRender("block"));
-            stone1.AddComponent("collider", new CAABB());
+            stone1.AddComponent(new CTileableSprite("tiletest", 2, 2));
+            stone1.AddComponent(new CAABB());
             GameObject stone2 = new GameObject("stone", this, 2, true);
             stone2.Pos = new Vector2(12, 5);
             stone2.Size = new Vector2(3, 0.2f);
-            stone2.AddComponent("render", new CRender("block"));
-            stone2.AddComponent("collider", new CAABB());
+            stone2.AddComponent(new CRender("block"));
+            stone2.AddComponent(new CAABB());
             GameObject stone3 = new GameObject("stone", this, 2, true);
             stone3.Pos = new Vector2(8, 3);
             stone3.Size = new Vector2(3, 0.2f);
-            stone3.AddComponent("render", new CRender("block"));
-            stone3.AddComponent("collider", new CAABB());
+            stone3.AddComponent(new CRender("block"));
+            stone3.AddComponent(new CAABB());
             GameObject killer = new GameObject("killer", this, 2);
-            killer.AddComponent("render", new CRender("block"));
-            killer.AddComponent("collider", new CAABB());
+            killer.AddComponent(new CRender("suprise"));
+            killer.AddComponent(new CAABB());
             killer.Pos = new Vector2(3, 5);
             killer.Size = new Vector2(1, 1);
-            killer.Renderer.colour = Color.Red;
+            (killer.Renderer as CRender).colour = Color.Red;
             GameObject player = new GameObject("player", this, 1);
-            player.AddComponent("render", new CRender("block"));
-            player.AddComponent("move", new CPlayerMovement(3.0f));
-            player.AddComponent("collider", new CAABB());
-            player.AddComponent("shoot", new CShoot());
+            player.AddComponent(new CRender("dude"));
+            player.AddComponent(new CPlayerMovement(3.0f));
+            player.AddComponent(new CAABB());
+            player.AddComponent(new CShoot());
+            player.AddComponent(new CHealthBar(5, player));
+            player.AddComponent(new CFsm());
             player.Pos = new Vector2(1, 1);
-            player.Size = new Vector2(0.5f, 0.5f);
-            uint max = 1000;
-            for (int i = 0; i < max; i++)
-            {
-                float t = (float)i / (float)max * 2 * MathH.PI;
-                float rad = 2;
-                GameObject stone = new GameObject("stone", this, 2, true);
-                stone.Pos = new Vector2(5, 3) + new Vector2((float)Math.Sin(t) * rad, (float)Math.Cos(t) * rad);
-                stone.Size = new Vector2(0.1f, 0.1f);
-                stone.AddComponent("render", new CRender("block"));
-                stone.AddComponent("collider", new CAABB());
-            }
+            player.Size = new Vector2(0.5f, 1.0f);
+            GameObject anim = new GameObject("anim", this, 5);
+            CAnimatedSprite animatie = new CAnimatedSprite();
+            animatie.AddAnimation("letters", "animLetters");
+            animatie.AddAnimation("nummers", "animNumbers");
+            animatie.PlayAnimation("letters", 4);
+            anim.AddComponent(animatie);
+            anim.Pos = new Vector2(5, 0);
+            anim.Size = new Vector2(1, 1);
+            //testing
+            GameObject parent = new GameObject("parent", this, 1);
+            parent.AddComponent(new CRender("block"));
+            parent.Pos = new Vector2(1, 1);
+            parent.Size = new Vector2(4, 4);
+            GameObject child = new GameObject("child", this, 0);
+            child.SetParent(parent);
+            child.LocalPos = new Vector2(0.5f, 0.5f);
+            child.LocalSize = new Vector2(0.5f, 0.5f);
+            child.AddComponent(new CRender("block"));
+            (child.Renderer as CRender).colour = Color.Red;
         }
         
         public override void Unload()
@@ -93,7 +104,6 @@ namespace MonogameCore.Test
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
-
             SliderBar xslider = ui.FindWithTag("xslider") as SliderBar;
             SliderBar yslider = ui.FindWithTag("yslider") as SliderBar;
             Console.WriteLine(xslider.GetValue);
@@ -107,6 +117,14 @@ namespace MonogameCore.Test
             Text type = ui.FindWithTag("typeDisplay") as Text;
             type.text = Input.Type(type.text);
 
+            if (Input.GetKey(PressAction.PRESSED, Keys.P))
+            {
+                if (Debug.Mode == DEBUGMODE.PROFILING)
+                    Debug.FullDebugMode();
+                else Debug.ProfilingMode();
+            }
+            if (Input.GetKey(PressAction.DOWN, Keys.O)) Debug.showAtlas = true;
+            else Debug.showAtlas = false;
             base.Update(time);
         }
 

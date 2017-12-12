@@ -81,6 +81,8 @@ namespace Core
             g.PreferredBackBufferWidth = (int)w;
             g.PreferredBackBufferHeight = (int)h;
             g.IsFullScreen = false;
+            g.SynchronizeWithVerticalRetrace = false;
+            
             g.ApplyChanges();
             screenSize = new Vector2(g.PreferredBackBufferWidth, g.PreferredBackBufferHeight);
             Grid.Setup(16, 9, (uint)screenSize.X, (uint)screenSize.Y);
@@ -93,7 +95,7 @@ namespace Core
                 height = (int)screenSize.Y;
                 width = (int)(height * targetAspectRatio);
             }
-
+            
             Viewport viewport = new Viewport();
             viewport.X = 0;
             viewport.Y = 0;

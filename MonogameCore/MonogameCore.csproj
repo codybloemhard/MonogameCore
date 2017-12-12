@@ -41,11 +41,14 @@
     <Compile Include="Core\AssetManager.cs" />
     <Compile Include="Core\CAABB.cs" />
     <Compile Include="Core\Camera.cs" />
+    <Compile Include="Core\CAnimatedSprite.cs" />
     <Compile Include="Core\Collision.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\CRender.cs" />
     <Compile Include="Core\CRenderSet.cs" />
+    <Compile Include="Core\CTileableSprite.cs" />
     <Compile Include="Core\DataManager.cs" />
+    <Compile Include="Core\Debug.cs" />
     <Compile Include="Core\FSM.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\GameObjectManager.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="Core\ParticleEmitter.cs" />
     <Compile Include="Core\TagEngine.cs" />
     <Compile Include="Core\TaskEngine.cs" />
+    <Compile Include="Core\TextureManager.cs" />
     <Compile Include="Core\Timers.cs" />
     <Compile Include="Core\UI.cs" />
     <Compile Include="Core\UIObjectManager.cs" />
@@ -71,6 +75,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\CBulletMovement.cs" />
+    <Compile Include="Test\CFsm.cs" />
+    <Compile Include="Test\CHealthBar.cs" />
     <Compile Include="Test\CPlayerMovement.cs" />
     <Compile Include="Test\CShoot.cs" />
     <Compile Include="Test\TestGame.cs" />

@@ -9,7 +9,7 @@ namespace MonogameCore.Test
     {
         private Text text, testTimer;
         private Button button;
-
+        
         public TestMenu() : base() { }
         
         public override void Load(SpriteBatch batch)
@@ -28,7 +28,7 @@ namespace MonogameCore.Test
             Timers.Add("timer", 10, changeTextColour);
             Camera.SetCameraTopLeft(new Vector2(0, 0));
         }
-
+        
         private void changeTextColour()
         {
             ui.FindWithTag("timerText").colour = new Color(255, 0, 0);

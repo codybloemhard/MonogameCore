@@ -223,7 +223,7 @@ namespace Core
         private List<_collider> statics;
         private LineRenderer lines;
         private QuadTree dynamicTree, staticTree;
-
+        
         internal Collision(LineRenderer lines)
         {
             dynamics = new List<_collider>();
