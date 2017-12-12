@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,21 @@ namespace MonogameCore.Test
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "positionText";
+
+            Text type = new Text(this, "", new Vector2(8, 8), new Vector2(5, 1), font);
+            type.tag = "typeDisplay";
+
+            List<string> testText = new List<string>();
+            testText.Add("Height: ");
+            testText.Add("W");
+            MultipleLinesText test = new MultipleLinesText(this, testText, new Vector2(10, 0), new Vector2(6, testText.Count * Grid.ToGridSpace(font.MeasureString("|")).Y), font);
+            test.tag = "test";
+
+            SliderBar yslider = new SliderBar(this, "block", "block", 1, new Vector2(1, 1), new Vector2(1, 4), "y");
+            yslider.tag = "yslider";
+            SliderBar xslider = new SliderBar(this, "block", "block", 1, new Vector2(5, 1), new Vector2(2, 0.2f), "x");
+            xslider.tag = "xslider";
+
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
@@ -88,6 +104,19 @@ namespace MonogameCore.Test
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
+            SliderBar xslider = ui.FindWithTag("xslider") as SliderBar;
+            SliderBar yslider = ui.FindWithTag("yslider") as SliderBar;
+            Console.WriteLine(xslider.GetValue);
+            Console.WriteLine(yslider.GetValue);
+            player.Size = new Vector2(yslider.GetValue * 3);
+            player.Pos = new Vector2(xslider.GetValue* 16, player.Pos.Y);
+
+            MultipleLinesText test = ui.FindWithTag("test") as MultipleLinesText;
+            Console.WriteLine(test.Clicked + " , " + test.Hover);
+
+            Text type = ui.FindWithTag("typeDisplay") as Text;
+            type.text = Input.Type(type.text);
+
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
             {
                 if (Debug.Mode == DEBUGMODE.PROFILING)

@@ -74,6 +74,9 @@ namespace Core
             return res;
         }
 
+        public List<GameObject> StaticObjects { get { return staticObjects; } }
+        public List<GameObject> Objects { get { return objects; } }
+
         public int Size { get { return objects.Count; } }
         public int StaticSize { get { return staticObjects.Count; } }
     }
