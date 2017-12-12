@@ -13,7 +13,7 @@ namespace Core
         private List<GameObject> childs;
         private Dictionary<string, Component> components;
         private Component[] comparray;//for fast iteration
-        private CRender renderer;
+        private _renderer renderer;
         private float gtime;
         private GameObject parent;
         private AABB bounds;
@@ -29,7 +29,6 @@ namespace Core
             this.context = context;
             this.layer = layer;
             context.objects.Add(this, isStatic);
-            context.collision.Add(this, isStatic);
             context.renderer.Add(this);
             construct();
         }
@@ -40,7 +39,6 @@ namespace Core
             this.context = context;
             this.layer = layer;
             context.objects.Add(this, isStatic);
-            context.collision.Add(this, isStatic);
             context.renderer.Add(this);
             construct();
             this.tag = tag;
@@ -57,11 +55,6 @@ namespace Core
             done = new List<GameObject>();
         }
 
-        public void Init()
-        {
-            for (int i = 0; i < comparray.Length; i++)
-                comparray[i].Init();
-        }
         public void Update(float gameTime)
         {
             if (!active) return;
@@ -78,6 +71,7 @@ namespace Core
                 Size = parent.Size * localsize;
             }
         }
+
         public void FinishFrame()
         {
             if (!active) return;
@@ -156,20 +150,25 @@ namespace Core
                 return components[name] as T;
             return default(T);
         }
-        public void AddComponent(string name, Component com)
+        public void AddComponent(Component com, string name = "")
         {
             com.gameObject = this;
-            if (com is CRender)
-                renderer = com as CRender;
+            com.Init();
+            if (com is _renderer)
+                renderer = com as _renderer;
             else if (com is _collider)
+            {
                 collider = com as _collider;
+                context.collision.Add(collider, isStatic);
+            }
             else
             {
+                if (name == "")
+                    name = MathH.random.NextDouble().ToString();
                 components.Add(name, com);
                 comparray = new Component[components.Count];
                 components.Values.CopyTo(comparray, 0);
             }
-            com.Init();
         }
         public int ComponentCount { get { return components.Count; }  }
         //methods om parent-childs relaties te beheren
@@ -181,11 +180,11 @@ namespace Core
                 return null;
             return childs[i];
         }
-        public void AddChild(GameObject obj)
+        internal void AddChild(GameObject obj)
         {
             childs.Add(obj);
         }
-        public void RemoveChild(GameObject obj)
+        internal void RemoveChild(GameObject obj)
         {
             childs.Remove(obj);
         }
@@ -220,9 +219,14 @@ namespace Core
         }
         public Vector2 LocalPos
         {
-            get { return localpos; }
+            get
+            {
+                if (parent == null) return Vector2.Zero;
+                return localpos;
+            }
             set
             {
+                if (parent == null) return;
                 localpos = value;
                 Pos = parent.pos + localpos;
                 dirtybounds = true;
@@ -252,7 +256,7 @@ namespace Core
         }
 
         public GameObjectManager Manager { get { return context.objects; } }
-        public CRender Renderer { get { return renderer;  } }
+        public _renderer Renderer { get { return renderer;  } }
         public _collider Collider { get { return collider; } }
         public bool IsStatic { get { return isStatic; } }
         public uint Layer { get { return layer; } }

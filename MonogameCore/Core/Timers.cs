@@ -1,14 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Core
 {
     public static class Time
     {
         public static float timeScale = 1.0f;
+        private static FPS fps;
+        private static PTimer timer;
+        private static float elapsed;
+
+        static Time()
+        {
+            fps = new FPS();
+            timer = new PTimer();
+            
+        }
+
+        public static void UpdateFps()
+        {
+            fps.Update();
+        }
+
+        public static void Update()
+        {
+            elapsed = (float)timer.GetElapsedTime();
+        }
+        
+        public static double Fps { get { return fps.fps; } }
+        public static float Elapsed { get { return elapsed; } }
+    }
+
+    public class PTimer
+    {
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        [DllImport("kernel32")]
+        private static extern bool QueryPerformanceFrequency(ref long PerformanceFrequency);
+
+        [System.Security.SuppressUnmanagedCodeSecurity]
+        [DllImport("kernel32")]
+        private static extern bool QueryPerformanceCounter(ref long PerformanceCount);
+
+        private long _ticksPerSecond = 0;
+        private long _previousElapsedTime = 0;
+
+        public PTimer()
+        {
+            QueryPerformanceFrequency(ref _ticksPerSecond);
+            GetElapsedTime();
+        }
+
+        public double GetElapsedTime()
+        {
+            long time = 0;
+            QueryPerformanceCounter(ref time);
+
+            double elapsedTime = (double)(time - _previousElapsedTime) / (double)_ticksPerSecond;
+            _previousElapsedTime = time;
+
+            return elapsedTime;
+        }
+    }
+
+    public class FPS
+    {
+        private PTimer timer = new PTimer();
+        private int nFrames = 0;
+        private double time = 0;
+        private double getFPS = 0;
+
+        public void Update()
+        {
+            nFrames++;
+            time += timer.GetElapsedTime();
+            if (time > 1)
+            {
+                getFPS = (double)nFrames / time;
+                time = 0;
+                nFrames = 0;
+            }
+        }
+
+        public float fps { get { return (float)getFPS; } }
     }
 
     public sealed class Timer : _tagged

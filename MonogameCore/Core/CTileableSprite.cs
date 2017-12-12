@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Core
 {
-    public interface _renderer { void Update(float time); }
-
-    public class CRender : Component, _renderer
+    public class CTileableSprite : Component, _renderer
     {
         protected SpriteBatch batch;
-        protected Texture texture;
+        protected TileableTexture texture;
         public Color colour;
         private Vector2 temp;
         private Rectangle dest;
 
-        public CRender(string name) : base()
+        public CTileableSprite(string name, float xx, float yy) : base()
         {
             this.batch = AssetManager.Batch;
-            texture = TextureManager.GetTexture(name);
+            texture = TextureManager.GetTileable(name);
+            if(texture != null)
+                texture.Tile(xx, yy);
             colour = Color.White;
             dest = new Rectangle();
         }

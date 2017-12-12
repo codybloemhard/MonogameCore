@@ -18,14 +18,6 @@ namespace Core
             tags = new TagEngine();
         }
 
-        internal void Init()
-        {
-            for (int i = 0; i < StaticSize; i++)
-                staticObjects[i].Init();
-            for (int i = 0; i < Size; i++)
-                objects[i].Init();
-        }
-
         internal void Update(float time)
         {
             for (int i = 0; i < StaticSize; i++)

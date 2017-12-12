@@ -21,6 +21,7 @@ namespace Core
         private bool dirtysize = true;
         public Color colour;
         public GameObject GO;
+        protected Vector2 offset = Vector2.Zero;
 
         public UIElement(GameState context, Vector2 position, Vector2 size)
         {
@@ -37,9 +38,10 @@ namespace Core
             this.colour = colour;
         }
 
-        public void AddGameObject(GameObject GO)
+        public void AddGameObject(GameObject GO, Vector2 offset)
         {
             this.GO = GO;
+            this.offset = offset;
         }
 
         protected Vector2 DrawSize(Vector2 physicalsize)
@@ -63,9 +65,7 @@ namespace Core
         public virtual void Update()
         {
             if (GO != null)
-            {
                 position = GO.Pos;
-            }
         }
     }
 
@@ -82,7 +82,7 @@ namespace Core
         public override void Draw(SpriteBatch batch)
         {
             Vector2 drawsize = DrawSize(new Vector2(texture.Width, texture.Height));
-            batch.Draw(texture, Grid.ToScreenSpace(position), null, 
+            batch.Draw(texture, Grid.ToScreenSpace(position + offset), null, 
                 colour, 0.0f, Vector2.Zero, drawsize, 
                 SpriteEffects.None, 0.0f);
         }
@@ -111,8 +111,9 @@ namespace Core
         {
             for (int i = 0; i < text.Count; i++)
             {
-                UI.TextInCenter(text[i], Grid.ToScreenSpace(position) + new Vector2(0, font.MeasureString(text[i]).Y) * i, Grid.ToScreenSpace(Size), batch, font, colour);
+                UI.TextInCenter(text[i], Grid.ToScreenSpace(position + offset) + new Vector2(0, font.MeasureString(text[i]).Y) * i, Grid.ToScreenSpace(Size), batch, font, colour);
             }
+
         }
     }
 
