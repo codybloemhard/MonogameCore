@@ -40,8 +40,6 @@ namespace Core
             this.colour = colour;
             active = true;
         }
-
-        public virtual void Update() { }
         
         public void AddGameObject(GameObject GO, Vector2 offset)
         {
