@@ -18,7 +18,7 @@ namespace Core
     {
         protected Vector2 position;
         private Vector2 size, sizemul;
-        private bool dirtysize = true;
+        internal bool dirtysize = true;
         public Color colour;
         public bool active;
         public GameObject GO;

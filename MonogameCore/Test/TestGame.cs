@@ -18,21 +18,6 @@ namespace MonogameCore.Test
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
             text.colour = new Color(0, 255, 0);
             text.tag = "positionText";
-
-            Text type = new Text(this, "", new Vector2(8, 8), new Vector2(5, 1), font);
-            type.tag = "typeDisplay";
-
-            List<string> testText = new List<string>();
-            testText.Add("Height: ");
-            testText.Add("W");
-            MultipleLinesText test = new MultipleLinesText(this, testText, new Vector2(10, 0), new Vector2(6, testText.Count * Grid.ToGridSpace(font.MeasureString("|")).Y), font);
-            test.tag = "test";
-
-            SliderBar yslider = new SliderBar(this, "block", "block", 1, new Vector2(1, 1), new Vector2(1, 4), "y");
-            yslider.tag = "yslider";
-            SliderBar xslider = new SliderBar(this, "block", "block", 1, new Vector2(5, 1), new Vector2(2, 0.2f), "x");
-            xslider.tag = "xslider";
-
             Button button = new Button(this, "Menu!", "block", () => GameStateManager.RequestChange("menu", CHANGETYPE.LOAD),
                 font, new Vector2(14, 0), new Vector2(2, 1));
             button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
@@ -80,23 +65,9 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(1, 1);
-            //testing
-            GameObject parent = new GameObject("parent", this, 1);
-            parent.AddComponent(new CRender("block"));
-            parent.Pos = new Vector2(1, 1);
-            parent.Size = new Vector2(4, 4);
-            GameObject child = new GameObject("child", this, 0);
-            child.SetParent(parent);
-            child.LocalPos = new Vector2(0.5f, 0.5f);
-            child.LocalSize = new Vector2(0.5f, 0.5f);
-            child.AddComponent(new CRender("block"));
-            (child.Renderer as CRender).colour = Color.Red;
         }
         
-        public override void Unload()
-        {
-            
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {
@@ -104,19 +75,6 @@ namespace MonogameCore.Test
             Text text = ui.FindWithTag("positionText") as Text;
             GameObject player = objects.FindWithTag("player");
             text.text = "Position: " + MathH.Float(player.Pos.X, 2) + " , " + MathH.Float(player.Pos.Y, 2);
-            SliderBar xslider = ui.FindWithTag("xslider") as SliderBar;
-            SliderBar yslider = ui.FindWithTag("yslider") as SliderBar;
-            Console.WriteLine(xslider.GetValue);
-            Console.WriteLine(yslider.GetValue);
-            player.Size = new Vector2(yslider.GetValue * 3);
-            player.Pos = new Vector2(xslider.GetValue* 16, player.Pos.Y);
-
-            MultipleLinesText test = ui.FindWithTag("test") as MultipleLinesText;
-            Console.WriteLine(test.Clicked + " , " + test.Hover);
-
-            Text type = ui.FindWithTag("typeDisplay") as Text;
-            type.text = Input.Type(type.text);
-
             if (Input.GetKey(PressAction.PRESSED, Keys.P))
             {
                 if (Debug.Mode == DEBUGMODE.PROFILING)
@@ -125,6 +83,8 @@ namespace MonogameCore.Test
             }
             if (Input.GetKey(PressAction.DOWN, Keys.O)) Debug.showAtlas = true;
             else Debug.showAtlas = false;
+            float res = 1920;
+            if (Input.GetKey(PressAction.PRESSED, Keys.Y)) Camera.SetupResolution((uint)res, (uint)(res / 16f*9f), false);
             base.Update(time);
         }
 

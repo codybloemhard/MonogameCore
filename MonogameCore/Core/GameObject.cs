@@ -90,7 +90,7 @@ namespace Core
                 comparray[i].OnCollision(other);
         }
         public bool DirtyBounds { get { return dirtybounds; } }
-        public bool DirtySize { get { return dirtyscale; } }
+        public bool DirtySize { get { return dirtyscale; } internal set { dirtyscale = value; } }
         //GetBounds creates a rectangle that matches the dimensions of the drawn sprite
         /*System with a diryflag ensures we do not have to calculate new bounds
         Everytime we either check for collision or updadate our position.*/

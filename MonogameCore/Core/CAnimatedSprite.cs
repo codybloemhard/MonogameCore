@@ -55,8 +55,8 @@ namespace Core
             if (gameObject.DirtySize)
             {
                 temp = Grid.ToScreenSpace(GO.Size);
-                dest.Width = (int)temp.X;
-                dest.Height = (int)temp.Y;
+                dest.Width = (int)temp.X + 1;
+                dest.Height = (int)temp.Y + 1;
             }
             temp = Grid.ToScreenSpace(GO.Pos);
             dest.X = (int)temp.X;
