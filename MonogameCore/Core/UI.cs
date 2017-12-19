@@ -21,6 +21,8 @@ namespace Core
         private bool dirtysize = true;
         public Color colour;
         public bool active;
+        public GameObject GO;
+        protected Vector2 offset = Vector2.Zero;
 
         public UIElement(GameState context, Vector2 position, Vector2 size)
         {
@@ -43,6 +45,14 @@ namespace Core
         {
             if (!active)
                 return;
+            if (GO != null)
+                position = GO.Pos;
+        }
+        
+        public void AddGameObject(GameObject GO, Vector2 offset)
+        {
+            this.GO = GO;
+            this.offset = offset;
         }
 
         protected Vector2 DrawSize(Vector2 physicalsize)
@@ -82,7 +92,7 @@ namespace Core
         {
             base.Draw(batch);
             Vector2 drawsize = DrawSize(new Vector2(texture.Width, texture.Height));
-            batch.Draw(texture, Grid.ToScreenSpace(position), null, 
+            batch.Draw(texture, Grid.ToScreenSpace(position + offset), null, 
                 colour, 0.0f, Vector2.Zero, drawsize, 
                 SpriteEffects.None, 0.0f);
         }
@@ -105,7 +115,7 @@ namespace Core
         public override void Draw(SpriteBatch batch)
         {
             base.Draw(batch);
-            UI.TextInCenter(text, Grid.ToScreenSpace(position), Grid.ToScreenSpace(Size), batch, font, colour);
+            UI.TextInCenter(text, Grid.ToScreenSpace(position + offset), Grid.ToScreenSpace(Size), batch, font, colour);
         }
 
         public bool Hover { get { return bounds.Inside(Input.GetMousePosition()); } }

@@ -142,8 +142,8 @@ namespace MonogameCore.Test
                     if (float.TryParse(properties.text[properties.selected], out input))
                         GO.Size = new Vector2(GO.Size.X, input);
                 }
-                if (backup == "Texture:")
-                    GO.Renderer.SetSprite(properties.text[properties.selected]);
+                //if (backup == "Texture:")
+                    //GO.Renderer.SetSprite(properties.text[properties.selected]);
                 if (backup == "Components:")
                 {
                     components.Add(properties.text[properties.selected]);    

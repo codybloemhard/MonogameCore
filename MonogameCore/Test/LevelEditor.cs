@@ -32,9 +32,9 @@ namespace MonogameCore.Test
             {
                 GameObject newObject = new GameObject("new", this, 0, true);
                 allObjects.Add(newObject);
-                newObject.AddComponent("renderer", new CRender("block"));
-                newObject.AddComponent("CAAB", new CAABB());
-                newObject.AddComponent("CLevelEditorObject", new CLevelEditorObject(newObject));
+                newObject.AddComponent(new CRender("block"));
+                newObject.AddComponent(new CAABB());
+                newObject.AddComponent(new CLevelEditorObject(newObject));
                 newObject.Pos = Input.GetMousePosition();
                 newObject.Size = new Vector2(1, 1);
             }
