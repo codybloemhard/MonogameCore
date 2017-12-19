@@ -27,9 +27,11 @@ namespace MonogameCore
         {
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
+            LevelEditor levelEditor = new LevelEditor();
+            game.states.AddState("editor", levelEditor);
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
-            game.states.SetStartingState("menu");
+            game.states.SetStartingState("editor");
         }
     }
 }

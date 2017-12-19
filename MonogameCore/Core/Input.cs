@@ -61,7 +61,12 @@ namespace Core
                         toAdd = " ";
                     else if (k == Keys.Back && s.Length >= 1)
                         s = s.Substring(0, s.Length - 1);
-
+                    else if (k == Keys.OemSemicolon)
+                        toAdd = ":";
+                    else if (k == Keys.OemPeriod)
+                        toAdd = ".";
+                    else if (k.ToString()[0] == 'D' && k.ToString().Length == 2)
+                        toAdd = k.ToString()[1].ToString();
                 }
             }
 
@@ -131,6 +136,11 @@ namespace Core
         public static Vector2 GetMousePosition()
         {
             return Grid.ToGridSpace(new Vector2(Mouse.GetState().X, Mouse.GetState().Y));
+        }
+
+        public static Vector2 GetMouseWorldPosition()
+        {
+            return GetMousePosition() + Grid.ToGridSpace(Camera.TopLeft);
         }
     }
 }
