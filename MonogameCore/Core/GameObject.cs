@@ -13,7 +13,7 @@ namespace Core
         private List<GameObject> childs;
         private Dictionary<string, Component> components;
         private Component[] comparray;//for fast iteration
-        private _renderer renderer;
+        private Renderer renderer;
         private float gtime;
         private GameObject parent;
         private AABB bounds;
@@ -154,8 +154,8 @@ namespace Core
         {
             com.gameObject = this;
             com.Init();
-            if (com is _renderer)
-                renderer = com as _renderer;
+            if (com is Renderer)
+                renderer = com as Renderer;
             else if (com is _collider)
             {
                 collider = com as _collider;
@@ -256,7 +256,7 @@ namespace Core
         }
 
         public GameObjectManager Manager { get { return context.objects; } }
-        public _renderer Renderer { get { return renderer;  } }
+        public Renderer Renderer { get { return renderer;  } }
         public _collider Collider { get { return collider; } }
         public bool IsStatic { get { return isStatic; } }
         public uint Layer { get { return layer; } }

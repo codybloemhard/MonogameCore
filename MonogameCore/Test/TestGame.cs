@@ -57,7 +57,7 @@ namespace MonogameCore.Test
             player.AddComponent(new CFsm());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
-            GameObject anim = new GameObject("anim", this, 5);
+            GameObject anim = new GameObject("rotationtest", this, 5);
             CAnimatedSprite animatie = new CAnimatedSprite();
             animatie.AddAnimation("letters", "animLetters");
             animatie.AddAnimation("nummers", "animNumbers");
@@ -83,8 +83,11 @@ namespace MonogameCore.Test
             }
             if (Input.GetKey(PressAction.DOWN, Keys.O)) Debug.showAtlas = true;
             else Debug.showAtlas = false;
-            float res = 1920;
-            if (Input.GetKey(PressAction.PRESSED, Keys.Y)) Camera.SetupResolution((uint)res, (uint)(res / 16f*9f), false);
+            if (Input.GetKey(PressAction.PRESSED, Keys.Y))
+            {
+                GameObject go = objects.FindWithTag("rotationtest");
+                (go.Renderer as Renderer).Rotate(10f);
+            }
             base.Update(time);
         }
 

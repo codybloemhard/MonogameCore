@@ -76,7 +76,7 @@ namespace Core
             states.Update(time * Time.timeScale);
             base.Update(gameTime);
         }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             Time.UpdateFps();

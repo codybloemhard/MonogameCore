@@ -46,6 +46,11 @@ namespace Core
             final.Width = (int)(bound.Width * q.X) - (int)(bound.Width * p.X);
             final.Height = (int)(bound.Height * q.Y) - (int)(bound.Height * p.Y);
         }
+        
+        public Vector2 Origin()
+        {
+            return new Vector2(final.Width * 0.5f, final.Height * 0.5f);
+        }
     }
 
     public class AnimatedTexture : Texture
