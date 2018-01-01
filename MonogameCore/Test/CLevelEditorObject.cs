@@ -18,6 +18,7 @@ namespace MonogameCore.Test
         private Vector2 grabPoint;
         private MultipleLinesText properties;
         private float input;
+        public static List<GameObject> objectList = new List<GameObject>();
 
         public CLevelEditorObject(GameObject GO)
         {
@@ -30,6 +31,7 @@ namespace MonogameCore.Test
             properties = new MultipleLinesText(GO.Context, text, new Vector2(10, 3), new Vector2(0, 0), AssetManager.GetResource<SpriteFont>("mainFont"));
             properties.Pos = new Vector2(16, 9) - properties.Size;
             selected = GO;
+            objectList.Add(GO);
         }
 
         public override void Update(float time)
@@ -136,11 +138,15 @@ namespace MonogameCore.Test
                 {
                     if (float.TryParse(properties.text[properties.selected], out input))
                         GO.Size = new Vector2(input, GO.Size.Y);
+                    else
+                        Console.WriteLine("'" + properties.text[properties.selected] + "'" + " is not a correct value");
                 }
                 if (backup == "YSize:")
                 {
                     if (float.TryParse(properties.text[properties.selected], out input))
                         GO.Size = new Vector2(GO.Size.X, input);
+                    else
+                        Console.WriteLine("'" + properties.text[properties.selected] + "'" + " is not a correct value");
                 }
                 //if (backup == "Texture:")
                     //GO.Renderer.SetSprite(properties.text[properties.selected]);
