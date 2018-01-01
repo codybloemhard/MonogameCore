@@ -40,6 +40,14 @@ namespace Core
             this.colour = colour;
             active = true;
         }
+
+        public virtual void Update()
+        {
+            if (!active)
+                return;
+            if (GO != null)
+                position = GO.Pos;
+        }
         
         public void AddGameObject(GameObject GO, Vector2 offset)
         {
@@ -67,12 +75,6 @@ namespace Core
         {
             if (!active)
                 return;
-        }
-
-        public virtual void Update()
-        {
-            if (GO != null)
-                position = GO.Pos;
         }
     }
 
@@ -126,6 +128,7 @@ namespace Core
         protected SpriteFont font;
         protected AABB bounds;
         protected Vector2 size;
+        public int selected = -1;
 
         public MultipleLinesText(GameState context, List<string> text, Vector2 position, Vector2 size, SpriteFont font) 
             : base(context, position, size)
@@ -140,8 +143,7 @@ namespace Core
                 if (font.MeasureString(s).X > font.MeasureString(longest).X)
                     longest = s;
             }
-            this.size = new Vector2(font.MeasureString(longest).X, text.Count * Grid.ToGridSpace(font.MeasureString("|")).Y);
-
+            this.size = Grid.ToGridSpace(new Vector2(font.MeasureString(longest).X, text.Count * font.MeasureString("This is just a random string, for testing purposes").Y));
 
             bounds = new AABB(position.X, position.Y, this.size.X, this.size.Y);
         }
@@ -149,8 +151,13 @@ namespace Core
         public override void Draw(SpriteBatch batch)
         {
             base.Draw(batch);
-            for(int i = 0; i < text.Count; i++)
-                UI.TextInCenter(text[i], Grid.ToScreenSpace(position) + new Vector2(0, i * font.MeasureString(text[i]).Y ), Grid.ToScreenSpace(new Vector2(Size.X, Size.Y/text.Count)), batch, font, colour);
+            if (!active)
+                return;
+            for (int i = 0; i < text.Count; i++)
+                batch.DrawString(font, text[i], Grid.ToScreenSpace(position) + new Vector2((Grid.ToScreenSpace(size).X - font.MeasureString(text[i]).X)/2, i * font.MeasureString(text[i]).Y), colour);
+
+            //batch.DrawString(text[i], Grid.ToScreenSpace(position) + new Vector2(0, i * font.MeasureString(text[i]).Y), Grid.ToScreenSpace(new Vector2(Size.X, Size.Y / text.Count)), font, colour);
+
         }
 
         //returns the line that the mouse is over/that is clicked, or -1
@@ -158,9 +165,9 @@ namespace Core
         {
             get
             {
-                if (!bounds.Inside(Input.GetMousePosition()))
+                if (!active || !bounds.Inside(Input.GetMousePosition()))
                     return -1;
-                return (int)((Input.GetMousePosition().Y - position.Y)/(size.Y/text.Count));
+                return (int)((Input.GetMousePosition().Y - position.Y) /(size.Y/text.Count));
             }
         }
 
@@ -168,11 +175,14 @@ namespace Core
         {
             get
             {
-                if (!bounds.Inside(Input.GetMousePosition()) || !Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
+                if (!active || !bounds.Inside(Input.GetMousePosition()) || !Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
                     return -1;
                 return (int)((Input.GetMousePosition().Y - position.Y) / (Grid.ToScreenSpace(size).Y/text.Count));
             }
         }
+
+        public Vector2 Pos { get { return position; } set { position = value; bounds = new AABB(position.X, position.Y, this.size.X, this.size.Y); } }
+        new public Vector2 Size { get { return size; } }
     }
 
     public class SliderBar : UITextureElement
