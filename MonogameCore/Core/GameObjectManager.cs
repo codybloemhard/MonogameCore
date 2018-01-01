@@ -20,6 +20,11 @@ namespace Core
 
         internal void Update(float time)
         {
+            if (Grid.dirty > 0)
+            {
+                Grid.dirty--;
+                SetDirty();
+            }
             for (int i = 0; i < StaticSize; i++)
                 staticObjects[i].Update(time);
             for (int i = 0; i < Size; i++)
@@ -48,6 +53,14 @@ namespace Core
         {
             staticObjects.Clear();
             objects.Clear();
+        }
+
+        internal void SetDirty()
+        {
+            for (int i = 0; i < StaticSize; i++)
+                staticObjects[i].DirtySize = true;
+            for (int i = 0; i < Size; i++)
+                objects[i].DirtySize = true;
         }
 
         public GameObject FindWithTag(string tag)

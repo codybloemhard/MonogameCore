@@ -10,6 +10,7 @@ namespace Core
         private static uint _screenW, _screenH;
         private static Vector2 _mul;
         private static Vector2 scrnsz, grdsz;
+        internal static uint dirty = 0;
 
         static Grid() { _mul = default(Vector2); }
 
