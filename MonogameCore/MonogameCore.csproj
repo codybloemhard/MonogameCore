@@ -33,6 +33,7 @@
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -45,7 +46,6 @@
     <Compile Include="Core\Collision.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Core\CRender.cs" />
-    <Compile Include="Core\CRenderSet.cs" />
     <Compile Include="Core\CTileableSprite.cs" />
     <Compile Include="Core\DataManager.cs" />
     <Compile Include="Core\Debug.cs" />

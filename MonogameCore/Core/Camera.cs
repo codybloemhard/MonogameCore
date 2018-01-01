@@ -67,6 +67,7 @@ namespace Core
         private static View view;
         private static Vector2 screenSize, size;
         private static GraphicsDeviceManager graphics;
+        private static GraphicsDevice device;
 
         static Camera()
         {
@@ -76,16 +77,31 @@ namespace Core
             graphics = null;
         }
 
-        public static void SetupResolution(uint w, uint h, GraphicsDeviceManager g, GraphicsDevice device)
+        internal static void SetupEnv(GraphicsDeviceManager g, GraphicsDevice d)
         {
-            g.PreferredBackBufferWidth = (int)w;
-            g.PreferredBackBufferHeight = (int)h;
-            g.IsFullScreen = false;
-            g.SynchronizeWithVerticalRetrace = false;
-            
-            g.ApplyChanges();
-            screenSize = new Vector2(g.PreferredBackBufferWidth, g.PreferredBackBufferHeight);
+            graphics = g;
+            device = d;
+        }
+
+        public static void SetupResolution(uint w, uint h, bool fullscreen)
+        {
+            graphics.IsFullScreen = fullscreen;
+            if (fullscreen)
+            {
+                graphics.PreferredBackBufferWidth = device.DisplayMode.Width;
+                graphics.PreferredBackBufferHeight = device.DisplayMode.Height;
+            }
+            else
+            {
+                graphics.PreferredBackBufferWidth = (int)w;
+                graphics.PreferredBackBufferHeight = (int)h;
+            }
+            graphics.SynchronizeWithVerticalRetrace = false;
+            graphics.ApplyChanges();
+
+            screenSize = new Vector2(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Grid.Setup(16, 9, (uint)screenSize.X, (uint)screenSize.Y);
+            Grid.dirty = 2;
 
             float targetAspectRatio = (float)w / (float)h;
             int width = (int)screenSize.X;

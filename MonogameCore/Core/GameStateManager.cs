@@ -130,7 +130,7 @@ namespace Core
             if (states.ContainsKey(name))
                 states.Remove(name);
         }
-
+        
         public void SetStartingState(string name)
         {
             if (currentstate != null) return;
