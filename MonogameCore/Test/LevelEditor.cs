@@ -50,46 +50,43 @@ namespace MonogameCore.Test
 
         public void Finish()
         {
-            using (StreamWriter fileWriter = new StreamWriter(url, false))
-            {
-                fileWriter.AutoFlush = true;
-                for (int i = 0; i < CLevelEditorObject.objectList.Count; i++)
-                {
-                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.X));
-                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.Y));
-                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Size.X));
-                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Size.Y));
-                    fileWriter.Write(MathH.CompressString(CLevelEditorObject.objectList[i].tag, 5));
-                }
-            }
+            WriteLevel();
             ReadLevel();
             //GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
         }
 
         public void WriteLevel()
         {
-            
+            using (BinaryWriter w = new BinaryWriter(File.Open(url, FileMode.Open)))
+            {
+                int count = CLevelEditorObject.objectList.Count;
+                w.Write(count);
+                for (int i = 0; i < count; i++)
+                {
+                    GameObject obj = CLevelEditorObject.objectList[i];
+                    w.Write(obj.Pos.X);
+                    w.Write(obj.Pos.Y);
+                    w.Write(obj.Size.X);
+                    w.Write(obj.Size.Y);
+                    w.Write(obj.tag);
+                }
+            }
         }
 
         public void ReadLevel()
         {
-            string content;
-            using (StreamReader fileReader = new StreamReader(url))
+            if (!File.Exists(url)) return;
+            using (BinaryReader r = new BinaryReader(File.Open(url, FileMode.Open)))
             {
-                content = fileReader.ReadLine();
-                Console.WriteLine(content);
-            }
-            int len = content.Length;
-            int togo = len;
-            while (content != null && togo > 0)
-            {
-                int done = len - togo;
-                Console.WriteLine(MathH.UncompressFloat(content.Substring(done + 0, 2)));
-                Console.WriteLine(MathH.UncompressFloat(content.Substring(done + 2, 2)));
-                Console.WriteLine(MathH.UncompressFloat(content.Substring(done + 4, 2)));
-                Console.WriteLine(MathH.UncompressFloat(content.Substring(done + 6, 2)));
-                Console.WriteLine(MathH.UncompressString(content.Substring(done + 8, 5)));
-                togo -= 13;
+                int count = r.ReadInt32();
+                for(int i = 0; i < count; i++)
+                {
+                    Console.WriteLine(r.ReadSingle());
+                    Console.WriteLine(r.ReadSingle());
+                    Console.WriteLine(r.ReadSingle());
+                    Console.WriteLine(r.ReadSingle());
+                    Console.WriteLine(r.ReadString());
+                }
             }
         }
     }

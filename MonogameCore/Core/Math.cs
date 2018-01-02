@@ -92,7 +92,8 @@ namespace Core
             f *= (float)Math.Pow(2, 16);
             f = Math.Abs(f);
             second = (char)(int)f;
-            return first.ToString() + second.ToString();
+            string b = first.ToString() + second.ToString();
+            return b;
         }
 
         public static float UncompressFloat(string s)
