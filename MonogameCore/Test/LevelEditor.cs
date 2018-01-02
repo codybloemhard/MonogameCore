@@ -11,6 +11,8 @@ namespace MonogameCore.Test
     public class LevelEditor : GameState
     {
         List<GameObject> allObjects = new List<GameObject>();
+        private bool moving;
+        private Vector2 grabPoint, offset, prevMousePos;
 
         public override void Load(SpriteBatch batch)
         {
@@ -29,7 +31,6 @@ namespace MonogameCore.Test
             if (Input.GetKey(PressAction.PRESSED, Keys.Enter))
             {
                 GameObject newObject = new GameObject("new", this, 0, true);
-                allObjects.Add(newObject);
                 newObject.AddComponent(new CRender("block"));
                 newObject.AddComponent(new CAABB());
                 newObject.AddComponent(new CLevelEditorObject(newObject));
@@ -38,13 +39,13 @@ namespace MonogameCore.Test
             }
 
             if (Input.GetKey(PressAction.DOWN, Keys.Right))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0.005f, 0));
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0.01f, 0));
             else if (Input.GetKey(PressAction.DOWN, Keys.Left))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(-0.005f, 0));
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(-0.01f, 0));
             if (Input.GetKey(PressAction.DOWN, Keys.Up))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.005f));
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.01f));
             else if (Input.GetKey(PressAction.DOWN, Keys.Down))
-                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, 0.005f));
+                Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, 0.01f));
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
@@ -54,17 +55,33 @@ namespace MonogameCore.Test
 
         public void Finish()
         {
+            string test;
+
             using (StreamWriter fileWriter = new StreamWriter("../../../../Content/level.txt", false))
             {
                 fileWriter.AutoFlush = true;
-                for (int i = 0; i < allObjects.Count; i++)
+
+                for (int i = 0; i < CLevelEditorObject.objectList.Count; i++)
                 {
-                    fileWriter.Write(allObjects[i].tag + "|");
-                    fileWriter.Write(allObjects[i].Pos.X + "/" + allObjects[i].Pos.Y + "|");
-                    fileWriter.WriteLine(allObjects[i].Size.X + "/" + allObjects[i].Size.Y);
-                }
+                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.X));
+                    fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.Y));
+                    fileWriter.Write(MathH.CompressSTring(CLevelEditorObject.objectList[i].tag, 5));
+                }                
             }
-            GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
+
+            using (StreamReader fileReader = new StreamReader("../../../../Content/level.txt"))
+            {
+                test = fileReader.ReadLine();
+                Console.WriteLine(test);
+            }
+            if (test != null)
+            {
+                Console.WriteLine(MathH.UncompressFloat(test.Substring(0, 2)));
+                Console.WriteLine(MathH.UncompressFloat(test.Substring(2, 2)));
+                Console.WriteLine(MathH.UncompressString(test.Substring(4, 5)));
+            }
+
+            //GameStateManager.RequestChange("game", CHANGETYPE.LOAD);
         }
     }
 }
