@@ -8,11 +8,9 @@ using System.Collections.Generic;
 
 namespace MonogameCore.Test
 {
-    class LevelEditor : GameState
+    public class LevelEditor : GameState
     {
         List<GameObject> allObjects = new List<GameObject>();
-        private bool moving;
-        private Vector2 grabPoint, offset, prevMousePos;
 
         public override void Load(SpriteBatch batch)
         {
@@ -47,9 +45,6 @@ namespace MonogameCore.Test
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, -0.005f));
             else if (Input.GetKey(PressAction.DOWN, Keys.Down))
                 Camera.SetCameraTopLeft(Grid.ToGridSpace(Camera.TopLeft) + new Vector2(0, 0.005f));
-
-
-
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)
@@ -59,11 +54,9 @@ namespace MonogameCore.Test
 
         public void Finish()
         {
-
             using (StreamWriter fileWriter = new StreamWriter("../../../../Content/level.txt", false))
             {
                 fileWriter.AutoFlush = true;
-
                 for (int i = 0; i < allObjects.Count; i++)
                 {
                     fileWriter.Write(allObjects[i].tag + "|");

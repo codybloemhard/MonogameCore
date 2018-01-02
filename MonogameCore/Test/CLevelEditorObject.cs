@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonogameCore.Test
 {
-    class CLevelEditorObject : Component
+    public class CLevelEditorObject : Component
     {
         private List<string> components = new List<string>();
         private float precision = 2;
@@ -54,7 +54,6 @@ namespace MonogameCore.Test
                         grabPoint = mousePos - GO.Pos;
                     }
                 }
-
                 else
                 {
                     if (selected == GO)
@@ -154,4 +153,3 @@ namespace MonogameCore.Test
         public static bool StaticGrabbed { get { return staticGrabbed; } }
     }
 }
-
