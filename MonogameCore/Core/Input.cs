@@ -54,6 +54,36 @@ namespace Core
             }
         }
 
+        public static string Type(string s)
+        {
+            string toAdd = "";
+            foreach (Keys k in kCurrent)
+            {
+                if (!Array.Exists<Keys>(kPrev, element => element == k))
+                {
+                    if (k.ToString().Length == 1)
+                        toAdd = k.ToString();
+                    else if (k == Keys.Space)
+                        toAdd = " ";
+                    else if (k == Keys.Back && s.Length >= 1)
+                        s = s.Substring(0, s.Length - 1);
+                    else if (k == Keys.OemSemicolon)
+                        toAdd = ":";
+                    else if (k == Keys.OemPeriod)
+                        toAdd = ".";
+                    else if (k.ToString()[0] == 'D' && k.ToString().Length == 2)
+                        toAdd = k.ToString()[1].ToString();
+                }
+            }
+
+            if (!Array.Exists<Keys>(kCurrent, element => element == Keys.LeftShift || element == Keys.RightShift))
+            {
+                toAdd = toAdd.ToLower();
+            }
+
+            return s + toAdd;
+        }
+
         private static bool GetButton(Mstate state, MouseButton button)
         {
             MouseState s;
@@ -112,6 +142,11 @@ namespace Core
         public static Vector2 GetMousePosition()
         {
             return Grid.ToGridSpace(new Vector2(Mouse.GetState().X, Mouse.GetState().Y));
+        }
+
+        public static Vector2 GetMouseWorldPosition()
+        {
+            return GetMousePosition() + Grid.ToGridSpace(Camera.TopLeft);
         }
     }
 }

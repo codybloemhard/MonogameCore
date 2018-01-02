@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,8 +57,8 @@ namespace MonogameCore.Test
             player.AddComponent(new CFsm());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
+            GameObject anim = new GameObject("rotationtest", this, 5);
 
-            GameObject anim = new GameObject("anim", this, 5);
             CAnimatedSprite animatie = new CAnimatedSprite();
             animatie.AddAnimation("letters", "animLetters");
             animatie.AddAnimation("nummers", "animNumbers");
@@ -65,23 +66,9 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(1, 1);
-            //testing
-            GameObject parent = new GameObject("parent", this, 1);
-            parent.AddComponent(new CRender("block"));
-            parent.Pos = new Vector2(1, 1);
-            parent.Size = new Vector2(4, 4);
-            GameObject child = new GameObject("child", this, 0);
-            child.SetParent(parent);
-            child.LocalPos = new Vector2(0.5f, 0.5f);
-            child.LocalSize = new Vector2(0.5f, 0.5f);
-            child.AddComponent(new CRender("block"));
-            (child.Renderer as CRender).colour = Color.Red;
         }
         
-        public override void Unload()
-        {
-            
-        }
+        public override void Unload() { }
 
         public override void Update(float time)
         {
@@ -99,10 +86,11 @@ namespace MonogameCore.Test
             }
             if (Input.GetKey(PressAction.DOWN, Keys.O)) Debug.showAtlas = true;
             else Debug.showAtlas = false;
-
-            GameObject anim = objects.FindWithTag("anim");
-            if (Input.GetKey(PressAction.DOWN, Keys.L)) anim.GetComponent<CAnimatedSprite>().PlayAnimation("nummers", 3) ;
-
+            if (Input.GetKey(PressAction.PRESSED, Keys.Y))
+            {
+                GameObject go = objects.FindWithTag("rotationtest");
+                (go.Renderer as Renderer).Rotate(10f);
+            }
             base.Update(time);
         }
 

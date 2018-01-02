@@ -10,6 +10,7 @@ namespace Core
     public sealed class GameWindow : Game
     {
         private uint screenWidth;
+        private bool fullscreen;
         private GraphicsDeviceManager graphics;
         private SpriteBatch batch;
         private Action load;
@@ -20,14 +21,15 @@ namespace Core
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        public GameWindow(uint width)
+        public GameWindow(uint width, bool fullscreen = false)
         {
             graphics = new GraphicsDeviceManager(this);
             AssetManager.content = Content;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             screenWidth = width;
-            
+            this.fullscreen = fullscreen;
+
             AllocConsole();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("MonogameCore running!");
@@ -48,7 +50,8 @@ namespace Core
         protected override void LoadContent()
         {
             uint screenHeight = screenWidth / 16 * 9;
-            Camera.SetupResolution(screenWidth, screenHeight, graphics, GraphicsDevice);
+            Camera.SetupEnv(graphics, GraphicsDevice);
+            Camera.SetupResolution(screenWidth, screenHeight, fullscreen);
             batch = new SpriteBatch(GraphicsDevice);
             AssetManager.Batch = batch;
             AssetManager.device = GraphicsDevice;
@@ -73,7 +76,7 @@ namespace Core
             states.Update(time * Time.timeScale);
             base.Update(gameTime);
         }
-
+        
         protected override void Draw(GameTime gameTime)
         {
             Time.UpdateFps();

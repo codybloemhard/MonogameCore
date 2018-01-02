@@ -18,22 +18,20 @@ namespace Core
 
         internal void Update()
         {
-            /*for (int i = 0; i < elements.Count; i++) {
-                if (elements[i] is Button)
-                    (elements[i] as Button).Update();
-            }*/
-            for (int i = 0; i < elements.Count; i++)
+            if(Grid.dirty > 0)
             {
-                elements[i].Update();
+                Grid.dirty--;
+                for (int i = 0; i < elements.Count; i++)
+                    elements[i].dirtysize = true;
             }
+            for (int i = 0; i < elements.Count; i++)
+                elements[i].Update();
         }
 
         internal void Draw(SpriteBatch batch)
         {
             for (int i = 0; i < elements.Count; i++)
-            {
                 elements[i].Draw(batch);
-            }
         }
 
         internal void Add(UIElement e)
