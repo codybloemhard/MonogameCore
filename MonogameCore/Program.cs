@@ -37,7 +37,7 @@ namespace MonogameCore
             TestGame testGame = new TestGame();
             game.states.AddState("menu", testMenu);
             game.states.AddState("game", testGame);
-            game.states.SetStartingState("editor");
+            game.states.SetStartingState("menu");
         }
     }
 }

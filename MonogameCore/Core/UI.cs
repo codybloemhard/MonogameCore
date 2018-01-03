@@ -23,6 +23,7 @@ namespace Core
         public bool active;
         public GameObject GO;
         protected Vector2 offset = Vector2.Zero;
+        private GameState context;
 
         public UIElement(GameState context, Vector2 position, Vector2 size)
         {
@@ -30,6 +31,7 @@ namespace Core
             this.size = size;
             colour = Color.White;
             context.ui.Add(this);
+            this.context = context;
             active = true;
         }
 
@@ -75,6 +77,11 @@ namespace Core
         {
             if (!active)
                 return;
+        }
+
+        public void Destroy()
+        {
+            context.ui.Remove(this);
         }
     }
 
