@@ -24,7 +24,7 @@ namespace MonogameCore
             Debug.ProfilingMode();
             game.Run();
         }
-
+        
         private void Load()
         {
             TextureManager.LoadTexture("block", "block");

@@ -223,7 +223,8 @@ namespace Core
         private List<_collider> statics;
         private LineRenderer lines;
         private QuadTree dynamicTree, staticTree;
-        
+        private Object l = new Object();
+
         internal Collision(LineRenderer lines)
         {
             dynamics = new List<_collider>();
@@ -235,13 +236,16 @@ namespace Core
 
         internal void Check()
         {
-            lines.Clear();
-            dynamicTree.Clear();
-            for (int i = 0; i < dynamics.Count; i++)
-                dynamicTree.Add(dynamics[i]);
-            CheckQuad();
-            dynamicTree.DrawTree(lines, Color.Red);
-            staticTree.DrawTree(lines, Color.Blue);
+            lock (l)
+            {
+                lines.Clear();
+                dynamicTree.Clear();
+                for (int i = 0; i < dynamics.Count; i++)
+                    dynamicTree.Add(dynamics[i]);
+                CheckQuad();
+                dynamicTree.DrawTree(lines, Color.Red);
+                staticTree.DrawTree(lines, Color.Blue);
+            }
         }
         
         internal void CheckQuad()
@@ -252,47 +256,59 @@ namespace Core
 
         internal void Add(_collider o, bool isStatic = false)
         {
-            if (o == null) return;
-            if (isStatic)
+            lock (l)
             {
-                statics.Add(o);
-                staticTree.Add(o);
-            }
-            else dynamics.Add(o);
+                if (o == null) return;
+                if (isStatic)
+                {
+                    statics.Add(o);
+                    staticTree.Add(o);
+                }
+                else dynamics.Add(o);
+            }         
         }
 
         internal void Remove(GameObject o, bool isStatic = false)
         {
-            if (o.Collider == null) return;
-            if (isStatic)
+            lock (l)
             {
-                statics.Remove(o.Collider);
-                staticTree.Clear();
-                for (int i = 0; i < statics.Count; i++)
-                    staticTree.Add(statics[i]);
-            }
-            else dynamics.Remove(o.Collider);
+                if (o.Collider == null) return;
+                if (isStatic)
+                {
+                    statics.Remove(o.Collider);
+                    staticTree.Clear();
+                    for (int i = 0; i < statics.Count; i++)
+                        staticTree.Add(statics[i]);
+                }
+                else dynamics.Remove(o.Collider);
+            }            
         }
 
         internal void Clear()
         {
-            dynamics.Clear();
-            statics.Clear();
+            lock (l)
+            {
+                dynamics.Clear();
+                statics.Clear();
+            }
         }
 
         internal RaycastResult Raycast(Vector2 origin, Vector2 direction, RAYCASTTYPE type)
         {
-            RaycastResult dynamicRes = new RaycastResult();
-            RaycastResult staticRes = new RaycastResult();
-            if (type == RAYCASTTYPE.DYNAMIC || type == RAYCASTTYPE.ALL)
-                dynamicRes = CollisionMath.Raycast(origin, direction, dynamics);
-            if (type == RAYCASTTYPE.STATIC || type == RAYCASTTYPE.ALL)
-                staticRes = CollisionMath.Raycast(origin, direction, statics);
-            if (!dynamicRes.hit) return staticRes;
-            if (!staticRes.hit) return dynamicRes;
-            if (dynamicRes.distance > staticRes.distance)
-                return staticRes;
-            return dynamicRes;
+            lock (l)
+            {
+                RaycastResult dynamicRes = new RaycastResult();
+                RaycastResult staticRes = new RaycastResult();
+                if (type == RAYCASTTYPE.DYNAMIC || type == RAYCASTTYPE.ALL)
+                    dynamicRes = CollisionMath.Raycast(origin, direction, dynamics);
+                if (type == RAYCASTTYPE.STATIC || type == RAYCASTTYPE.ALL)
+                    staticRes = CollisionMath.Raycast(origin, direction, statics);
+                if (!dynamicRes.hit) return staticRes;
+                if (!staticRes.hit) return dynamicRes;
+                if (dynamicRes.distance > staticRes.distance)
+                    return staticRes;
+                return dynamicRes;
+            }
         }
     }
 

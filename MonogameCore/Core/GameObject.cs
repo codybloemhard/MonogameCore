@@ -62,8 +62,9 @@ namespace Core
             Component col = (collider as Component);
             if (col != null)
                 col.Update(gameTime);
-            for (int i = 0; i < comparray.Length; i++)
-                comparray[i].Update(gameTime);
+            if(comparray != null)
+                for (int i = 0; i < comparray.Length; i++)
+                    comparray[i].Update(gameTime);
             if (isStatic) return;
             if (parent != null)
             {
