@@ -84,7 +84,7 @@ namespace Core
         public static string CompressFloat(float f)
         {
             char first, second;
-            if (f<0)
+            if (f < 0)
                 first = (char)(Math.Abs(f) + Math.Pow(2, 15));
             else
                 first = (char)f;
@@ -92,7 +92,8 @@ namespace Core
             f *= (float)Math.Pow(2, 16);
             f = Math.Abs(f);
             second = (char)(int)f;
-            return first.ToString() + second.ToString();
+            string b = first.ToString() + second.ToString();
+            return b;
         }
 
         public static float UncompressFloat(string s)
@@ -140,7 +141,7 @@ namespace Core
             return c.ToString() + (char)(second / (char)Math.Pow(2, 8));
         }
 
-        public static string CompressSTring(string s, int length = -1)
+        public static string CompressString(string s, int length = -1)
         {
             string result = "";
             for (int i = 0; i < s.Length; i += 2)
