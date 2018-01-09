@@ -17,6 +17,7 @@ namespace MonogameCore.Test
         {
             Button button = new Button(this, "Finish", "block", () => Finish(),
                 AssetManager.GetResource<SpriteFont>("mainFont"), new Vector2(14, 0), new Vector2(2, 1));
+            button.SetupColours(Color.Gray, Color.White, Color.DarkGray, Color.Red);
         }
 
         public override void Unload()
@@ -62,6 +63,10 @@ namespace MonogameCore.Test
 
                 for (int i = 0; i < CLevelEditorObject.objectList.Count; i++)
                 {
+                    Console.WriteLine("i: "+i);
+                    Console.WriteLine("x: " + CLevelEditorObject.objectList[i].Pos.X);
+                    Console.WriteLine("y: " + CLevelEditorObject.objectList[i].Pos.Y);
+                    Console.WriteLine("tag: " + CLevelEditorObject.objectList[i].tag, 5);
                     fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.X));
                     fileWriter.Write(MathH.CompressFloat(CLevelEditorObject.objectList[i].Pos.Y));
                     fileWriter.Write(MathH.CompressSTring(CLevelEditorObject.objectList[i].tag, 5));

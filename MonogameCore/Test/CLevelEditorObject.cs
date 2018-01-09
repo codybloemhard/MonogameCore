@@ -72,6 +72,8 @@ namespace MonogameCore.Test
             if (selected == GO)
             {
                 (GO.Renderer as CRender).colour = new Color(180, 180, 180);
+                if (Input.GetKey(PressAction.PRESSED, Keys.Delete))
+                    Destroy();
                 properties.active = true;
             }
             else
@@ -155,6 +157,12 @@ namespace MonogameCore.Test
                     components.Add(properties.text[properties.selected]);    
                 } 
             }
+        }
+
+        protected void Destroy()
+        {
+            GO.Destroy();
+            GO.Context.ui.Remove(properties);
         }
 
         public static bool StaticGrabbed { get { return staticGrabbed; } }

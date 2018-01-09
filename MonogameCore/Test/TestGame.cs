@@ -4,6 +4,7 @@ using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Threading.Tasks;
 
 namespace MonogameCore.Test
 {
@@ -54,7 +55,6 @@ namespace MonogameCore.Test
             player.AddComponent(new CAABB());
             player.AddComponent(new CShoot());
             player.AddComponent(new CHealthBar(5, player));
-            player.AddComponent(new CFsm());
             player.Pos = new Vector2(1, 1);
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject anim = new GameObject("rotationtest", this, 5);
@@ -91,7 +91,24 @@ namespace MonogameCore.Test
                 GameObject go = objects.FindWithTag("rotationtest");
                 (go.Renderer as Renderer).Rotate(10f);
             }
+            if (Input.GetKey(PressAction.PRESSED, Keys.Q))
+            {
+                Task.Factory.StartNew(test);
+                Task.Factory.StartNew(test);
+            }
             base.Update(time);
+        }
+
+        private void test()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                GameObject a = new GameObject(this, 0);
+                a.Pos = new Vector2((float)MathH.random.NextDouble() * 16, (float)MathH.random.NextDouble() * 16);
+                a.Size = new Vector2(0.5f);
+                a.AddComponent(new CRender("block"));
+                a.AddComponent(new CAABB());
+            }
         }
 
         public override void Draw(float time, SpriteBatch batch, GraphicsDevice device)

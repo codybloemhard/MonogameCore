@@ -71,6 +71,8 @@ namespace Core
                         toAdd = ":";
                     else if (k == Keys.OemPeriod)
                         toAdd = ".";
+                    else if (k == Keys.OemComma)
+                        toAdd = ",";
                     else if (k.ToString()[0] == 'D' && k.ToString().Length == 2)
                         toAdd = k.ToString()[1].ToString();
                 }
