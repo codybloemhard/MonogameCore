@@ -7,6 +7,7 @@ namespace Core
 {
     public abstract class GameState
     {
+        public LineRenderer lineRenderer;
         public GameObjectManager objects;
         public UIObjectManager ui;
         internal Collision collision;
@@ -20,6 +21,7 @@ namespace Core
             ui = new UIObjectManager();
             renderer = new LayeredRenderer();
             lines = new LineRenderer();
+            lineRenderer = new LineRenderer();
             collision = new Collision(lines);
         }
         
@@ -43,6 +45,7 @@ namespace Core
             renderer.Render();
             batch.End();
             batch.Begin();
+            lineRenderer.Render(batch);
             if(Debug.drawLines) lines.Render(batch);
             if(Debug.showAtlas) batch.Draw(TextureManager.atlas, new Rectangle(0, 0, (int)Camera.ScreenSize.Y, (int)Camera.ScreenSize.Y), Color.White);
             ui.Draw(batch);

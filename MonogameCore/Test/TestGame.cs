@@ -14,6 +14,10 @@ namespace MonogameCore.Test
 
         public override void Load(SpriteBatch batch)
         {
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(16, 16), Color.Red));
+            lineRenderer.Add(new Line(new Vector2(0), new Vector2(0, 16)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(16, 0)));
+            lineRenderer.Add(new Line(new Vector2(16), new Vector2(0, 16)));
             //UI
             SpriteFont font = AssetManager.GetResource<SpriteFont>("mainFont");
             Text text = new Text(this, "Position: ", new Vector2(0f, 0f), new Vector2(16f, 1f), font);
