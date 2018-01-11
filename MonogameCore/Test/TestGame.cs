@@ -65,6 +65,8 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(1, 1);
+            AudioManager.PlayTrack("music");
+            AudioManager.LoopTrack(true);
         }
         
         public override void Unload() { }

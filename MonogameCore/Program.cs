@@ -34,6 +34,7 @@ namespace MonogameCore
             TextureManager.LoadTexture("animLetters", "animatie1", 5, 2);
             TextureManager.LoadTexture("tiletest", "block", 0, 0);
             AudioManager.LoadEffect("bleep", "blocklock");
+            AudioManager.LoadTrack("music", "beethoven");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             game.states.AddState("menu", testMenu);
