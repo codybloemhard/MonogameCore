@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\AssetManager.cs" />
+    <Compile Include="Core\AudioManager.cs" />
     <Compile Include="Core\CAABB.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="Core\CAnimatedSprite.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Core\OrderedSet.cs" />
     <Compile Include="Core\ParticleEmitter.cs" />
     <Compile Include="Core\TagEngine.cs" />
-    <Compile Include="Core\TaskEngine.cs" />
     <Compile Include="Core\TextureManager.cs" />
     <Compile Include="Core\Timers.cs" />
     <Compile Include="Core\UI.cs" />

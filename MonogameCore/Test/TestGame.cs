@@ -93,9 +93,11 @@ namespace MonogameCore.Test
                 Task.Factory.StartNew(test);
                 Task.Factory.StartNew(test);
             }
+            if (Input.GetMouseButton(PressAction.PRESSED, MouseButton.LEFT))
+                AudioManager.PlayEffect("bleep");
             base.Update(time);
         }
-
+        
         private void test()
         {
             for (int i = 0; i < 100; i++)

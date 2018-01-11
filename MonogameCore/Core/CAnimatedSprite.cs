@@ -11,11 +11,13 @@ namespace Core
         private AnimatedTexture current;
         private float speed = 0f;
         private float frame = 0;
+        private string currentName;
 
         public CAnimatedSprite() : base()
         {
             textures = new Dictionary<string, AnimatedTexture>();
             current = null;
+            currentName = "";
         }
 
         public void AddAnimation(string name, string texture)
@@ -31,6 +33,21 @@ namespace Core
 
         public void PlayAnimation(string name, float rate)
         {
+            if (!textures.ContainsKey(name))
+            {
+                Debug.PrintError("Could not find animation: ", name);
+                return;
+            }
+            current = textures[name];
+            currentName = name;
+            speed = rate;
+            frame = 0;
+            origin = current.Origin();
+        }
+
+        public void PlayAnimationIfDifferent(string name, float rate)
+        {
+            if (name == currentName) return;
             if (!textures.ContainsKey(name))
             {
                 Debug.PrintError("Could not find animation: ", name);

@@ -353,7 +353,7 @@ namespace Core
                 bool hit = MathH.RayBoxIntersection(list[i].Minmax(), px, py, qx, qy, ref ix, ref iy);
                 if (!hit) continue;
                 Vector2 inter = new Vector2(ix, iy);
-                float dist = Vector2.Distance(origin, inter);
+                float dist = Math.Abs(Vector2.Distance(origin, inter));
                 if (dist < minDist)
                 {
                     minDist = dist;
