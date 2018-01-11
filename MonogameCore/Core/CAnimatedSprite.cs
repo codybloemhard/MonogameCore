@@ -54,6 +54,7 @@ namespace Core
                 return;
             }
             current = textures[name];
+            currentName = name;
             speed = rate;
             frame = 0;
             origin = current.Origin();
