@@ -18,7 +18,7 @@ namespace MonogameCore.Test
         {
             GameObject bullet = new GameObject("bullet", GO.Context, 0);
             bullet.AddComponent(new CRender("block"));
-            bullet.AddComponent(new CBulletMovement(0.3f, dir));
+            bullet.AddComponent(new CBulletMovement(1f, dir));
             bullet.AddComponent(new CAABB());
             bullet.Pos = GO.Pos + GO.Size / 2f - size / 2f;
             bullet.Size = size;

@@ -10,7 +10,6 @@ namespace Core
         internal List<GameObject> objects;
         internal List<GameObject> staticObjects;
         private TagEngine tags;
-        private Object l = new Object();
 
         internal GameObjectManager()
         {
@@ -26,79 +25,64 @@ namespace Core
                 Grid.dirty--;
                 SetDirty();
             }
-            lock (l)
+            lock (objects)
+            {         
+                for (int i = 0; i < Size; i++)
+                    objects[i].Update(time);
+            }
+            lock (staticObjects)
             {
                 for (int i = 0; i < StaticSize; i++)
                     staticObjects[i].Update(time);
-                for (int i = 0; i < Size; i++)
-                    objects[i].Update(time);
             }
         }
 
         public void Add(GameObject o, bool isStatic = false)
         {
-            lock (l)
-            {
-                if (isStatic) staticObjects.Add(o);
-                else objects.Add(o);
-            }
+            if (isStatic) lock(staticObjects) staticObjects.Add(o);
+            else lock(objects) objects.Add(o);
         }
         
         public void Destroy(GameObject o, bool isStatic = false)
         {
-            lock (l)
-            {
-                if (isStatic) staticObjects.Remove(o);
-                else objects.Remove(o);
-            }
-        }
-        
-        public void Remove(GameObject o, bool isStatic = false)
-        {
-            lock (l)
-            {
-                if (isStatic) staticObjects.Remove(o);
-                else objects.Remove(o);
-            }
+            if (isStatic) lock(staticObjects) staticObjects.Remove(o);
+            else lock(objects) objects.Remove(o);
         }
 
         internal void Clear()
         {
-            lock (l)
-            {
-                staticObjects.Clear();
-                objects.Clear();
-            }
+            lock(staticObjects) staticObjects.Clear();
+            lock(objects) objects.Clear();
         }
 
         internal void SetDirty()
         {
-            lock (l)
-            {
+            lock(staticObjects)
                 for (int i = 0; i < StaticSize; i++)
                     staticObjects[i].DirtySize = true;
+            lock(objects)
                 for (int i = 0; i < Size; i++)
                     objects[i].DirtySize = true;
-            }
         }
 
         public GameObject FindWithTag(string tag)
         {
-            lock (l)
+            lock (tags)
             {
-                GameObject res = tags.FindWithTag(tag, staticObjects);
-                if (res == null)
-                    res = tags.FindWithTag(tag, objects);
+                GameObject res;
+                lock (staticObjects) res = tags.FindWithTag(tag, staticObjects);
+                if (res == null) lock(objects) res = tags.FindWithTag(tag, objects);
                 return res;
             }
         }
 
         public GameObject[] FindAllWithTag(string tag)
         {
-            lock (l)
+            lock (tags)
             {
-                GameObject[] res = tags.FindAllWithTag(tag, staticObjects);
-                if (res == null)
+                GameObject[] res;
+                lock(staticObjects) res = tags.FindAllWithTag(tag, staticObjects);
+                if (res == null) lock(objects)
                     res = tags.FindAllWithTag(tag, objects);
                 return res;
             }
@@ -106,10 +90,11 @@ namespace Core
 
         public GameObject[] FindAllWithTags(string[] tags)
         {
-            lock (l)
+            lock (tags)
             {
-                GameObject[] res = this.tags.FindAllWithTags(tags, staticObjects);
-                if (res == null)
+                GameObject[] res;
+                lock(staticObjects) res = this.tags.FindAllWithTags(tags, staticObjects);
+                if (res == null) lock(objects)
                     res = this.tags.FindAllWithTags(tags, objects);
                 return res;
             }

@@ -73,6 +73,12 @@ namespace Core
             set { size = value; dirtysize = true; }
         }
 
+        public Vector2 Pos
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
         public virtual void Draw(SpriteBatch batch)
         {
             if (!active)
@@ -194,7 +200,8 @@ namespace Core
 
     public class SliderBar : UITextureElement
     {
-        SliderButton button;
+        private SliderButton button;
+
         public SliderBar(GameState context, string barTexture, string buttonTexture, int buttonSize, Vector2 position, Vector2 size, string axis): base(context, barTexture, position, size)
         {
             if (axis == "x")
@@ -203,7 +210,11 @@ namespace Core
                 button = new SliderButton(context, buttonTexture, position - new Vector2((buttonSize - size.X), 0) /2, new Vector2(buttonSize), axis, position.Y, size.Y);
         }
 
-        public float GetValue { get { return button.GetValue; } }
+        public float Value
+        {
+            get { return button.Value; }
+            set { button.Value = (float)MathH.Clamp(value, 0f, 1f); }
+        }
     }
 
     internal class SliderButton : UITextureElement
@@ -255,14 +266,21 @@ namespace Core
         }
 
         //returns a value between 0-1
-        public float GetValue
+        public float Value
         {
             get
             {
                 if (axis == "x")
-                    return (position.X + size.Y / 2 - start) / limit;
+                    return (position.X + (size.Y / 2) - start) / limit;
                 else
-                    return (position.Y + size.Y/2 - start) / limit;
+                    return (position.Y + (size.Y / 2) - start) / limit;
+            }
+            set
+            {
+                if (axis == "x")
+                    position.X = start - (size.Y / 2) + (limit * value);
+                else
+                    position.Y = start - (size.Y / 2) + (limit * value);
             }
         }
 

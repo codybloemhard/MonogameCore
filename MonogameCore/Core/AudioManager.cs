@@ -10,6 +10,7 @@ namespace Core
     {
         private static Dictionary<string, SoundEffect> effects;
         private static Dictionary<string, Song> songs;
+        private static float masterVolume = 1f, trackVolume = 1f, effectVolume = 1f;
 
         static AudioManager()
         {
@@ -56,7 +57,7 @@ namespace Core
                 Debug.PrintError("SoundEffect could not be played: ", name);
                 return;
             }
-            effects[name].Play(volume, pitch, pan);
+            effects[name].Play(volume * effectVolume * masterVolume, pitch, pan);
         }
 
         public static void PlayTrack(string name)
@@ -75,15 +76,32 @@ namespace Core
             MediaPlayer.Stop();
         }
 
-        public static void SetTrackVolume(float vol)
-        {
-            vol = (float)MathH.Clamp(vol, 0f, 1f);
-            MediaPlayer.Volume = vol;
-        }
-
         public static void LoopTrack(bool loop)
         {
             MediaPlayer.IsRepeating = loop;
+        }
+
+        public static void SetTrackVolume(float vol)
+        {
+            vol = (float)MathH.Clamp(vol, 0f, 1f);
+            trackVolume = vol;
+            ApplyVolumes();
+        }
+
+        public static void SetEffectVolume(float vol)
+        {
+            effectVolume = vol;
+        }
+
+        public static void SetMasterVolume(float v)
+        {
+            masterVolume = (float)MathH.Clamp(v, 0f, 1f);
+            ApplyVolumes();
+        }
+
+        private static void ApplyVolumes()
+        {
+            MediaPlayer.Volume = trackVolume * masterVolume;
         }
     }
 }

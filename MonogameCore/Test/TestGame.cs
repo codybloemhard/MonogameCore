@@ -65,8 +65,17 @@ namespace MonogameCore.Test
             anim.AddComponent(animatie);
             anim.Pos = new Vector2(5, 0);
             anim.Size = new Vector2(1, 1);
+            GameObject floor = new GameObject("stone", this, 2, true);
+            floor.Pos = new Vector2(-100, 8);
+            floor.Size = new Vector2(100, 1);
+            floor.AddComponent(new CRender("block"));
+            floor.AddComponent(new CAABB());
             AudioManager.PlayTrack("music");
             AudioManager.LoopTrack(true);
+            AudioManager.SetTrackVolume(1f);
+            AudioManager.SetEffectVolume(0.3f);
+            AudioManager.SetMasterVolume(0f);
+            Debug.FullDebugMode();
         }
         
         public override void Unload() { }

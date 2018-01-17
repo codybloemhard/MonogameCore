@@ -154,7 +154,7 @@ namespace Core
     public class QuadTree
     {
         private Node root;
-        private AABB minmax;
+        public AABB minmax;
         private uint counter = 0;
 
         public QuadTree()
@@ -167,15 +167,18 @@ namespace Core
         {
             if (col == null) return;
             root.Add(col);
-            AABB ominmax = col.Minmax();
-            if (ominmax.x < minmax.x)
-                minmax.x = ominmax.x;
-            if (ominmax.y < minmax.y)
-                minmax.y = ominmax.y;
-            if (ominmax.x + ominmax.w > minmax.x + minmax.w)
-                minmax.w = ominmax.x + ominmax.w - minmax.x;
-            if (ominmax.y + ominmax.h > minmax.y + minmax.h)
-                minmax.h = ominmax.y + ominmax.h - minmax.y;
+            AABB added = col.Minmax();
+            AABB old = new AABB(minmax);
+
+            float minx = Math.Min(added.x, old.x);
+            float miny = Math.Min(added.y, old.y);
+            float maxx = Math.Max(added.x + added.w, old.x + old.w);
+            float maxy = Math.Max(added.y + added.h, old.y + old.h);
+            minmax.x = minx;
+            minmax.y = miny;
+            minmax.w = maxx - minx;
+            minmax.h = maxy - miny;
+            
             root.MakeBound(minmax);
             counter++;
         }
@@ -198,9 +201,7 @@ namespace Core
             List<Batch> batches = GetBatches();
             for (int i = 0; i < batches.Count; i++)
                 for (int j = 0; j < batches[i].colliders.Count; j++)
-                {
                     CollisionMath.CheckN2(batches[i].colliders, batches[i].colliders);
-                }
         }
 
         public void CheckOther(List<Batch> batches)

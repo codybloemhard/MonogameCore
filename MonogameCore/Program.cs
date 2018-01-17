@@ -19,7 +19,7 @@ namespace MonogameCore
 
         public RunGame()
         {
-            game = new GameWindow(1200);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             Debug.ProfilingMode();
             game.Run();
