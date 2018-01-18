@@ -57,7 +57,7 @@ namespace Core
             MakeBound(bound);
             counter = 0;
         }
-          
+        
         public void Add(_collider element)
         {
             if (counter < 10 || depth >= 7)
@@ -133,20 +133,22 @@ namespace Core
             batches.Add(new Batch(colliders, cbound));
         }
 
-        public void CheckOther(Batch batch)
+        public void CheckOther(_collider col)
         {
-            if (!batch.bound.Intersects(cbound)) return;
+            if (!cbound.Intersects(col))
+            {
+                return;
+            }
             if(childs == null)
             {
                 for(int i = 0; i < colliders.Count; i++)
-                    for(int j = 0; j < batch.colliders.Count; j++)
-                        CollisionMath.Check(colliders[i], batch.colliders[j]);
+                    CollisionMath.Check(colliders[i], col);
             }
             else
             {
                 for (int i = 0; i < 2; i++)
                     for (int j = 0; j < 2; j++)
-                        childs[i, j].CheckOther(batch);
+                        childs[i, j].CheckOther(col);
             }
         }
     }
@@ -154,19 +156,21 @@ namespace Core
     public class QuadTree
     {
         private Node root;
-        public AABB minmax;
+        private AABB minmax;
         private uint counter = 0;
+        private List<_collider> cols;
 
         public QuadTree()
         {
             root = new Node(null, new AABB(0,0,0,0), 0);
             minmax = new AABB(0,0,0,0);
+            cols = new List<_collider>();
         }
 
         public void Add(_collider col)
         {
             if (col == null) return;
-            root.Add(col);
+            cols.Add(col);
             AABB added = col.Minmax();
             AABB old = new AABB(minmax);
 
@@ -183,8 +187,16 @@ namespace Core
             counter++;
         }
 
+        public void Build()
+        {
+            root.childs = null;
+            for (int i = 0; i < cols.Count; i++)
+                root.Add(cols[i]);
+        }
+
         public void Clear()
         {
+            cols.Clear();
             root.childs = null;
             counter = 0;
         }
@@ -204,15 +216,20 @@ namespace Core
                     CollisionMath.CheckN2(batches[i].colliders, batches[i].colliders);
         }
 
-        public void CheckOther(List<Batch> batches)
+        public void CheckOther(List<_collider> list)
         {
-            for (int i = 0; i < batches.Count; i++)
-                root.CheckOther(batches[i]);
+            for (int i = 0; i < list.Count; i++)
+                root.CheckOther(list[i]);
         }
 
         public void DrawTree(LineRenderer lines, Color colour)
         {
             root.Draw(lines, colour);
+        }
+
+        public void PrintMinMax()
+        {
+            Console.WriteLine(minmax.String());
         }
 
         public uint Count { get { return counter; } }
@@ -224,7 +241,6 @@ namespace Core
         private List<_collider> statics;
         private LineRenderer lines;
         private QuadTree dynamicTree, staticTree;
-        private Object l = new Object();
 
         internal Collision(LineRenderer lines)
         {
@@ -237,12 +253,13 @@ namespace Core
 
         internal void Check()
         {
-            lock (l)
+            lock (dynamics) lock(statics)
             {
                 lines.Clear();
                 dynamicTree.Clear();
                 for (int i = 0; i < dynamics.Count; i++)
                     dynamicTree.Add(dynamics[i]);
+                dynamicTree.Build();
                 CheckQuad();
                 dynamicTree.DrawTree(lines, Color.Red);
                 staticTree.DrawTree(lines, Color.Blue);
@@ -252,18 +269,20 @@ namespace Core
         internal void CheckQuad()
         {
             dynamicTree.CheckSelf();
-            staticTree.CheckOther(dynamicTree.GetBatches());
+            staticTree.CheckOther(dynamics);
+            //CollisionMath.CheckN2(dynamics, statics);//quick fix
         }
 
         internal void Add(_collider o, bool isStatic = false)
         {
-            lock (l)
+            lock (dynamics) lock(statics)
             {
                 if (o == null) return;
                 if (isStatic)
                 {
                     statics.Add(o);
                     staticTree.Add(o);
+                    staticTree.Build();
                 }
                 else dynamics.Add(o);
             }         
@@ -271,7 +290,7 @@ namespace Core
 
         internal void Remove(GameObject o, bool isStatic = false)
         {
-            lock (l)
+            lock (dynamics) lock(statics)
             {
                 if (o.Collider == null) return;
                 if (isStatic)
@@ -280,6 +299,7 @@ namespace Core
                     staticTree.Clear();
                     for (int i = 0; i < statics.Count; i++)
                         staticTree.Add(statics[i]);
+                    staticTree.Build();
                 }
                 else dynamics.Remove(o.Collider);
             }            
@@ -287,7 +307,7 @@ namespace Core
 
         internal void Clear()
         {
-            lock (l)
+            lock (dynamics) lock(statics)
             {
                 dynamics.Clear();
                 statics.Clear();
@@ -296,20 +316,17 @@ namespace Core
 
         internal RaycastResult Raycast(Vector2 origin, Vector2 direction, RAYCASTTYPE type)
         {
-            lock (l)
-            {
-                RaycastResult dynamicRes = new RaycastResult();
-                RaycastResult staticRes = new RaycastResult();
-                if (type == RAYCASTTYPE.DYNAMIC || type == RAYCASTTYPE.ALL)
-                    dynamicRes = CollisionMath.Raycast(origin, direction, dynamics);
-                if (type == RAYCASTTYPE.STATIC || type == RAYCASTTYPE.ALL)
-                    staticRes = CollisionMath.Raycast(origin, direction, statics);
-                if (!dynamicRes.hit) return staticRes;
-                if (!staticRes.hit) return dynamicRes;
-                if (dynamicRes.distance > staticRes.distance)
-                    return staticRes;
-                return dynamicRes;
-            }
+            RaycastResult dynamicRes = new RaycastResult();
+            RaycastResult staticRes = new RaycastResult();
+            if (type == RAYCASTTYPE.DYNAMIC || type == RAYCASTTYPE.ALL)
+                lock(dynamics) dynamicRes = CollisionMath.Raycast(origin, direction, dynamics);
+            if (type == RAYCASTTYPE.STATIC || type == RAYCASTTYPE.ALL)
+                lock(statics) staticRes = CollisionMath.Raycast(origin, direction, statics);
+            if (!dynamicRes.hit) return staticRes;
+            if (!staticRes.hit) return dynamicRes;
+            if (dynamicRes.distance > staticRes.distance)
+                return staticRes;
+            return dynamicRes;
         }
     }
 
@@ -326,6 +343,8 @@ namespace Core
         
         internal static void CheckN2(List<_collider> LA, List<_collider> LB)
         {
+            if (LA == null) return;
+            if (LB == null) return;
             if (LA.Count == 0) return;
             if (LB.Count == 0) return;
             bool same = LA == LB;

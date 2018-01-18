@@ -63,6 +63,15 @@ namespace MonogameCore.Test
             player.Size = new Vector2(0.5f, 1.0f);
             GameObject anim = new GameObject("rotationtest", this, 5);
 
+            for(int i = 0; i < 100; i++)
+            {
+                GameObject s = new GameObject("stone", this, 2, true);
+                s.Pos = new Vector2(12+(float)MathH.random.NextDouble()*3, (float)MathH.random.NextDouble() * 3);
+                s.Size = new Vector2(1, 1);
+                s.AddComponent(new CRender("block"));
+                s.AddComponent(new CAABB());
+            }
+
             CAnimatedSprite animatie = new CAnimatedSprite();
             animatie.AddAnimation("letters", "animLetters");
             animatie.AddAnimation("nummers", "animNumbers");

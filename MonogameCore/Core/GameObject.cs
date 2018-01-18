@@ -22,6 +22,7 @@ namespace Core
         private bool isStatic;
         private uint layer = 0;
         public bool active = true;
+        private bool kill = false;
 
         public GameObject(GameState context, uint layer = 0, bool isStatic = false)
         {
@@ -57,6 +58,7 @@ namespace Core
 
         public void Update(float gameTime)
         {
+            if (kill) killself();
             if (!active) return;
             gtime = gameTime;
             Component col = (collider as Component);
@@ -205,10 +207,15 @@ namespace Core
             for (int i = 0; i < childs.Count; i++)
                 childs[i].Destroy();
             childs.Clear();
+            kill = true;
+        }
+        private void killself()
+        {
             context.objects.Destroy(this, isStatic);
             context.collision.Remove(this, isStatic);
             context.renderer.Remove(this);
         }
+
         //locale en wereld coordinaten
         public Vector2 Pos
         {

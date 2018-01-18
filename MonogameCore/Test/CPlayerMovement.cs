@@ -10,9 +10,6 @@ namespace MonogameCore.Test
     {
         private float speed;
         private Vector2 dir;
-        private float jumpPower = 20f;
-        private float acceleration = 80f, vertVelo = 0f;
-        private bool grounded = false;
 
         public CPlayerMovement(float speed) : base()
         {
@@ -28,38 +25,18 @@ namespace MonogameCore.Test
 
         public override void Update(float time)
         {
-            if (GO.Pos.Y > 9) GO.Pos = new Vector2(1, -1);
             Vector2 velocity = Vector2.Zero;
             if (Input.GetKey(PressAction.DOWN, Keys.A))
                 velocity = new Vector2(-1, 0);
-            else if (Input.GetKey(PressAction.DOWN, Keys.D))
-                velocity = new Vector2(1, 0);       
-            if (velocity != Vector2.Zero)
-            {
-                dir = velocity;
-                dir.Normalize();
-            }
+            if (Input.GetKey(PressAction.DOWN, Keys.D))
+                velocity = new Vector2(+1, 0);
+            if (Input.GetKey(PressAction.DOWN, Keys.W))
+                velocity = new Vector2(0, -1);
+            if (Input.GetKey(PressAction.DOWN, Keys.S))
+                velocity = new Vector2(0, +1);
 
-            //gravity and jump
-            Vector2 feetLeft = GO.Pos + new Vector2(0, GO.Size.Y + 0.01f);
-            Vector2 feetRight = GO.Pos + new Vector2(GO.Size.X, GO.Size.Y + 0.01f);
-            RaycastResult hitLeft = GO.Raycast(feetLeft, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hitRight = GO.Raycast(feetRight, new Vector2(0, 1), RAYCASTTYPE.STATIC);
-            RaycastResult hit;
-            if (hitLeft.distance > hitRight.distance) hit = hitRight;
-            else hit = hitLeft;
-            if (hit.hit)
-            {
-                if (hit.distance < 0.05f) grounded = true;
-                else grounded = false;
-            }
-            else grounded = false;
-            if (grounded && Input.GetKey(PressAction.PRESSED, Keys.W))
-                vertVelo = -jumpPower;
-            if (!grounded) vertVelo += acceleration * time;
-            //speed is in Units/Second
-            GO.Pos += velocity * speed * time;
-            GO.Pos += new Vector2(0, Math.Min(hit.distance, vertVelo * time));
+            Camera.SetCameraTopLeft(GO.Pos - GO.Size/2f - new Vector2(16,9)/2f);
+            GO.Pos += velocity * time * speed;
             //shoot
             if (Input.GetKey(PressAction.PRESSED, Keys.Space))
                 GO.GetComponent<CShoot>().Shoot(dir, new Vector2(0.2f, 0.2f));
