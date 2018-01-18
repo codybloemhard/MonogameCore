@@ -72,14 +72,15 @@ namespace Core
                 Size = parent.Size * localsize;
             }
         }
-
+        
         public void FinishFrame()
         {
             if (!active) return;
-            if (renderer != null)
+            if (renderer != null) lock(renderer)
                 renderer.Update(gtime);
             dirtyscale = false;
-            done.Clear();
+            if(done != null) lock(done)
+                    done.Clear();
         }
         //This will get called when it collides with something
         public void OnCollision(GameObject other)

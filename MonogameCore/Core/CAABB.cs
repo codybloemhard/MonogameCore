@@ -16,6 +16,11 @@ namespace Core
             this.h = h;
         }
 
+        public AABB(AABB orig)
+        {
+            Copy(orig);
+        }
+
         public bool Intersects(AABB b)
         {
             if (b == null) return false;
@@ -30,6 +35,14 @@ namespace Core
             if (p.X > x && p.X < x + w && p.Y > y && p.Y < y + h)
                 return true;
             return false;
+        }
+
+        public void Copy(AABB orig)
+        {
+            x = orig.x;
+            y = orig.y;
+            w = orig.w;
+            h = orig.h;
         }
 
         public string String()
@@ -81,7 +94,8 @@ namespace Core
 
         public bool IsActive()
         {
-            return GO.active;
+            if (!GO.active) return false;
+            return active;
         }
 
         public GameObject Parent()

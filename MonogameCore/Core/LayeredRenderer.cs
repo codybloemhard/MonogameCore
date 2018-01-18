@@ -7,7 +7,6 @@ namespace Core
     {
         private OrderedSet<GameObject> set;
         private LayerComparer comparer;
-        private Object l = new Object();
 
         internal LayeredRenderer()
         {
@@ -17,22 +16,22 @@ namespace Core
 
         internal void Add(GameObject go)
         {
-            lock(l) set.Add(go);
+            lock(set) set.Add(go);
         }
 
         internal void Remove(GameObject go)
         {
-            lock(l) set.Remove(go);
+            lock(set) set.Remove(go);
         }
         
         internal void Clear()
         {
-            lock(l) set.Clear();
+            lock(set) set.Clear();
         }
 
         internal void Render()
         {
-            lock(l)
+            lock(set)
                 for (int i = set.Set.Count - 1; i >= 0; i--)
                     set.Set[i].FinishFrame();
         }

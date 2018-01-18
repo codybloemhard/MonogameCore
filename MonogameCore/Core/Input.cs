@@ -148,7 +148,7 @@ namespace Core
 
         public static Vector2 GetMouseWorldPosition()
         {
-            return GetMousePosition() + Grid.ToGridSpace(Camera.TopLeft);
+            return GetMousePosition() + Camera.TopLeft;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace MonogameCore
 
         public RunGame()
         {
-            game = new GameWindow(1200);
+            game = new GameWindow(1920);
             game.SetLoad(Load);
             Debug.ProfilingMode();
             game.Run();
@@ -33,6 +33,8 @@ namespace MonogameCore
             TextureManager.LoadTexture("animNumbers", "animatie0", 4, 2);
             TextureManager.LoadTexture("animLetters", "animatie1", 5, 2);
             TextureManager.LoadTexture("tiletest", "block", 0, 0);
+            AudioManager.LoadEffect("bleep", "blocklock");
+            AudioManager.LoadTrack("music", "beethoven");
             TestMenu testMenu = new TestMenu();
             TestGame testGame = new TestGame();
             game.states.AddState("menu", testMenu);
