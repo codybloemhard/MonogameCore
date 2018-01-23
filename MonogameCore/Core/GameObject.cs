@@ -74,7 +74,7 @@ namespace Core
                 Size = parent.Size * localsize;
             }
         }
-        
+        //draw
         public void FinishFrame()
         {
             if (!active) return;

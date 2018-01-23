@@ -64,7 +64,7 @@ namespace Core
                 for (int i = 0; i < Size; i++)
                     objects[i].DirtySize = true;
         }
-
+        //use tag engine to find objects
         public GameObject FindWithTag(string tag)
         {
             lock (tags)

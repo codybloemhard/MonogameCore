@@ -13,7 +13,7 @@ namespace Core
     }
 
     public enum RAYCASTTYPE { DYNAMIC, STATIC, ALL}
-
+    
     public class RaycastResult
     {
         public bool hit;
@@ -39,7 +39,7 @@ namespace Core
             this.bound = bound;
         }
     }
-
+    //recursive node used for the quadtree
     public class Node
     {
         public Node parent;
@@ -57,7 +57,7 @@ namespace Core
             MakeBound(bound);
             counter = 0;
         }
-        
+        //add a collider to this batch and see if it needs splitting
         public void Add(_collider element)
         {
             if (counter < 10 || depth >= 7)
@@ -90,7 +90,7 @@ namespace Core
                     for (int j = 0; j < 2; j++)
                         childs[i, j].Draw(lines, colour);
         }
-
+        //split this batch into four childbatches
         public AABB[,] Split()
         {
             AABB[,] aabbs = new AABB[2, 2];
@@ -110,7 +110,7 @@ namespace Core
                 cbound = new CAABB(nbound.x, nbound.y, nbound.w, nbound.h);
             else cbound.aabb = nbound;
         }
-
+        //see in what child batch it should go
         public void Choose(_collider col)
         {
             for(int i = 0; i < 2; i++)
@@ -120,7 +120,7 @@ namespace Core
                         childs[i, j].Add(col);
                 }
         }
-
+        
         public void GetBatches(List<Batch> batches)
         {
             if(childs != null)
@@ -132,7 +132,7 @@ namespace Core
             }
             batches.Add(new Batch(colliders, cbound));
         }
-
+        //run objects through the batches down
         public void CheckOther(_collider col)
         {
             if (!cbound.Intersects(col))
@@ -173,7 +173,7 @@ namespace Core
             cols.Add(col);
             AABB added = col.Minmax();
             AABB old = new AABB(minmax);
-
+            //find outerbound to cut
             float minx = Math.Min(added.x, old.x);
             float miny = Math.Min(added.y, old.y);
             float maxx = Math.Max(added.x + added.w, old.x + old.w);
@@ -268,9 +268,9 @@ namespace Core
         
         internal void CheckQuad()
         {
-            dynamicTree.CheckSelf();
-            staticTree.CheckOther(dynamics);
-            //CollisionMath.CheckN2(dynamics, statics);//quick fix
+            dynamicTree.CheckSelf();//check tree against itself
+            //staticTree.CheckOther(dynamics);//has bugs?
+            CollisionMath.CheckN2(dynamics, statics);//quick fix
         }
 
         internal void Add(_collider o, bool isStatic = false)
@@ -281,9 +281,11 @@ namespace Core
                 if (isStatic)
                 {
                     statics.Add(o);
-                    staticTree.Add(o);
+                    staticTree.Clear();
+                    for (int i = 0; i < statics.Count; i++)
+                        staticTree.Add(statics[i]);
                     staticTree.Build();
-                }
+                    }
                 else dynamics.Add(o);
             }         
         }
@@ -313,7 +315,7 @@ namespace Core
                 statics.Clear();
             }
         }
-
+        //find objects according to RAYCASTTYPE
         internal RaycastResult Raycast(Vector2 origin, Vector2 direction, RAYCASTTYPE type)
         {
             RaycastResult dynamicRes = new RaycastResult();
@@ -340,7 +342,7 @@ namespace Core
                 b.Parent().OnCollision(a.Parent());
             }
         }
-        
+        //check all objects in A against all objects in B
         internal static void CheckN2(List<_collider> LA, List<_collider> LB)
         {
             if (LA == null) return;
@@ -359,7 +361,7 @@ namespace Core
                 }
             }
         }
-
+        //find closest object colliding with the ray.
         internal static RaycastResult Raycast(Vector2 origin, Vector2 direction, List<_collider> list)
         {
             float px = origin.X, py = origin.Y;

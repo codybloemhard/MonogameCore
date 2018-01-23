@@ -21,7 +21,7 @@ namespace Core
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        public GameWindow(uint width, bool fullscreen = false)
+        public GameWindow(uint width, bool fullscreen = false, int atlasSize = -1)
         {
             graphics = new GraphicsDeviceManager(this);
             AssetManager.content = Content;
@@ -29,6 +29,9 @@ namespace Core
             IsMouseVisible = true;
             screenWidth = width;
             this.fullscreen = fullscreen;
+
+            if (atlasSize > 2048)
+                TextureManager.atlasSize = atlasSize;
 
             AllocConsole();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -64,9 +67,7 @@ namespace Core
             this.IsFixedTimeStep = false;
         }
         
-        protected override void UnloadContent()
-        {
-        }
+        protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {

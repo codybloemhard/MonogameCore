@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Core
 {
+    //texture object used by all ingame renderers, to get the right piece of the atlas texture.
     public class Texture
     {
         protected Rectangle bound, final;
@@ -101,7 +102,7 @@ namespace Core
             this.r = r;
         }
     }
-
+    //this is used to sort based on area
     internal class RawTexComparer : IComparer<RawTexture>
     {
         public int Compare(RawTexture x, RawTexture y)
@@ -115,7 +116,7 @@ namespace Core
             else return 1;
         }
     }
-
+    //recursive node to construct the binary tree
     internal class PackingNode
     {
         public PackingNode l, r;
@@ -129,7 +130,7 @@ namespace Core
             l = null;
             r = null;
         }
-
+        //see if the image fits this node recursivly and cut the space if needed. 
         public PackingNode Fill(Rectangle rect)
         {
             if (rect == null) return null;
@@ -157,7 +158,7 @@ namespace Core
             Split(rect, hor);    
             return l.Fill(rect);
         }
-
+        //split space in two
         public void Split(Rectangle rect, bool hor)
         { 
             if (hor)
@@ -179,6 +180,7 @@ namespace Core
         private static Dictionary<string, AnimatedTexture> animations;
         private static Dictionary<string, TileableTexture> tiles;
         private static OrderedSet<RawTexture> rawTexs;
+        internal static int atlasSize = 2048;
         internal static Texture2D atlas;
 
         static TextureManager()
@@ -214,12 +216,12 @@ namespace Core
             rawTexs.Add(new RawTexture(tex2d, name, col, row));
             return true;
         }
-
+        //construct the tree
         internal static void CalculateTree()
         {
             lock (rawTexs)
             {
-                PackingNode root = new PackingNode(new Rectangle(0, 0, 2048, 2048));
+                PackingNode root = new PackingNode(new Rectangle(0, 0, atlasSize, atlasSize));
                 for (int i = 0; i < rawTexs.Set.Count; i++)
                 {
                     RawTexture raw = rawTexs.Set[i];
@@ -238,17 +240,17 @@ namespace Core
                 }
             }
         }
-
+        //use the tree to construct the atlas texture
         internal static void Bake()
         {
-            Color[] data = new Color[2048 * 2048];
+            Color[] data = new Color[atlasSize * atlasSize];
             List<Texture> texs = textures.Values.ToList();
             List<AnimatedTexture> anims = animations.Values.ToList();
             for (int i = 0; i < texs.Count; i++)
                 WriteToIMG(texs[i], data);
             for (int i = 0; i < anims.Count; i++)
                 WriteToIMG(anims[i], data);
-            atlas = AssetManager.GetNewTexture(2048, 2048);
+            atlas = AssetManager.GetNewTexture((uint)atlasSize, (uint)atlasSize);
             atlas.SetData<Color>(data);
             for (int i = 0; i < texs.Count; i++)
                 texs[i].texture = atlas;
@@ -257,7 +259,7 @@ namespace Core
             rawTexs.Clear();
             GC.Collect();
         }
-        
+        //helper function to copy image data
         internal static void WriteToIMG(Texture t, Color[] data)
         {
             Rectangle r = new Rectangle(0, 0, t.texture.Width, t.texture.Height);
@@ -265,7 +267,7 @@ namespace Core
             t.texture.GetData<Color>(0, r, local, 0, r.Width * r.Height);
             for (int y = 0; y < r.Height; y++)
                 for (int x = 0; x < r.Width; x++)
-                    data[To1D(t.Final.X + x, t.Final.Y + y, 2048)] = local[To1D(x, y, r.Width)];
+                    data[To1D(t.Final.X + x, t.Final.Y + y, atlasSize)] = local[To1D(x, y, r.Width)];
         }
 
         internal static int To1D(int x, int y, int h)
