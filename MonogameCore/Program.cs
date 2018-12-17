@@ -17,9 +17,23 @@ namespace MonogameCore
     {
         private GameWindow game;
 
+        private void Test()
+        {
+            object legacyWMPCheck = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Active Setup\Installed Components\{22d6f312-b0f6-11d0-94ab-0080c74c7e95}", "IsInstalled", null);
+            if (legacyWMPCheck == null || legacyWMPCheck.ToString() != "1")
+            {
+                /*Console.WriteLine("It appears that you don't have Windows Media Player installed. This game needs system features bound to Windows Media Player. Please install the Media Feature Pack corresponding to your Windows version to run this game:"
+                    + "Windows 10: https://www.microsoft.com/en-US/download/details.aspx?id=48231"
+                */
+                Console.WriteLine("wmp not here");
+                return;
+            }
+        }
+
         public RunGame()
         {
-            game = new GameWindow(1920);
+            Test();
+            game = new GameWindow(1600);
             game.SetLoad(Load);
             Debug.ProfilingMode();
             game.Run();

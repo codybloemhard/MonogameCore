@@ -62,6 +62,7 @@ namespace Core
 
         public static void PlayTrack(string name)
         {
+            return;
             if (!songs.ContainsKey(name))
             {
                 Debug.PrintError("SoundTrack could not be played: ", name);
@@ -73,11 +74,13 @@ namespace Core
 
         public static void StopTrack()
         {
+            return;
             MediaPlayer.Stop();
         }
 
         public static void LoopTrack(bool loop)
         {
+            return;
             MediaPlayer.IsRepeating = loop;
         }
 
@@ -101,6 +104,7 @@ namespace Core
 
         private static void ApplyVolumes()
         {
+            return;
             MediaPlayer.Volume = trackVolume * masterVolume;
         }
     }

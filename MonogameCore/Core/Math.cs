@@ -41,19 +41,19 @@ namespace Core
         {
             string res = "" + Math.Round(x, p);
             int c = -1;
-            for(int i = 0; i < res.Length; i++)
+            for (int i = 0; i < res.Length; i++)
             {
                 if (c != -1) c++;//masterrace
                 if (res[i] == '.' || res[i] == ',') c = 0;
             }
-            if(c == -1)
+            if (c == -1)
             {
                 res += '.';
-                for(uint i = 0; i < p; i++)
+                for (uint i = 0; i < p; i++)
                     res += '0';
             }
             else for (uint i = 0; i < Math.Max(0, p - c); i++)
-                res += '0';
+                    res += '0';
             return res;
         }
         //From:
@@ -80,4 +80,5 @@ namespace Core
             else if (value < min) value = min;
             return value;
         }
+    }
 }
