@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonogameCore", "MonogameCore\MonogameCore.csproj", "{345213E4-EB2B-485F-837F-174E1B42116B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "Builder\Builder.csproj", "{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{345213E4-EB2B-485F-837F-174E1B42116B}.Release|Any CPU.Build.0 = Release|x86
 		{345213E4-EB2B-485F-837F-174E1B42116B}.Release|x86.ActiveCfg = Release|x86
 		{345213E4-EB2B-485F-837F-174E1B42116B}.Release|x86.Build.0 = Release|x86
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Debug|x86.Build.0 = Debug|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E0428E3-6D76-426D-A6F3-2B9C62F3E24D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
