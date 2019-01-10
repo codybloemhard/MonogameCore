@@ -42,8 +42,8 @@ namespace Core
 
         internal void UpdateDebugInfo() {
             lock(lObjects) lock (lStaticObjects) {
-                Debug.dynamicObjects = objects.Count;
-                Debug.staticObjects = staticObjects.Count;
+                if(objects != null) Debug.dynamicObjects = objects.Count;
+                if(staticObjects != null) Debug.staticObjects = staticObjects.Count;
             }
         }
 

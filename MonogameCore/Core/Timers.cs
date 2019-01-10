@@ -16,7 +16,6 @@ namespace Core
         {
             fps = new FPS();
             timer = new PTimer();
-            
         }
 
         public static void UpdateFps()
