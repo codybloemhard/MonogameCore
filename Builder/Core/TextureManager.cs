@@ -219,24 +219,19 @@ namespace Core
         //construct the tree
         internal static void CalculateTree()
         {
-            lock (rawTexs)
-            {
-                PackingNode root = new PackingNode(new Rectangle(0, 0, atlasSize, atlasSize));
-                for (int i = 0; i < rawTexs.Set.Count; i++)
-                {
-                    RawTexture raw = rawTexs.Set[i];
-                    Rectangle r = new Rectangle(0, 0, raw.texture.Width, raw.texture.Height);
-                    PackingNode res = root.Fill(r);
-                    if (res == null) Debug.PrintError("Texture could not be packed: " + raw.name);
+            PackingNode root = new PackingNode(new Rectangle(0, 0, atlasSize, atlasSize));
+            for (int i = 0; i < rawTexs.Set.Count; i++) {
+                RawTexture raw = rawTexs.Set[i];
+                Rectangle r = new Rectangle(0, 0, raw.texture.Width, raw.texture.Height);
+                PackingNode res = root.Fill(r);
+                if (res == null) Debug.PrintError("Texture could not be packed: " + raw.name);
+                else {
+                    if (raw.c == 1 && raw.r == 1)
+                        textures.Add(raw.name, new Texture(raw.texture, res.bound));
+                    else if (raw.c == 0 && raw.r == 0)
+                        tiles.Add(raw.name, new TileableTexture(raw.texture));
                     else
-                    {
-                        if (raw.c == 1 && raw.r == 1)
-                            textures.Add(raw.name, new Texture(raw.texture, res.bound));
-                        else if (raw.c == 0 && raw.r == 0)
-                            tiles.Add(raw.name, new TileableTexture(raw.texture));
-                        else
-                            animations.Add(raw.name, new AnimatedTexture(raw.texture, raw.c, raw.r, res.bound));
-                    }
+                        animations.Add(raw.name, new AnimatedTexture(raw.texture, raw.c, raw.r, res.bound));
                 }
             }
         }

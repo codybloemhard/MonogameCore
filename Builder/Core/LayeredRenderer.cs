@@ -17,24 +17,23 @@ namespace Core
 
         internal void Add(GameObject go)
         {
-            lock(locker) set.Add(go);
+            set.Add(go);
         }
 
         internal void Remove(GameObject go)
         {
-            lock (locker) set.Remove(go);
+            set.Remove(go);
         }
         
         internal void Clear()
         {
-            lock (locker) set.Clear();
+            set.Clear();
         }
 
         internal void Render()
         {
-            lock (locker)
-                for (int i = set.Set.Count - 1; i >= 0; i--)
-                    set.Set[i].FinishFrame();
+            for (int i = set.Set.Count - 1; i >= 0; i--)
+                set.Set[i].FinishFrame();
         }
     }
 
