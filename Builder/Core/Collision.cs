@@ -29,245 +29,114 @@ namespace Core
         }
     }
 
-    public class Batch
-    {
-        public List<_collider> colliders;
-        public CAABB bound;
-        public Batch(List<_collider> colliders, CAABB bound)
-        {
-            this.colliders = colliders;
-            this.bound = bound;
-        }
-    }
-    //recursive node used for the quadtree
-    public class Node
-    {
-        public Node parent;
-        public Node[,] childs;
-        public List<_collider> colliders;
-        public CAABB cbound;
-        public uint depth;
-        public uint counter;
+    internal class UniformGrid {
+        private Dictionary<Tuple<int, int>, List<_collider>> grid;
+        private int unitSize;
 
-        public Node(Node parent, AABB bound, uint depth)
-        {
-            this.parent = parent;
-            this.depth = depth;
-            colliders = new List<_collider>();
-            MakeBound(bound);
-            counter = 0;
+        public UniformGrid(int unitSize) {
+            this.unitSize = unitSize;
+            grid = new Dictionary<Tuple<int, int>, List<_collider>>();
         }
-        //add a collider to this batch and see if it needs splitting
-        public void Add(_collider element)
-        {
-            if (counter < 10 || depth >= 7)
-            {
-                colliders.Add(element);
-                counter++;
+
+        public void CheckSelf() {
+            foreach(var unit in grid.Values)
+                CollisionMath.CheckN2(unit, unit);
+        }
+
+        public void CheckAgainst(UniformGrid other) {
+            foreach (var key in grid.Keys) {
+                if (!other.grid.ContainsKey(key)) continue;
+                CollisionMath.CheckN2(grid[key], other.grid[key]);
             }
-            else if (childs == null)
-            {
-                childs = new Node[2, 2];
-                AABB[,] splits = Split();
-                for (int i = 0; i < 2; i++)
-                    for (int j = 0; j < 2; j++)
-                        childs[i, j] = new Node(this, splits[i, j], depth + 1);
-                Choose(element);
-                for (int i = 0; i < colliders.Count; i++)
-                    Choose(colliders[i]);
-                colliders.Clear();
-            }
-            else
-                Choose(element);
         }
 
-        public void Draw(LineRenderer lines, Color colour)
-        {
-            lines.Add(new Line(cbound.aabb.x, cbound.aabb.y, cbound.aabb.x + cbound.aabb.w, cbound.aabb.y, colour));
-            lines.Add(new Line(cbound.aabb.x, cbound.aabb.y, cbound.aabb.x, cbound.aabb.y + cbound.aabb.h, colour));
-            if (childs != null)
-                for (int i = 0; i < 2; i++)
-                    for (int j = 0; j < 2; j++)
-                        childs[i, j].Draw(lines, colour);
-        }
-        //split this batch into four childbatches
-        public AABB[,] Split()
-        {
-            AABB[,] aabbs = new AABB[2, 2];
-            for (int i = 0; i < 2; i++)
-                for (int j = 0; j < 2; j++)
-                {
-                    float w = cbound.aabb.w / 2;
-                    float h = cbound.aabb.h / 2;
-                    aabbs[i, j] = new AABB(cbound.aabb.x + i * w, cbound.aabb.y + j * h, w, h);
-                }
-            return aabbs;
-        }
-
-        public void MakeBound(AABB nbound)
-        {
-            if (cbound == null)
-                cbound = new CAABB(nbound.x, nbound.y, nbound.w, nbound.h);
-            else cbound.aabb = nbound;
-        }
-        //see in what child batch it should go
-        public void Choose(_collider col)
-        {
-            for(int i = 0; i < 2; i++)
-                for(int j = 0; j < 2; j++)
-                {
-                    if (col.Minmax().Intersects(childs[i, j].cbound.Minmax()))
-                        childs[i, j].Add(col);
+        public void Add(_collider col) {
+            AABB mm = col.Minmax();
+            for (int x = (int)(mm.x / unitSize); x <= Math.Ceiling(mm.x + mm.w); x++)
+                for (int y = (int)(mm.y / unitSize); y <= Math.Ceiling(mm.y + mm.h); y++) {
+                    var pos = new Tuple<int, int>(x, y);
+                    if (grid.ContainsKey(pos))
+                        grid[pos].Add(col);
+                    else
+                        grid.Add(pos, new List<_collider>() { col });
                 }
         }
-        
-        public void GetBatches(List<Batch> batches)
-        {
-            if(childs != null)
-            {
-                for (int i = 0; i < 2; i++)
-                    for (int j = 0; j < 2; j++)
-                        childs[i, j].GetBatches(batches);
-                return;
-            }
-            batches.Add(new Batch(colliders, cbound));
-        }
-        //run objects through the batches down
-        public void CheckOther(_collider col)
-        {
-            if (!cbound.Intersects(col))
-            {
-                return;
-            }
-            if(childs == null)
-            {
-                for(int i = 0; i < colliders.Count; i++)
-                    CollisionMath.Check(colliders[i], col);
-            }
-            else
-            {
-                for (int i = 0; i < 2; i++)
-                    for (int j = 0; j < 2; j++)
-                        childs[i, j].CheckOther(col);
-            }
-        }
-    }
 
-    public class QuadTree
-    {
-        private Node root;
-        private AABB minmax;
-        private uint counter = 0;
-        private List<_collider> cols;
-
-        public QuadTree()
-        {
-            root = new Node(null, new AABB(0,0,0,0), 0);
-            minmax = new AABB(0,0,0,0);
-            cols = new List<_collider>();
+        public void Remove(_collider col) {
+            AABB mm = col.Minmax();
+            for (int x = (int)(mm.x / unitSize); x <= Math.Ceiling(mm.x + mm.w); x++)
+                for (int y = (int)(mm.y / unitSize); y <= Math.Ceiling(mm.y + mm.h); y++) {
+                    var pos = new Tuple<int, int>(x, y);
+                    if (grid.ContainsKey(pos))
+                        grid[pos].Remove(col);
+                }
         }
 
-        public void Add(_collider col)
-        {
-            if (col == null) return;
-            cols.Add(col);
-            AABB added = col.Minmax();
-            AABB old = new AABB(minmax);
-            //find outerbound to cut
-            float minx = Math.Min(added.x, old.x);
-            float miny = Math.Min(added.y, old.y);
-            float maxx = Math.Max(added.x + added.w, old.x + old.w);
-            float maxy = Math.Max(added.y + added.h, old.y + old.h);
-            minmax.x = minx;
-            minmax.y = miny;
-            minmax.w = maxx - minx;
-            minmax.h = maxy - miny;
-            
-            root.MakeBound(minmax);
-            counter++;
+        public void CleanSoft() {
+            foreach (var unit in grid.Values)
+                unit.Clear();
         }
 
-        public void Build()
-        {
-            root.childs = null;
-            for (int i = 0; i < cols.Count; i++)
-                root.Add(cols[i]);
+        public void CleanHard() {
+            foreach (var unit in grid.Values)
+                unit.Clear();
+            grid.Clear();
         }
 
-        public void Clear()
-        {
-            cols.Clear();
-            root.childs = null;
-            counter = 0;
-        }
-
-        public List<Batch> GetBatches()
-        {
-            List<Batch> batches = new List<Batch>();
-            root.GetBatches(batches);
-            return batches;
-        }
-
-        public void CheckSelf()
-        {
-            List<Batch> batches = GetBatches();
-            for (int i = 0; i < batches.Count; i++)
-                for (int j = 0; j < batches[i].colliders.Count; j++)
-                    CollisionMath.CheckN2(batches[i].colliders, batches[i].colliders);
-        }
-
-        public void CheckOther(List<_collider> list)
-        {
+        public void ChangeUnitSize(int size, List<_collider> list) {
+            unitSize = size;
+            CleanHard();
             for (int i = 0; i < list.Count; i++)
-                root.CheckOther(list[i]);
+                Add(list[i]);
         }
 
-        public void DrawTree(LineRenderer lines, Color colour)
-        {
-            root.Draw(lines, colour);
+        public void ChangeUnitSize(int size) {
+            var list = new List<_collider>();
+            foreach (var l in grid.Values)
+                for (int i = 0; i < l.Count; i++)
+                    list.Add(l[i]);
+            ChangeUnitSize(size, list);
         }
 
-        public void PrintMinMax()
-        {
-            Console.WriteLine(minmax.String());
+        public void DebugRender(LineRenderer lr, Color c) {
+            foreach(var key in grid.Keys) {
+                lr.Add(new Line(key.Item1, key.Item2, key.Item1 + unitSize, key.Item2, c));
+                lr.Add(new Line(key.Item1, key.Item2, key.Item1, key.Item2 + unitSize, c));
+                lr.Add(new Line(key.Item1 + unitSize, key.Item2 + unitSize, key.Item1, key.Item2 + unitSize, c));
+                lr.Add(new Line(key.Item1 + unitSize, key.Item2 + unitSize, key.Item1 + unitSize, key.Item2, c));
+            }
         }
-
-        public uint Count { get { return counter; } }
     }
 
     internal class Collision
     {
         private List<_collider> dynamics;
         private List<_collider> statics;
+        private UniformGrid gridDynamic, gridStatic;
         private LineRenderer lines;
-        private QuadTree dynamicTree, staticTree;
 
         internal Collision(LineRenderer lines)
         {
             dynamics = new List<_collider>();
             statics = new List<_collider>();
             this.lines = lines;
-            dynamicTree = new QuadTree();
-            staticTree = new QuadTree();
+            gridDynamic = new UniformGrid(64);
+            gridStatic = new UniformGrid(64);
         }
 
         internal void Check()
         {
-            lines.Clear();
-            dynamicTree.Clear();
+            //CollisionMath.CheckN2(dynamics, dynamics);
+            //CollisionMath.CheckN2(dynamics, statics);
+            if (Debug.Mode == DEBUGMODE.DEBUG) {
+                lines.Clear();
+                gridDynamic.DebugRender(lines, Color.Red);
+            }
+            gridDynamic.CleanSoft();
             for (int i = 0; i < dynamics.Count; i++)
-                dynamicTree.Add(dynamics[i]);
-            dynamicTree.Build();
-            CheckQuad();
-            dynamicTree.DrawTree(lines, Color.Red);
-            staticTree.DrawTree(lines, Color.Blue);
-        }
-        
-        internal void CheckQuad()
-        {
-            dynamicTree.CheckSelf();//check tree against itself
-            //staticTree.CheckOther(dynamics);//has bugs?
-            CollisionMath.CheckN2(dynamics, statics);//quick fix
+                gridDynamic.Add(dynamics[i]);
+            gridDynamic.CheckSelf();
+            gridDynamic.CheckAgainst(gridStatic);
         }
 
         internal void Add(_collider o, bool isStatic = false)
@@ -275,12 +144,12 @@ namespace Core
             if (o == null) return;
             if (isStatic) {
                 statics.Add(o);
-                staticTree.Clear();
-                for (int i = 0; i < statics.Count; i++)
-                    staticTree.Add(statics[i]);
-                staticTree.Build();
+                gridStatic.Add(o);
             }
-            else dynamics.Add(o);
+            else {
+                dynamics.Add(o);
+                gridDynamic.Add(o);
+            }
         }
 
         internal void Remove(GameObject o, bool isStatic = false)
@@ -288,18 +157,20 @@ namespace Core
             if (o.Collider == null) return;
             if (isStatic) {
                 statics.Remove(o.Collider);
-                staticTree.Clear();
-                for (int i = 0; i < statics.Count; i++)
-                    staticTree.Add(statics[i]);
-                staticTree.Build();
+                gridStatic.Remove(o.Collider);
             }
-            else dynamics.Remove(o.Collider);
+            else {
+                dynamics.Remove(o.Collider);
+                gridDynamic.Remove(o.Collider);
+            }
         }
 
         internal void Clear()
         {
             dynamics.Clear();
             statics.Clear();
+            gridDynamic.CleanSoft();
+            gridStatic.CleanSoft();
         }
         //find objects according to RAYCASTTYPE
         internal RaycastResult Raycast(Vector2 origin, Vector2 direction, RAYCASTTYPE type)
