@@ -52,8 +52,14 @@ namespace Core
 
         public void Add(_collider col) {
             AABB mm = col.Minmax();
-            for (int x = (int)(mm.x / unitSize); x <= Math.Ceiling(mm.x + mm.w); x++)
-                for (int y = (int)(mm.y / unitSize); y <= Math.Ceiling(mm.y + mm.h); y++) {
+            int startx, starty;
+            if (mm.x > 0f) startx = (int)(mm.x / unitSize);
+            else startx = -((int)Math.Abs(mm.x / unitSize) + 1);
+            if (mm.y > 0f) starty = (int)(mm.y / unitSize);
+            else starty = -((int)Math.Abs(mm.y / unitSize) + 1);
+
+            for (int x = startx; x <= Math.Ceiling(mm.x + mm.w) / unitSize; x++)
+                for (int y = starty; y <= Math.Ceiling(mm.y + mm.h) / unitSize; y++) {
                     var pos = new Tuple<int, int>(x, y);
                     if (grid.ContainsKey(pos))
                         grid[pos].Add(col);
@@ -61,7 +67,7 @@ namespace Core
                         grid.Add(pos, new List<_collider>() { col });
                 }
         }
-
+        
         public void Remove(_collider col) {
             AABB mm = col.Minmax();
             for (int x = (int)(mm.x / unitSize); x <= Math.Ceiling(mm.x + mm.w); x++)
@@ -100,10 +106,14 @@ namespace Core
 
         public void DebugRender(LineRenderer lr, Color c) {
             foreach(var key in grid.Keys) {
-                lr.Add(new Line(key.Item1, key.Item2, key.Item1 + unitSize, key.Item2, c));
-                lr.Add(new Line(key.Item1, key.Item2, key.Item1, key.Item2 + unitSize, c));
-                lr.Add(new Line(key.Item1 + unitSize, key.Item2 + unitSize, key.Item1, key.Item2 + unitSize, c));
-                lr.Add(new Line(key.Item1 + unitSize, key.Item2 + unitSize, key.Item1 + unitSize, key.Item2, c));
+                int px = key.Item1 * unitSize;
+                int py = key.Item2 * unitSize;
+                int qx = px + unitSize;
+                int qy = py + unitSize;
+                lr.Add(new Line(px, py, qx, py, c));
+                lr.Add(new Line(px, py, px, qy, c));
+                lr.Add(new Line(px, qy, qx, qy, c));
+                lr.Add(new Line(qx, py, qx, qy, c));
             }
         }
     }
@@ -120,8 +130,8 @@ namespace Core
             dynamics = new List<_collider>();
             statics = new List<_collider>();
             this.lines = lines;
-            gridDynamic = new UniformGrid(64);
-            gridStatic = new UniformGrid(64);
+            gridDynamic = new UniformGrid(8);
+            gridStatic = new UniformGrid(8);
         }
 
         internal void Check()

@@ -42,10 +42,10 @@ namespace Core
             device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Deferred, GameStateManager.blendstate, GameStateManager.samplerstate, null, null, null, Camera.TranslationMatrix);
             renderer.Render();
-            batch.End();
-            batch.Begin();
             lineRenderer.Render(batch);
             if(Debug.drawLines) lines.Render(batch);
+            batch.End();
+            batch.Begin();
             if(Debug.showAtlas) batch.Draw(TextureManager.atlas, new Rectangle(0, 0, (int)Camera.ScreenSize.Y, (int)Camera.ScreenSize.Y), Color.White);
             ui.Draw(batch);
             batch.End();
